@@ -1,0 +1,92 @@
+<p>album-page works!</p>
+<section class="py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="row gx-4 gx-lg-5 align-items-center">
+      <div class="col-md-6">
+        <img
+          class="card-img-top mb-5 mb-md-0"
+          [src]="BASE_API_URL + album?.album_cover"
+          alt="Album cover"
+        />
+        
+      </div>
+      <div class="col-md-6">
+        <!-- Bind the title of the album. This dynamically sets the text of the h1 tag -->
+        <h1 class="display-5 fw-bolder">{{ album?.album_title }}</h1>
+        <div class="fs-5 mb-5">
+          <!-- Bind the price of the album. This dynamically sets the text of the span tag -->
+          <span class="text-decoration-line-through">${{ album?.price }}</span>
+        </div>
+        <!-- Static text -->
+        <p class="lead">About this Album:</p>
+        <!-- Bind the description of the album. This dynamically sets the text of the p tag -->
+        <p>{{ album?.description }}</p>
+        <!-- Here we use routing to link the artist name to its corresponding page. album.artist_name is the text and '/artists/album.artist' is the URL -->
+        <p>
+          <strong>Artist:</strong>
+          <a [routerLink]="['/artists', album?.artist]">{{
+            album?.artist_name
+          }}</a>
+        </p>
+        <!-- Bind the year of the album -->
+        <p><strong>Year:</strong> {{ album?.albumYear }}</p>
+        <!-- Bind the genre of the album -->
+        <p><strong>Genre:</strong> {{ album?.genre }}</p>
+        <!-- Static text -->
+        <p><strong>Songs in this album:</strong></p>
+        <ol>
+          <!-- Here we iterate over the songs_list array and for each song we create a new li element -->
+          <li *ngFor="let song of album?.songs_list">{{ song }}</li>
+        </ol>
+        <!-- Static elements -->
+        <div class="d-flex align-items-center">
+          <!-- Using Angular Material Input with an input of type number -->
+          <mat-form-field appearance="fill">
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" min="1" value="1" />
+          </mat-form-field>
+
+          <!-- Using Angular Material Button with a color of primary -->
+          <button mat-raised-button color="primary" class="ml-3">
+            <!-- Using Material Icons -->
+            <mat-icon>add_shopping_cart</mat-icon>
+            Add to cart
+          </button>
+        </div>
+
+        <!-- Bind the yt_link of the album. Here we also use a custom Pipe called 'safe' to bypass Angular's security mechanisms -->
+        <!-- <div class="embed-responsive embed-responsive-16by9 mt-3">
+          <iframe
+            class="embed-responsive-item"
+            [src]="album.yt_link | safe : 'resourceUrl'"
+          ></iframe> -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <p>album-page works!</p>
+<section class="py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." /></div>
+                    <div class="col-md-6">
+                        <div class="small mb-1">SKU: BST-498</div>
+                        <h1 class="display-5 fw-bolder">Shop item template</h1>
+                        <div class="fs-5 mb-5">
+                            <span class="text-decoration-line-through">$45.00</span>
+                            <span>$40.00</span>
+                        </div>
+                        <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero?</p>
+                        <div class="d-flex">
+                            <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                                <i class="bi-cart-fill me-1"></i>
+                                Add to cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> -->

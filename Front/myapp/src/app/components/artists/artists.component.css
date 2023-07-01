@@ -1,0 +1,98 @@
+ /* ######### Alphabetical menu ############ */
+.alphabet-bar {
+  justify-content: space-around;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.letter-button {
+  cursor: pointer; /* Change the cursor to a hand when hovering */
+  padding: 5px;
+  font-size: 18px;
+}
+
+.letter-button:hover {
+  background-color: #673AB7;
+  color: white;
+}
+
+
+ /* ########################## artists list ########################### */
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #36013F;
+  padding-left: 10px; /* Add some padding to the title */
+}
+
+.letter-title {
+  font-size: 40px;
+  color: #0d3471;
+  padding-top: 20px; /* Add some padding above each letter */
+  padding: 16px;
+}
+
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Define the grid layout */
+  grid-gap: 20px; /* Gap between grid items */
+  padding: 20px; /* Add padding to the grid */
+}
+
+.artist-item {
+  font-size: 16px;
+  color: #080808; /* Amber */
+}
+
+@media (max-width: 768px) {
+  .artists-grid {
+    grid-template-columns: 1fr; /* One column on small screens */
+  }
+}
+
+
+/* ####################################  Artist Card  ################################### */
+
+.container {
+  max-width: 1500px;
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: center; */
+
+  /* padding: 8px; */
+  /* background-color: #B19ADA; */
+}
+
+.item {
+  max-width: 400px;
+  flex: 1 1 calc(33.33% - 16px); /* The item should take up one third of the container's width, minus the margins */
+  margin: 16px;
+  background-color: #B19ADA;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+  justify-content: flex-start;
+}
+
+.artist-card {
+  width: 100%; /* card takes full width of the item */
+  transition: background-color 0.3s ease; /* transition for hover effect */
+}
+
+.artist-card:hover {
+  background-color: #FFC107; /* Amber hover effect */
+}
+
+.artist-card mat-card-content {
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+@media (max-width: 768px) {
+  .item {
+    flex: 1 1 100%; /* item takes full width on small screens */
+  }
+}

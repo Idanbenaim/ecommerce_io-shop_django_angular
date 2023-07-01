@@ -1,0 +1,40 @@
+<!-- Alphabetical menu -->
+
+<mat-toolbar class="alphabet-bar">
+  <span *ngFor="let letter of uniqueLetters" (click)="navigateToLetter(letter)" class="letter-button">
+    {{ letter }}
+  </span>
+</mat-toolbar>
+
+<!-- List of artists -->
+<h3 class="title">Select the artist:</h3>
+<ng-container *ngFor="let letter of uniqueLetters">
+  <h2 id="letter-{{ letter }}" class="letter-title">{{ letter }}</h2>
+  <div class="container">
+    <div class="item" *ngFor="let artist of getArtistsByLetter(letter) | async">
+      <mat-card class="artist-card" [routerLink]="['/artists', artist.id]">
+        <mat-card-header>
+          <mat-card-title-group>
+            <mat-card-title>{{ artist.artist_name }}</mat-card-title>
+            <mat-card-subtitle>XXX</mat-card-subtitle>
+            <img mat-card-md-image [src]="BASE_API_URL + artist.artist_image" alt="Artist Image">
+          </mat-card-title-group>
+        </mat-card-header>
+        <mat-card-content>
+          {{ artist.artist_bio }}
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</ng-container>
+
+
+<!-- <h3 class="title">Select the artist name:</h3>
+<ng-container *ngFor="let letter of uniqueLetters">
+  <h2 id="letter-{{ letter }}" class="letter-title">{{ letter }}</h2>
+  <div class="artists-grid">
+    <app-artist-card *ngFor="let artist of getArtistsByLetter(letter) | async" [artist]="artist"></app-artist-card>
+
+  </div>
+</ng-container> -->
+
