@@ -48,11 +48,11 @@ class AlbumSerializer(serializers.ModelSerializer):
 #        model = Inventory
 #        fields = '__all__'
 
-# #################### Cart ####################
-# class CartSerializer(serializers.ModelSerializer):
-#     class Meta:
-#          model = Cart
-#          fields = '__all__'
+#################### Cart ####################
+class CartSerializer(serializers.ModelSerializer):
+    class Meta:
+         model = Cart
+         fields = '__all__'
 
 # #################### CartItem ####################
 # class CartItemSerializer(serializers.ModelSerializer):

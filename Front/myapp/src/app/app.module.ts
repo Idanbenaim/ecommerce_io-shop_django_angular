@@ -24,6 +24,7 @@ import { AlbumPageComponent } from './components/album-page/album-page.component
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ArtistPageComponent } from './components/artist-page/artist-page.component';
+import { CartComponent } from './components/cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ArtistPageComponent } from './components/artist-page/artist-page.compon
     // ArtistCardComponent,
     AlbumPageComponent,
     ArtistPageComponent,
+    CartComponent,
     // MatdesComponent,
   ],
   imports: [

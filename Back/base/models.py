@@ -63,9 +63,6 @@ class Cart(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     totalAmount = models.DecimalField(max_digits=5, decimal_places=2)
 
-    # def __str__(self):
-    #     return self.customer.firstName
-
     def __str__(self):
         return f'Cart #{self.id} by {self.customer.firstName} {self.customer.lastName}'
 
