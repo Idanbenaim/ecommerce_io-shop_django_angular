@@ -12,6 +12,8 @@ const routes: Routes = [
     { path: "mat", component: MatdesComponent },
     { path: 'album/:id', component: AlbumPageComponent },
     { path: "artists/:id", component: ArtistPageComponent },
+    // { path: "cart", loadChildren: () => import('./components/cart/cart.module').then(m => m.CartModule) },
+
 
 
 

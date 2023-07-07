@@ -1,0 +1,31 @@
+<div class="side_filter" [ngClass]="isTagOpen ? 'active_filter' : 'close_filter'">
+  <div class="filter_inner_wrapper">
+    <div class="fliter_main_header">
+      Cart
+      <button class="close_filter_btn" (click)="onClose()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <div *ngIf="cart">
+      Total Amount: ${{ cart.totalAmount }}
+      <p *ngIf="cart.totalAmount === 0">Your cart is empty.</p>
+    </div>
+  </div>
+</div>
+<div class="side_filter_overlay" (click)="onClose()" [ngClass]="isTagOpen ? 'active_filter' : 'close_filter'"></div>
+
+
+
+
+<!-- <div class="side_filter" [ngClass]="isTagOpen ? 'active_filter' : 'close_filter'">
+  <div class="filter_inner_wrapper">
+    <div class="fliter_main_header">
+      Cart
+      <button class="close_filter_btn" (click)="toggleTag()">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+ Cart items would go here
+ </div>
+</div>
+<div class="side_filter_overlay" (click)="toggleTag()" [ngClass]="isTagOpen ? 'active_filter' : 'close_filter'"></div> -->

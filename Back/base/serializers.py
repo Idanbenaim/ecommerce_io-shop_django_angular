@@ -54,11 +54,11 @@ class CartSerializer(serializers.ModelSerializer):
          model = Cart
          fields = '__all__'
 
-# #################### CartItem ####################
-# class CartItemSerializer(serializers.ModelSerializer):
-#     class Meta:
-#          model = CartItem
-#          fields = '__all__'
+#################### CartItem ####################
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+         model = CartItem
+         fields = '__all__'
 
 # #################### Order ####################
 # class OrderSerializer(serializers.ModelSerializer):

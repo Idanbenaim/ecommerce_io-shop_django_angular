@@ -3,14 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BASE_API_URL } from '../api.config';
+import { Artist } from '../models/artist';
 
 
-export interface Artist {
-  id: number;
-  artist_name: string;
-  artist_bio: string;
-  artist_image: string;
-}
+// export interface Artist {
+//   id: number;
+//   artist_name: string;
+//   artist_bio: string;
+//   artist_image: string;
+// }
 
 @Injectable({
   providedIn: 'root'

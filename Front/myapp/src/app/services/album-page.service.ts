@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Album } from '../components/albums/albums.component';
+import { Album } from '../models/album';
 import { BASE_API_URL } from '../api.config';
 
 @Injectable({

@@ -1,9 +1,10 @@
 // album-page.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Album, AlbumPageService } from 'src/app/services/album-page.service';
+import { AlbumPageService } from 'src/app/services/album-page.service';
+import { Album } from 'src/app/models/album';
 import { BASE_API_URL } from 'src/app/api.config';
+
 
 @Component({
   selector: 'app-album-page',
@@ -25,7 +26,7 @@ export class AlbumPageComponent implements OnInit {
     if (id) {
       // id exists, convert it to a number and fetch the album details
       const idNumber = Number(id);
-      this.albumPageService.getAlbum(idNumber).subscribe(album => this.album = album);
+      this.albumPageService.getAlbum(idNumber).subscribe(albm => this.album = albm);
 
     } else {
       // id is null or undefined, handle this case here. For example, you could redirect to a 404 page.

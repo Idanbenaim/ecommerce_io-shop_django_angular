@@ -1,0 +1,13 @@
+<!-- cart-item.component.html -->
+<div class="cart-item">
+  <img [src]="CartItem.album.album_cover" alt="{{CartItem.album.album_title}} cover">
+  <div class="details">
+    <p>{{CartItem.album.album_title}}</p>
+    <p>${{CartItem.album.price}}</p>
+  </div>
+  <div class="quantity">
+    <button (click)="updateCartItem(CartItem.qty - 1)" [disabled]="CartItem.qty <= 1">-</button>
+    <span>{{CartItem.qty}}</span>
+    <button (click)="updateCartItem(CartItem.qty + 1)">+</button>
+  </div>
+</div>

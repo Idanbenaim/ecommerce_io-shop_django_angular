@@ -25,6 +25,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ArtistPageComponent } from './components/artist-page/artist-page.component';
 import { CartComponent } from './components/cart/cart.component';
+import { CartPanelComponent } from './components/cart-panel/cart-panel.component';
+import { CartItemComponent } from './components/cart-item/cart-item.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { CartComponent } from './components/cart/cart.component';
     AlbumPageComponent,
     ArtistPageComponent,
     CartComponent,
+    CartPanelComponent,
+    CartItemComponent,
     // MatdesComponent,
   ],
   imports: [

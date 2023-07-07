@@ -21,5 +21,7 @@ urlpatterns = [
     path('albums/<int:id>',views.manageAlbums.as_view()),
     path('albums/', views.manageAlbums.as_view()),
 
-]
+    path('cart/<int:id>',views.manageCarts.as_view()),
+    path('cart/', views.manageCarts.as_view()),
 
+]

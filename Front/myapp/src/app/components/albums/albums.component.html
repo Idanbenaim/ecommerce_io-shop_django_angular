@@ -9,7 +9,7 @@
         <mat-card-header>
           <div mat-card-avatar class="album-header-image"></div>
           <mat-card-title>{{ item.album_title }}</mat-card-title>
-          <mat-card-subtitle>Artist: {{ item.artist_name }}</mat-card-subtitle>
+          <mat-card-subtitle>Artist: {{ item.artist.artist_name }}</mat-card-subtitle>
         </mat-card-header>
         <img mat-card-image [src]="BASE_API_URL + item.album_cover" alt="Album Cover Image" />
         <mat-card-content>

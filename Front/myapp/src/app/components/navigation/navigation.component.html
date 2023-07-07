@@ -3,10 +3,11 @@
   <a mat-button routerLink="/albums" routerLinkActive="active-link" color="accent">Albums</a>
   <a mat-button routerLink="/artists" routerLinkActive="active-link" color="accent">Artists</a>
   <a mat-button routerLink="/about" routerLinkActive="active-link" color="accent">About</a>
-  <!-- <a mat-button class="material-symbols-outlined" routerLink="/cart" routerLinkActive="active-link" color="accent">Cart</a>
-</mat-toolbar> -->
+  <a mat-button (click)="toggleTag()" routerLinkActive="active-link" color="accent"><mat-icon>shopping_cart</mat-icon></a>
+</mat-toolbar>
 
-<span class="material-symbols-outlined">
+<app-cart-panel *ngIf="isTagOpen" [isTagOpen]="isTagOpen" (closePanel)="toggleTag()"></app-cart-panel>
+
+<!-- <span class="material-symbols-outlined">
 shopping_cart
-</span>
-
+</span> -->

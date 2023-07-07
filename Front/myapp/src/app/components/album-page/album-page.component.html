@@ -8,7 +8,7 @@
           [src]="BASE_API_URL + album?.album_cover"
           alt="Album cover"
         />
-        
+
       </div>
       <div class="col-md-6">
         <!-- Bind the title of the album. This dynamically sets the text of the h1 tag -->
@@ -25,7 +25,7 @@
         <p>
           <strong>Artist:</strong>
           <a [routerLink]="['/artists', album?.artist]">{{
-            album?.artist_name
+            album?.artist
           }}</a>
         </p>
         <!-- Bind the year of the album -->

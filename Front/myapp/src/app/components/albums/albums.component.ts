@@ -3,20 +3,22 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AlbumsService } from 'src/app/services/albums.service';
 import { BASE_API_URL } from 'src/app/api.config';
+import { Album } from 'src/app/models/album';
+// import { OnInit } from '@angular/core';
 
-// Add the Album interface here
-export interface Album {
-  id: number;
-  album_title: string;
-  albumYear: number;
-  description: string;
-  price: string;
-  album_cover: string;
-  artist: number;
-  artist_name: string;
-  genre: number;
-  songs_list: string[];
-}
+// // Add the Album interface here
+// export interface Album {
+//   id: number;
+//   album_title: string;
+//   albumYear: number;
+//   description: string;
+//   price: string;
+//   album_cover: string;
+//   artist: number;
+//   artist_name: string;
+//   genre: number;
+//   songs_list: string[];
+// }
 
 @Component({
   selector: 'app-albums',
@@ -50,6 +52,20 @@ export class AlbumsComponent {
     // So ar$ is now an Observable that will emit an array of albums when someone subscribes to it.
     this.ar$ = this.albums.getAllData();
   }
+// export class AlbumsComponent implements OnInit {
+//   BASE_API_URL = BASE_API_URL;
+//   ar$!: Observable<Album[]>;
+
+//   constructor(private albums: AlbumsService) { }
+
+  ngOnInit() {
+    // this.ar$ = this.albums.getAllData();
+    this.ar$.subscribe(data => {
+      console.log(data);
+    });
+    console.log(this.ar$);
+  }
+
+
 
 }
-
