@@ -52,11 +52,6 @@ export class AlbumsComponent {
     // So ar$ is now an Observable that will emit an array of albums when someone subscribes to it.
     this.ar$ = this.albums.getAllData();
   }
-// export class AlbumsComponent implements OnInit {
-//   BASE_API_URL = BASE_API_URL;
-//   ar$!: Observable<Album[]>;
-
-//   constructor(private albums: AlbumsService) { }
 
   ngOnInit() {
     // this.ar$ = this.albums.getAllData();
@@ -65,7 +60,5 @@ export class AlbumsComponent {
     });
     console.log(this.ar$);
   }
-
-
 
 }

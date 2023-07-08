@@ -1,31 +1,39 @@
-<div class="side_filter" [ngClass]="isTagOpen ? 'active_filter' : 'close_filter'">
-  <div class="filter_inner_wrapper">
-    <div class="fliter_main_header">
-      Cart
-      <button class="close_filter_btn" (click)="onClose()">
-        <span class="material-icons">close</span>
-      </button>
+<!-- cart-panel.component.html -->
+<div class="side_filter" *ngIf="isTagOpen; else emptyCart">
+  <h2>Your Cart</h2>
+
+    <div *ngFor="let album of cart">
+      <img class="album-cover" [src]="BASE_API_URL + album.album_cover" alt="Album cover">
+      {{ album.album_title }}
+      <div>Quantity: {{ album.quantity }}
+      Price: ${{ album.price }}
+      <button (click)="removeFromCart(album)">Remove</button>
+      </div>
+      <hr>
     </div>
-    <div *ngIf="cart">
-      Total Amount: ${{ cart.totalAmount }}
-      <p *ngIf="cart.totalAmount === 0">Your cart is empty.</p>
-    </div>
-  </div>
+
 </div>
-<div class="side_filter_overlay" (click)="onClose()" [ngClass]="isTagOpen ? 'active_filter' : 'close_filter'"></div>
 
+<ng-template #emptyCart>
+  <p>Your cart is empty.</p>
+</ng-template>
 
-
-
-<!-- <div class="side_filter" [ngClass]="isTagOpen ? 'active_filter' : 'close_filter'">
-  <div class="filter_inner_wrapper">
-    <div class="fliter_main_header">
-      Cart
-      <button class="close_filter_btn" (click)="toggleTag()">
-        <span class="material-icons">close</span>
-      </button>
-    </div>
- Cart items would go here
- </div>
+<!-- <div class="side_filter" *ngIf="isTagOpen; else emptyCart">
+  <h2>Your Cart</h2>
+  <button (click)="close()">Close</button>
+  <ul>
+    <li *ngFor="let album of cart">
+      {{ album.album_title }} - ${{ album.price }}
+      <button (click)="removeFromCart(album)">Remove</button>
+    </li>
+  </ul>
 </div>
-<div class="side_filter_overlay" (click)="toggleTag()" [ngClass]="isTagOpen ? 'active_filter' : 'close_filter'"></div> -->
+
+<ng-template #emptyCart>
+  <p>Your cart is empty.</p>
+</ng-template> -->
+
+
+
+
+

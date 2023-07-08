@@ -23,5 +23,8 @@ urlpatterns = [
 
     path('cart/<int:id>',views.manageCarts.as_view()),
     path('cart/', views.manageCarts.as_view()),
+    # path('cart/current', views.getCurrentCart),   # Get the current user's cart
+    # path('cart/add', views.addItemToCart),        # Add an item to the user's cart
+
 
 ]

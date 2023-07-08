@@ -1,4 +1,3 @@
-
 export class Cart {
   id?: number;
   customer_id: number = 0;

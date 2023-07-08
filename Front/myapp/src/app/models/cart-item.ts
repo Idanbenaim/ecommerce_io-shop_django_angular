@@ -7,4 +7,3 @@ export class CartItem {
   album: Album = new Album;
   qty: number = 0;
 }
-

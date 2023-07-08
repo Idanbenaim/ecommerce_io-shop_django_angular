@@ -1,7 +1,34 @@
-<p>cart works!</p>
-<div *ngFor="let cart of carts">
-  <h2>Cart ID: {{cart.id}}</h2>
-  <p>Customer ID: {{cart.customer_id}}</p>
-  <p>Date Created: {{cart.date_created}}</p>
-  <p>Total Amount: {{cart.totalAmount}}</p>
+<!-- cart.component.html -->
+<!-- cart.component.html -->
+<div *ngIf="cart.length > 0; else emptyCart">
+  <h2>Your Cart</h2>
+
+    <div *ngFor="let album of cart">
+      <img [src]="BASE_API_URL + album.album_cover" alt="Album cover">
+      <div>{{ album.album_title }}</div>
+      <div>Quantity: {{ album.quantity }}</div>
+      <div>Price: ${{ album.price }}</div>
+      <hr>
+      <button (click)="removeFromCart(album)">Remove</button>
+    </div>
+
 </div>
+
+<ng-template #emptyCart>
+  <p>Your cart is empty.</p>
+</ng-template>
+
+<!-- <div *ngIf="cart.length > 0; else emptyCart">
+  <h2>Your Cart</h2>
+  <ul>
+    <li *ngFor="let album of cart">
+    {{ album.album_title }} - ${{ album.price }} <hr>
+      <button (click)="removeFromCart(album)">Remove</button>
+    </li>
+  </ul>
+</div>
+
+<ng-template #emptyCart>
+  <p>Your cart is empty.</p>
+</ng-template> -->
+

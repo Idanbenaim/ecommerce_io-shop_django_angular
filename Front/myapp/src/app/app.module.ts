@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -26,7 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ArtistPageComponent } from './components/artist-page/artist-page.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CartPanelComponent } from './components/cart-panel/cart-panel.component';
-import { CartItemComponent } from './components/cart-item/cart-item.component';
+// import { CartItemComponent } from './components/cart-item/cart-item.component';
 
 @NgModule({
   declarations: [
@@ -39,12 +40,13 @@ import { CartItemComponent } from './components/cart-item/cart-item.component';
     ArtistPageComponent,
     CartComponent,
     CartPanelComponent,
-    CartItemComponent,
+    // CartItemComponent,
     // MatdesComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule,
+    FormsModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,

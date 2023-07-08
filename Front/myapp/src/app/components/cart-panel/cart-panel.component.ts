@@ -1,36 +1,39 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CartService } from '../../services/cart.service';
-import { Cart } from 'src/app/models/cart';
-import { Observable } from 'rxjs';
+// cart-panel.component.ts
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { CartService } from 'src/app/services/cart.service';
+import { Album } from 'src/app/models/album';
+import { BASE_API_URL } from 'src/app/api.config';
 
 @Component({
   selector: 'app-cart-panel',
   templateUrl: './cart-panel.component.html',
   styleUrls: ['./cart-panel.component.css']
 })
-export class CartPanelComponent {
-  @Input()
-  isTagOpen: boolean = false;
-  @Output() closePanel: EventEmitter<void> = new EventEmitter();
-
-  cart: Cart = new Cart();
+export class CartPanelComponent implements OnInit {
+  BASE_API_URL = BASE_API_URL;
+  @Input() isTagOpen: boolean = false;
+  @Output() closePanel = new EventEmitter<void>();
+  cart: Album[] = [];
 
   constructor(private cartService: CartService) { }
 
-  getCart() {
-    this.cartService.getCart().subscribe(cart => {
-      this.cart = cart;
-    });
+  ngOnInit(): void {
+    this.cart = this.cartService.getCart();
   }
 
-  onClose() {
+  removeFromCart(album: Album): void {
+    this.cartService.removeFromCart(album);
+    // Refresh the cart
+    this.cart = this.cartService.getCart();
+  }
+
+  close(): void {
     this.closePanel.emit();
   }
 }
 
 
-
-// import { Component, OnInit } from '@angular/core';
+// import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 // import { CartService } from '../../services/cart.service';
 // import { Cart } from 'src/app/models/cart';
 // import { Observable } from 'rxjs';
@@ -41,24 +44,26 @@ export class CartPanelComponent {
 //   styleUrls: ['./cart-panel.component.css']
 // })
 // export class CartPanelComponent implements OnInit {
+//   @Input()
 //   isTagOpen: boolean = false;
-//   cart: Cart = new Cart();
+//   @Output() closePanel: EventEmitter<void> = new EventEmitter();
+
+//   cartItems: any[] = [];
 
 //   constructor(private cartService: CartService) { }
 
-//   ngOnInit() { }
-
-//   toggleTag() {
-//     this.isTagOpen = !this.isTagOpen;
-//     if (this.isTagOpen) {
-//       this.getCart();
-//     }
+//   ngOnInit(): void {
+//     this.getCart();
 //   }
 
-//   getCart() {
-//     this.cartService.getCart().subscribe(cart => {
-//       this.cart = cart;
+//   getCart(): void {
+//     this.cartService.getCart().subscribe(items => {
+//       this.cartItems = items;
 //     });
+//   }
+
+//   onClose(): void {
+//     this.closePanel.emit();
 //   }
 // }
 

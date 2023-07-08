@@ -1,47 +1,105 @@
-import { HttpClient } from '@angular/common/http';
+// cart.service.ts
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Cart } from '../models/cart';
-import { BASE_API_URL } from '../api.config';
+import { Album } from '../models/album';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  MY_SERVER = `${BASE_API_URL}/carts`;
+  private cart: Album[] = [];
 
-  constructor(private http: HttpClient) { }
-
-  getAllCarts(): Observable<Cart[]> {
-    return this.http.get<Cart[]>(this.MY_SERVER);
+  constructor() {
+    this.loadCart();
   }
 
-  // getCart(id: number): Observable<Cart> {
-  //   return this.http.get<Cart>(`${this.MY_SERVER}/${id}`);
-  // }
-  getCart(): Observable<Cart> {
-    // const userId = this.authService.getUserId(); // assuming you have an AuthService to handle authentication
-
-    // if (userId) {
-    //   // User is logged in, fetch cart from server
-    //   return this.http.get<Cart>(`${this.MY_SERVER}/${userId}`);
-    // } else {
-      // User is not logged in, get the cart from local storage
-      const localCart = JSON.parse(localStorage.getItem('cart') || '{}');
-      return of(localCart);
+  loadCart(): void {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      this.cart = JSON.parse(storedCart);
     }
-  // }
-
-
-  createCart(cart: Cart): Observable<Cart> {
-    return this.http.post<Cart>(this.MY_SERVER, cart);
   }
 
-  updateCart(id: number, cart: Cart): Observable<Cart> {
-    return this.http.put<Cart>(`${this.MY_SERVER}/${id}`, cart);
+  saveCart(): void {
+    localStorage.setItem('cart', JSON.stringify(this.cart));
   }
 
-  deleteCart(id: number): Observable<{}> {
-    return this.http.delete(`${this.MY_SERVER}/${id}`);
+  addToCart(album: Album): void {
+    const foundAlbum = this.cart.find(item => item.id === album.id);
+    if (foundAlbum) {
+      foundAlbum.quantity = (foundAlbum.quantity || 0) + 1;
+      console.log(foundAlbum.quantity)
+    } else {
+      album.quantity = 1;
+      this.cart.push(album);
+    }
+    this.saveCart();
+  }
+
+  removeFromCart(album: Album): void {
+    const foundAlbum = this.cart.find(item => item.id === album.id);
+    if (foundAlbum) {
+      if (foundAlbum.quantity && foundAlbum.quantity > 1) {
+        foundAlbum.quantity -= 1;
+      } else {
+        const index = this.cart.findIndex(item => item.id === album.id);
+        if (index > -1) {
+          this.cart.splice(index, 1);
+        }
+      }
+    }
+    this.saveCart();
+  }
+
+  getCart(): Album[] {
+    return this.cart;
   }
 }
+
+
+
+// // cart.service.ts
+// import { Injectable } from '@angular/core';
+// import { BehaviorSubject } from 'rxjs';
+// import { Album } from '../models/album';
+
+// @Injectable({
+//   providedIn: 'root'
+// })
+// export class CartService {
+//   private cart: Album[] = [];
+//   cartSubject = new BehaviorSubject<Album[]>(this.cart);
+
+//   constructor() {
+//     this.loadCart();
+//   }
+
+//   loadCart(): void {
+//     const storedCart = localStorage.getItem('cart');
+//     if (storedCart) {
+//       this.cart = JSON.parse(storedCart);
+//     }
+//   }
+
+//   saveCart(): void {
+//     localStorage.setItem('cart', JSON.stringify(this.cart));
+//   }
+
+//   addToCart(album: Album): void {
+//     console.log(album)
+//     this.cart.push(album);
+//     this.saveCart();
+//   }
+
+//   removeFromCart(album: Album): void {
+//     const index = this.cart.findIndex(item => item.id === album.id);
+//     if (index > -1) {
+//       this.cart.splice(index, 1);
+//       this.saveCart();
+//     }
+//   }
+
+//   getCart(): Album[] {
+//     return this.cart;
+//   }
+// }
+

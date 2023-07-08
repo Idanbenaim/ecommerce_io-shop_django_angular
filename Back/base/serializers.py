@@ -23,6 +23,7 @@ class GenreSerializer(serializers.ModelSerializer):
 
 #################### Album ####################
 class AlbumSerializer(serializers.ModelSerializer): 
+    artist = ArtistSerializer()
     artist_name = serializers.CharField(source='artist.artist_name')
     genre = serializers.CharField(source='genre.genre_name')
     songs_list = serializers.SerializerMethodField()

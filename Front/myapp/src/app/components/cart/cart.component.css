@@ -1,0 +1,6 @@
+/* cart.component.css */
+.album-cover {
+  width: 100px; /* Adjust as needed */
+  height: 100px; /* Adjust as needed */
+  object-fit: cover;
+}

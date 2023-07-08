@@ -11,5 +11,6 @@ export class Album {
   price: number = 0;
   yt_link?: string;
   songs_list?: string[];
-  album_cover?: string; 
+  album_cover?: string;
+  quantity?: number;
 }
