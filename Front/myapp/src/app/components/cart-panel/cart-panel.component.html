@@ -1,39 +1,42 @@
 <!-- cart-panel.component.html -->
-<div class="side_filter" *ngIf="isTagOpen; else emptyCart">
-  <h2>Your Cart</h2>
-
-    <div *ngFor="let album of cart">
-      <img class="album-cover" [src]="BASE_API_URL + album.album_cover" alt="Album cover">
-      {{ album.album_title }}
-      <div>Quantity: {{ album.quantity }}
-      Price: ${{ album.price }}
-      <button (click)="removeFromCart(album)">Remove</button>
-      </div>
-      <hr>
+<div
+  class="side_filter"
+  [ngClass]="{ active_filter: isTagOpen, close_filter: !isTagOpen }"
+>
+  <div class="filter_inner_wrapper">
+    <div class="fliter_main_header">
+      <h2>Your Cart</h2>
     </div>
 
+    <div *ngIf="isTagOpen; else emptyCart">
+      <div *ngFor="let item of cart">
+        <hr />
+        <div class="album-info" style="background-color: rgb(240, 149, 234)">
+          <img
+            class="album-cover"
+            [src]="BASE_API_URL + item.album.album_cover"
+            alt="Album cover"
+          />
+          <div>
+            <div class="album-title">{{ item.album.album_title }}</div>
+            <!-- <div class="quantity">Quantity: {{ item.quantity }}</div> -->
+            <div class="quantity">
+              Quantity:
+              <button (click)="decrementQuantity(item)">-</button>
+              <span>{{ item.quantity }}</span>
+              <button (click)="incrementQuantity(item)">+</button>
+            </div>
+            <div class="price">Price: ${{ item.album.price }}
+            <button class="remove" (click)="removeFromCart(item)">Remove</button></div>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
+
+    <ng-template #emptyCart>
+      <p>Your cart is empty.</p>
+    </ng-template>
+  </div>
 </div>
-
-<ng-template #emptyCart>
-  <p>Your cart is empty.</p>
-</ng-template>
-
-<!-- <div class="side_filter" *ngIf="isTagOpen; else emptyCart">
-  <h2>Your Cart</h2>
-  <button (click)="close()">Close</button>
-  <ul>
-    <li *ngFor="let album of cart">
-      {{ album.album_title }} - ${{ album.price }}
-      <button (click)="removeFromCart(album)">Remove</button>
-    </li>
-  </ul>
-</div>
-
-<ng-template #emptyCart>
-  <p>Your cart is empty.</p>
-</ng-template> -->
-
-
-
-
 

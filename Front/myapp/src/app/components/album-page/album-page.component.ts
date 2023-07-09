@@ -5,6 +5,7 @@ import { AlbumPageService } from 'src/app/services/album-page.service';
 import { Album } from 'src/app/models/album';
 import { BASE_API_URL } from 'src/app/api.config';
 import { CartService } from 'src/app/services/cart.service';
+import { CartItem } from 'src/app/models/cart-item';
 
 
 @Component({
@@ -15,12 +16,18 @@ import { CartService } from 'src/app/services/cart.service';
 export class AlbumPageComponent implements OnInit {
   BASE_API_URL = BASE_API_URL;
   album?: Album;
-  quantity: number = 1;
+  quantity: number = 0;
+
 
   constructor(private albumPageService: AlbumPageService, private route: ActivatedRoute, private cartService: CartService) { }
 
   ngOnInit(): void {
     this.getAlbum();
+    this.cartService.cartUpdated.subscribe((item: CartItem) => {
+      if (this.album && this.album.id === item.album.id) {
+        this.quantity = item.quantity;
+      }
+    });
   }
 
   getAlbum(): void {
@@ -34,16 +41,23 @@ export class AlbumPageComponent implements OnInit {
       // id is null or undefined, handle this case here. For example, you could redirect to a 404 page.
     }
   }
-  addToCart(): void {
+  // addToCart(): void {
+  //   if (this.album) {
+  //     for (let i = 0; i < this.quantity; i++) {
+  //       this.cartService.addToCart(this.album);
+  //     }
+  //   }
+  // }
+
+  incrementQuantity(): void {
     if (this.album) {
-      for (let i = 0; i < this.quantity; i++) {
-        this.cartService.addToCart(this.album);
-      }
+      this.cartService.addToCart(this.album);
+    }
+  }
+
+  decrementQuantity(): void {
+    if (this.album && this.quantity > 0) {
+      this.cartService.decrementQuantity(this.album);
     }
   }
 }
-  // addToCart(album: Album): void {
-  //   console.log(album)
-  //   this.cartService.addToCart(album);
-  // }
-

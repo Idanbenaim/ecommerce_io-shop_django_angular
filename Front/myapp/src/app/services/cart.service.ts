@@ -1,12 +1,14 @@
 // cart.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Album } from '../models/album';
+import { CartItem } from '../models/cart-item';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cart: Album[] = [];
+  private cart: CartItem[] =[];
+  cartUpdated = new EventEmitter<CartItem>();
 
   constructor() {
     this.loadCart();
@@ -15,91 +17,52 @@ export class CartService {
   loadCart(): void {
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {
-      this.cart = JSON.parse(storedCart);
+      const parsedCart = JSON.parse(storedCart);
+      this.cart = parsedCart.map((item: any) => new CartItem(Object.assign(new Album(), item.album), item.quantity));
     }
   }
+  //   const storedCart = localStorage.getItem('cart');
+  //   if (storedCart) {
+  //     this.cart = JSON.parse(storedCart);
+  //   }
+  // }
 
   saveCart(): void {
     localStorage.setItem('cart', JSON.stringify(this.cart));
   }
 
   addToCart(album: Album): void {
-    const foundAlbum = this.cart.find(item => item.id === album.id);
-    if (foundAlbum) {
-      foundAlbum.quantity = (foundAlbum.quantity || 0) + 1;
-      console.log(foundAlbum.quantity)
+    const item = this.cart.find(item => item.album.id === album.id);
+    if (item) {
+      item.quantity += 1;
     } else {
-      album.quantity = 1;
-      this.cart.push(album);
+      this.cart.push(new CartItem(album, 1));
+    }
+    this.saveCart();
+    this.cartUpdated.emit(new CartItem(album, item ? item.quantity : 1));
+  }
+
+  decrementQuantity(album: Album): void {
+    const item = this.cart.find(item => item.album.id === album.id);
+    if (item && item.quantity > 1) {
+      item.quantity -= 1;
+      this.cartUpdated.emit(new CartItem(album, item.quantity));
+    } else if (item && item.quantity === 1) {
+      this.removeFromCart(album);
     }
     this.saveCart();
   }
 
   removeFromCart(album: Album): void {
-    const foundAlbum = this.cart.find(item => item.id === album.id);
-    if (foundAlbum) {
-      if (foundAlbum.quantity && foundAlbum.quantity > 1) {
-        foundAlbum.quantity -= 1;
-      } else {
-        const index = this.cart.findIndex(item => item.id === album.id);
-        if (index > -1) {
-          this.cart.splice(index, 1);
-        }
-      }
+    const index = this.cart.findIndex(item => item.album.id === album.id);
+    if (index > -1) {
+      this.cart.splice(index, 1);
     }
     this.saveCart();
+    this.cartUpdated.emit();
   }
 
-  getCart(): Album[] {
+  getCart(): CartItem[] {
     return this.cart;
   }
 }
-
-
-
-// // cart.service.ts
-// import { Injectable } from '@angular/core';
-// import { BehaviorSubject } from 'rxjs';
-// import { Album } from '../models/album';
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class CartService {
-//   private cart: Album[] = [];
-//   cartSubject = new BehaviorSubject<Album[]>(this.cart);
-
-//   constructor() {
-//     this.loadCart();
-//   }
-
-//   loadCart(): void {
-//     const storedCart = localStorage.getItem('cart');
-//     if (storedCart) {
-//       this.cart = JSON.parse(storedCart);
-//     }
-//   }
-
-//   saveCart(): void {
-//     localStorage.setItem('cart', JSON.stringify(this.cart));
-//   }
-
-//   addToCart(album: Album): void {
-//     console.log(album)
-//     this.cart.push(album);
-//     this.saveCart();
-//   }
-
-//   removeFromCart(album: Album): void {
-//     const index = this.cart.findIndex(item => item.id === album.id);
-//     if (index > -1) {
-//       this.cart.splice(index, 1);
-//       this.saveCart();
-//     }
-//   }
-
-//   getCart(): Album[] {
-//     return this.cart;
-//   }
-// }
-

@@ -13,6 +13,8 @@
   -webkit-transition: 0.4s ease;
   -moz-transition: 0.4s ease;
   -ms-transition: 0.4s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -78,4 +80,43 @@
   width: 100px; /* Adjust as needed */
   height: 100px; /* Adjust as needed */
   object-fit: cover;
+}
+
+.album-cover {
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin-right: 10px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.album-info {
+  display: flex;
+  align-items: center;
+  height: 100px;
+}
+
+.album-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.quantity,
+.price {
+  margin-right: 10px;
+}
+
+button {
+  margin-top: 10px;
+}
+
+hr {
+  margin: 10px 0;
+}
+
+.remove {
+margin-left: 100px;
 }
