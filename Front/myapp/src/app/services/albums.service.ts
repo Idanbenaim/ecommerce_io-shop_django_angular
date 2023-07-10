@@ -12,7 +12,7 @@ import { BASE_API_URL } from '../api.config';
   providedIn: 'root'
 })
 export class AlbumsService {
-  MY_SERVER = `${BASE_API_URL}/albums`;
+  private MY_SERVER = `${BASE_API_URL}/albums`;
 
   constructor(private http: HttpClient) { }
 

@@ -6,6 +6,7 @@ import { CartItem } from 'src/app/models/cart-item';
 import { NavigationComponent } from '../navigation/navigation.component';
 import { BASE_API_URL } from 'src/app/api.config';
 
+
 @Component({
   selector: 'app-cart-panel',
   templateUrl: './cart-panel.component.html',
@@ -28,19 +29,8 @@ export class CartPanelComponent implements OnInit {
 
   removeFromCart(item: CartItem): void {
     this.cartService.removeFromCart(item.album);
-    // Refresh the cart
-    // this.cart = this.cartService.getCart();
   }
 
-  // incrementQuantity(item: CartItem): void {
-  //   this.cartService.addToCart(item.album);
-  //   this.cart = this.cartService.getCart();
-  // }
-
-  // decrementQuantity(item: CartItem): void {
-  //   this.cartService.removeFromCart(item.album);
-  //   this.cart = this.cartService.getCart();
-  // }
   incrementQuantity(item: CartItem): void {
     if (item.album) {
       this.cartService.addToCart(item.album);

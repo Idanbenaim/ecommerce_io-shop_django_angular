@@ -6,6 +6,9 @@
   <div class="filter_inner_wrapper">
     <div class="fliter_main_header">
       <h2>Your Cart</h2>
+      <button mat-icon-button (click)="close()" class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
 
     <div *ngIf="isTagOpen; else emptyCart">

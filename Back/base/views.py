@@ -27,7 +27,7 @@ from .models import Customer, Artist, Genre, Album
 #     permission_classes = [IsSuperuser]
 
 
-# register staff
+# register new user
 @api_view(['POST'])
 def register(request):
     user = User.objects.create_user(

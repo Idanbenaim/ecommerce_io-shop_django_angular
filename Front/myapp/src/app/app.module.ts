@@ -26,6 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ArtistPageComponent } from './components/artist-page/artist-page.component';
 // import { CartComponent } from './components/cart/cart.component';
 import { CartPanelComponent } from './components/cart-panel/cart-panel.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { CartPanelComponent } from './components/cart-panel/cart-panel.component
     ArtistPageComponent,
     // CartComponent,
     CartPanelComponent,
+    LoginComponent,
     // MatdesComponent,
   ],
   imports: [

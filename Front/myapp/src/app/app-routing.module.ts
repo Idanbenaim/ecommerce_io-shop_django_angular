@@ -4,6 +4,7 @@ import { AlbumPageComponent } from './components/album-page/album-page.component
 import { AlbumsComponent } from './components/albums/albums.component';
 import { ArtistPageComponent } from './components/artist-page/artist-page.component';
 import { ArtistsComponent } from './components/artists/artists.component';
+import { LoginComponent } from './components/login/login.component';
 import { MatdesComponent } from './components/matdes/matdes.component';
 
 const routes: Routes = [
@@ -12,11 +13,7 @@ const routes: Routes = [
     { path: "mat", component: MatdesComponent },
     { path: 'album/:id', component: AlbumPageComponent },
     { path: "artists/:id", component: ArtistPageComponent },
-    // { path: "cart", loadChildren: () => import('./components/cart/cart.module').then(m => m.CartModule) },
-
-
-
-
+    { path: 'auth', component: LoginComponent }
 
 
 ];

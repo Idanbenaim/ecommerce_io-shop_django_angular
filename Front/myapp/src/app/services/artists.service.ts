@@ -6,13 +6,6 @@ import { BASE_API_URL } from '../api.config';
 import { Artist } from '../models/artist';
 
 
-// export interface Artist {
-//   id: number;
-//   artist_name: string;
-//   artist_bio: string;
-//   artist_image: string;
-// }
-
 @Injectable({
   providedIn: 'root'
 })
