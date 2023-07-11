@@ -5,6 +5,8 @@ import { CustomerService } from '../../services/customer.service';
 import { CartService } from '../../services/cart.service';
 import { Customer } from '../../models/customer';
 import { CartItem } from '../../models/cart-item';
+import { Location } from '@angular/common';
+
 
 
 @Component({
@@ -13,6 +15,7 @@ import { CartItem } from '../../models/cart-item';
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent implements OnInit {
+  isLinear = false;
   cartItems: CartItem[] = [];
   customerForm = this.fb.group({
     firstName: ['', Validators.required],
@@ -25,7 +28,11 @@ export class CheckoutComponent implements OnInit {
     zipcode: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder, private customerService: CustomerService, private cartService: CartService) { }
+  constructor(private fb: FormBuilder,
+    private customerService: CustomerService,
+    private cartService: CartService,
+    private location: Location
+  ) { }
 
   ngOnInit(): void {
     this.cartItems = this.cartService.getCart();
@@ -52,6 +59,10 @@ export class CheckoutComponent implements OnInit {
         // handle error here. Showing error message to user
       }
     });
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }
