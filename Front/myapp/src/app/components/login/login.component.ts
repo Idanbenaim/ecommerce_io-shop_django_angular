@@ -1,3 +1,4 @@
+// login.component.ts
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Login } from '../../models/login';
@@ -31,28 +32,3 @@ export class LoginComponent implements OnInit {
       });
   }
 }
-
-
-
-// // login.component.ts
-// import { Component } from '@angular/core';
-// import { AuthService } from '../../services/auth.service';
-
-// @Component({
-//   selector: 'app-login',
-//   templateUrl: './login.component.html',
-//   styleUrls: ['./login.component.css']
-// })
-// export class LoginComponent {
-//   email: string = '';
-//   password: string = '';
-
-//   constructor(private AuthService: AuthService) { }
-
-//   login(): void {
-//     this.AuthService.auth(this.email, this.password).subscribe(token => {
-//       localStorage.setItem('token', token);
-//       // Navigate to home page or wherever you want to redirect the user after login
-//     });
-//   }
-// }

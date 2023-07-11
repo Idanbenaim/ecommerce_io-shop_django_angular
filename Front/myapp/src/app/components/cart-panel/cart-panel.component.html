@@ -11,6 +11,18 @@
       </button>
     </div>
 
+    <div class="cart-summary">
+      Subtotal ({{ itemCount }} Items): ${{ total }}
+    </div>
+    <button
+      mat-raised-button
+      color="primary"
+      class="checkout-button"
+      (click)="proceedToCheckout()"
+    >
+      Proceed to Checkout
+    </button>
+
     <div *ngIf="isTagOpen; else emptyCart">
       <div *ngFor="let item of cart">
         <hr />
@@ -29,8 +41,12 @@
               <span>{{ item.quantity }}</span>
               <button (click)="incrementQuantity(item)">+</button>
             </div>
-            <div class="price">Price: ${{ item.album.price }}
-            <button class="remove" (click)="removeFromCart(item)">Remove</button></div>
+            <div class="price">
+              Price: ${{ item.album.price }}
+              <button class="remove" (click)="removeFromCart(item)">
+                Remove
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -40,6 +56,13 @@
     <ng-template #emptyCart>
       <p>Your cart is empty.</p>
     </ng-template>
+
+    <!-- <div class="cart-summary">
+      <div>Total: ${{ total }}</div>
+      <div>Items: {{ itemCount }}</div>
+    </div>
+    <button mat-raised-button color="primary" class="checkout-button">
+      Proceed to Checkout
+    </button> -->
   </div>
 </div>
-

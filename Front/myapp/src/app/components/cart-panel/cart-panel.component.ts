@@ -5,6 +5,8 @@ import { Album } from 'src/app/models/album';
 import { CartItem } from 'src/app/models/cart-item';
 import { NavigationComponent } from '../navigation/navigation.component';
 import { BASE_API_URL } from 'src/app/api.config';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,14 +19,24 @@ export class CartPanelComponent implements OnInit {
   @Input() isTagOpen: boolean = false;
   @Output() closePanel = new EventEmitter<void>();
   cart: CartItem[] = [];
+  total: number = 0;
+  itemCount: number = 0;
 
-  constructor(private cartService: CartService) { }
+  constructor(private cartService: CartService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.cart = this.cartService.getCart();
+    this.updateCartSummary();
     this.cartService.cartUpdated.subscribe(() => {
       this.cart = this.cartService.getCart();
+      this.updateCartSummary();
     });
+  }
+
+  updateCartSummary(): void {
+    const summary = this.cartService.getCartSummary();
+    this.total = summary.total;
+    this.itemCount = summary.itemCount;
   }
 
   removeFromCart(item: CartItem): void {
@@ -45,5 +57,15 @@ export class CartPanelComponent implements OnInit {
 
   close(): void {
     this.closePanel.emit();
+  }
+
+  proceedToCheckout(): void {
+    if (this.authService.isLoggedIn()) {
+      // If the user is logged in, navigate to the checkout page
+      this.router.navigate(['/checkout']);
+    } else {
+      // If the user is not logged in, prompt the user to login and then redirect to the checkout page
+      this.router.navigate(['/auth'], { queryParams: { returnUrl: '/checkout' } });
+    }
   }
 }

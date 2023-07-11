@@ -287,3 +287,5 @@ class manageCartItems(APIView):
         my_model = CartItem.objects.get(id=id)
         my_model.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+

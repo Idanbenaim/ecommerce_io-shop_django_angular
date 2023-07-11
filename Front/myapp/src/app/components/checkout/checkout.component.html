@@ -1,0 +1,36 @@
+<!-- checkout.component.html -->
+<mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+  <mat-step>
+    <ng-template matStepLabel>Review your order</ng-template>
+    <div *ngFor="let item of cartItems">
+      <p>{{item.album.album_title}} - Quantity: {{item.quantity}}</p>
+    </div>
+    <button mat-button matStepperNext>Next</button>
+  </mat-step>
+  <mat-step [stepControl]="customerForm">
+    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+      <ng-template matStepLabel>Your Shipping Details</ng-template>
+      <mat-form-field>
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" required>
+      </mat-form-field>
+
+      <!-- Add similar form fields for lastName, custPhone, email, address, city, state, and zipcode -->
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Place Your Order</ng-template>
+    <p>Payment details go here.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-stepper>
+<button mat-raised-button (click)="goToCart()">Back to cart</button>
+

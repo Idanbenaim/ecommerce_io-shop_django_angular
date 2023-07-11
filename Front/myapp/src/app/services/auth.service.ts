@@ -1,3 +1,4 @@
+// Auth Service
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Login } from '../models/login';
@@ -35,5 +36,9 @@ export class AuthService {
   // Method to remove the token from local storage
   logout(): void {
     localStorage.removeItem('token');
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 }

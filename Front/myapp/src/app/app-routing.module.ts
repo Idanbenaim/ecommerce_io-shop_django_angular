@@ -1,3 +1,4 @@
+// app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AlbumPageComponent } from './components/album-page/album-page.component';
@@ -6,6 +7,7 @@ import { ArtistPageComponent } from './components/artist-page/artist-page.compon
 import { ArtistsComponent } from './components/artists/artists.component';
 import { LoginComponent } from './components/login/login.component';
 import { MatdesComponent } from './components/matdes/matdes.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 const routes: Routes = [
     { path: "albums",component:AlbumsComponent },
@@ -13,9 +15,8 @@ const routes: Routes = [
     { path: "mat", component: MatdesComponent },
     { path: 'album/:id', component: AlbumPageComponent },
     { path: "artists/:id", component: ArtistPageComponent },
-    { path: 'auth', component: LoginComponent }
-
-
+    { path: 'auth', component: LoginComponent },
+    { path: 'checkout', component: CheckoutComponent },
 ];
 
 @NgModule({

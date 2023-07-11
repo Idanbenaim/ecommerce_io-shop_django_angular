@@ -27,6 +27,7 @@ import { ArtistPageComponent } from './components/artist-page/artist-page.compon
 // import { CartComponent } from './components/cart/cart.component';
 import { CartPanelComponent } from './components/cart-panel/cart-panel.component';
 import { LoginComponent } from './components/login/login.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { LoginComponent } from './components/login/login.component';
     // CartComponent,
     CartPanelComponent,
     LoginComponent,
+    CheckoutComponent,
     // MatdesComponent,
   ],
   imports: [
