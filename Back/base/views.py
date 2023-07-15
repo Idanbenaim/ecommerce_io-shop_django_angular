@@ -1,12 +1,11 @@
+# views.py
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework import serializers, status, viewsets, permissions, generics 
 from rest_framework.views import APIView
 from .serializers import (CustomerSerializer, ArtistSerializer, GenreSerializer, 
                         AlbumSerializer, CartSerializer,CartItemSerializer,) 
-# InventorySerializer, 
-#                          OrderSerializer, OrderItemSerializer, 
-#                         PaymentSerializer, ReviewSerializer)
+
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -15,16 +14,7 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 
 
-from .models import Customer, Artist, Genre, Album
-# from .permissions import IsSuperuser
-
-
-# class MyView(APIView):
-#     """
-#     A custom API view that requires the user to be a superuser.
-#     Only authenticated users with the 'is_superuser' flag set to True are granted permission.
-#     """
-#     permission_classes = [IsSuperuser]
+from .models import (Customer, Artist, Genre, Album, Cart, CartItem)
 
 
 # register new user
@@ -61,42 +51,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 # Create your views here.
-#################### Customer ####################
-
-@permission_classes([IsAuthenticated])
-class manageCustomers(APIView):
-    def get(self, request, id=-1):  # axios.get
-        if id > -1:
-            my_model = Customer.objects.get(id=id)
-            serializer = CustomerSerializer(my_model, many=False)
-        else:
-            my_model = Customer.objects.all()
-            serializer = CustomerSerializer(my_model, many=True)
-        return Response(serializer.data)
-
-
-    def post(self, request):  # axios.post
-        serializer = CustomerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-    def put(self, request, id):  # axios.put
-        my_model = Customer.objects.get(id=id)
-        serializer = CustomerSerializer(my_model, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-    def delete(self, request, id):  # axios.delete
-        my_model = Customer.objects.get(id=id)
-        my_model.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 #################### Artist ####################
 class manageArtists(APIView):
@@ -289,3 +243,107 @@ class manageCartItems(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+#################### Customer ####################
+
+class manageCustomers(APIView):
+    def get(self, request, id=-1):  # axios.get
+        if id > -1:
+            my_model = Customer.objects.get(id=id)
+            serializer = CustomerSerializer(my_model, many=False)
+        else:
+            my_model = Customer.objects.all()
+            serializer = CustomerSerializer(my_model, many=True)
+        return Response(serializer.data)
+
+
+    def post(self, request):  # axios.post
+        serializer = CustomerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def put(self, request, id):  # axios.put
+        my_model = Customer.objects.get(id=id)
+        serializer = CustomerSerializer(my_model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request, id):  # axios.delete
+        my_model = Customer.objects.get(id=id)
+        my_model.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#################### Order ####################
+class manageOrders(APIView):
+    def get(self, request, id=-1):  # axios.get
+        if id > -1:
+            my_model = Order.objects.get(id=id)
+            serializer = OrderSerializer(my_model, many=False)
+        else:
+            my_model = Order.objects.all()
+            serializer = OrderSerializer(my_model, many=True)
+        return Response(serializer.data)
+
+
+    def post(self, request):  # axios.post
+        serializer = OrderSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def put(self, request, id):  # axios.put
+        my_model = Order.objects.get(id=id)
+        serializer = OrderSerializer(my_model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request, id):  # axios.delete
+        my_model = Order.objects.get(id=id)
+        my_model.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#################### Order Item ####################
+Class manageOrderItems(APIView):
+    def get(self, request, id=-1):  # axios.get
+        if id > -1:
+            my_model = OrderItem.objects.get(id=id)
+            serializer = OrderItemSerializer(my_model, many=False)
+        else:
+            my_model = OrderItem.objects.all()
+            serializer = OrderItemSerializer(my_model, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):  # axios.post
+        serializer = OrderItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, id):  # axios.put
+        my_model = OrderItem.objects.get(id=id)
+        serializer = OrderItemSerializer(my_model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id):  # axios.delete
+        my_model = OrderItem.objects.get(id=id)
+        my_model.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        

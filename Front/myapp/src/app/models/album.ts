@@ -1,3 +1,4 @@
+// album.ts
 import { Artist } from './artist';
 import { Genre } from './genre';
 

@@ -41,13 +41,6 @@ export class AlbumPageComponent implements OnInit {
       // id is null or undefined, handle this case here. For example, you could redirect to a 404 page.
     }
   }
-  // addToCart(): void {
-  //   if (this.album) {
-  //     for (let i = 0; i < this.quantity; i++) {
-  //       this.cartService.addToCart(this.album);
-  //     }
-  //   }
-  // }
 
   incrementQuantity(): void {
     if (this.album) {

@@ -1,9 +1,9 @@
 <!-- checkout.component.html -->
-<!-- checkout.component.html -->
 <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
   <mat-step>
     <ng-template matStepLabel>Review your order</ng-template>
     <div *ngFor="let item of cartItems">
+              <hr />
       <div class="album-info" style="background-color: rgb(240, 149, 234)">
         <img
           class="album-cover"
@@ -17,19 +17,37 @@
             <span>{{ item.quantity }}</span>
           </div>
           <div class="price">Price: ${{ item.album.price }}</div>
-          <div class="subtotal">
+          <!-- <div class="subtotal">
             Subtotal: ${{ item.album.price * item.quantity }}
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
+            <hr />
     <button mat-button matStepperNext>Next</button>
   </mat-step>
-  <mat-step [stepControl]="customerForm">
+
+  <mat-step>
+    <ng-template matStepLabel>Place Your Order</ng-template>
+    <!-- <p>Payment details go here.</p> -->
+    <!-- PAYPAL -->
+    <app-paypal (onApprove)="handlePayment($event)" (onError)="handlePaymentError($event)"></app-paypal>
+    <div id="paypal-button-container"></div>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-stepper>
+<div class="subtotal"> Order total: ${{ total }}</div>
+<button mat-raised-button class="subtotal" (click)="goBack()">Back</button>
+
+<!-- stepper deprecated second step -->
+<!-- <mat-step [stepControl]="customerForm">
     <br />
-    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="customerForm" (ngSubmit)="onSubmit()"> -->
       <!-- first and last name -->
-      <ng-template matStepLabel>Your Shipping Details</ng-template>
+      <!-- <ng-template matStepLabel>Your Shipping Details</ng-template>
       <mat-form-field class="spacing">
         <mat-label>First Name</mat-label>
         <mat-icon matSuffix>person</mat-icon>
@@ -40,30 +58,30 @@
         <mat-icon matSuffix>person</mat-icon>
         <input matInput formControlName="lastName" required />
       </mat-form-field>
-      <br />
+      <br /> -->
       <!-- Phone -->
-      <mat-form-field class="spacing">
+      <!-- <mat-form-field class="spacing">
         <mat-label>Phone number</mat-label>
         <input matInput formControlName="custPhone" required pattern="[0-9]{10}" />
         <mat-icon matSuffix>phone</mat-icon>
-      </mat-form-field>
+      </mat-form-field> -->
       <!-- Email -->
-      <mat-form-field>
+      <!-- <mat-form-field>
         <mat-label>Enter your email</mat-label>
         <input matInput placeholder="me@example.com"[formControl]="email" required/>
         <mat-icon matSuffix>email</mat-icon>
         <mat-error *ngIf="email.invalid">{{ getEmailErrorMessage() }}</mat-error>
       </mat-form-field>
-      <br />
+      <br /> -->
       <!-- Address -->
-      <mat-form-field class="address">
+      <!-- <mat-form-field class="address">
         <mat-label>Address</mat-label>
         <input matInput formControlName="address" required />
         <mat-icon matSuffix>home</mat-icon>
       </mat-form-field>
-      <br />
+      <br /> -->
       <!-- City, State , Zip -->
-      <mat-form-field class="spacing">
+      <!-- <mat-form-field class="spacing">
         <mat-label>City</mat-label>
         <input matInput formControlName="city" required />
         <mat-icon matSuffix>apartment</mat-icon>
@@ -80,24 +98,9 @@
       </mat-form-field>
       <br />
       <br />
-
-      <!-- Add similar form fields for lastName, custPhone, email, address, city, state, and zipcode -->
-
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
       </div>
     </form>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Place Your Order</ng-template>
-    <div class="order-total">Order total: ${{ total }}</div>
-
-    <p>Payment details go here.</p>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-    </div>
-  </mat-step>
-</mat-stepper>
-<button mat-raised-button (click)="goBack()">Back</button>
+  </mat-step> -->

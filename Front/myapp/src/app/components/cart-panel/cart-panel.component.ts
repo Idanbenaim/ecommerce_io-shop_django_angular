@@ -69,3 +69,4 @@ export class CartPanelComponent implements OnInit {
     }
   }
 }
+

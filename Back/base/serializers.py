@@ -1,13 +1,6 @@
+# serializers.py
 from rest_framework import serializers
-from .models import Customer, Artist, Genre, Album, Cart, CartItem, Order, OrderItem, Payment, Review
-
-
-
-#################### Customer ####################
-class CustomerSerializer(serializers.ModelSerializer):
-   class Meta:
-       model = Customer
-       fields = '__all__'
+from .models import Artist, Genre, Album, Cart, CartItem, Order, OrderItem, Customer,
 
 #################### Artist ####################
 class ArtistSerializer(serializers.ModelSerializer):
@@ -33,21 +26,11 @@ class AlbumSerializer(serializers.ModelSerializer):
        model = Album
        fields = '__all__'
 
-    # def get_artist_name(self, obj):  
-    #     """This method will be used to get the artist name"""
-    #     return obj.artist.artist_name  # Access the artist_name property of the related Artist object
-
     def get_songs_list(self, obj):
         """This method will be used to get the songs list"""
         if isinstance(obj.songs_list, str):
             return obj.songs_list.split(', ')
         return []
-
-# #################### Inventory ####################
-# class InventorySerializer(serializers.ModelSerializer):
-#    class Meta:
-#        model = Inventory
-#        fields = '__all__'
 
 #################### Cart ####################
 class CartSerializer(serializers.ModelSerializer):
@@ -61,17 +44,23 @@ class CartItemSerializer(serializers.ModelSerializer):
          model = CartItem
          fields = '__all__'
 
-# #################### Order ####################
-# class OrderSerializer(serializers.ModelSerializer):
-#     class Meta:
-#          model = Order
-#          fields = '__all__'
+#################### Order ####################
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+         model = Order
+         fields = '__all__'
 
-# #################### OrderItem ####################
-# class OrderItemSerializer(serializers.ModelSerializer):
-#     class Meta:
-#          model = OrderItem
-#          fields = '__all__'
+#################### OrderItem ####################
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+         model = OrderItem
+         fields = '__all__'
+
+#################### Customer ####################
+class CustomerSerializer(serializers.ModelSerializer):
+   class Meta:
+       model = Customer
+       fields = '__all__'
 
 # #################### Payment ####################
 # class PaymentSerializer(serializers.ModelSerializer):
@@ -85,3 +74,19 @@ class CartItemSerializer(serializers.ModelSerializer):
 #          model = Review
 #          fields = '__all__'
 
+
+# #################### Inventory ####################
+# class InventorySerializer(serializers.ModelSerializer):
+#    class Meta:
+#        model = Inventory
+#        fields = '__all__'
+
+# class CustomerSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Customer
+#         fields = ['first_name', 'last_name', 'phone', 'email', 'address', 'city', 'state', 'zipcode']
+
+# class TransactionSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Transaction
+#         fields = ['customer', 'transaction_id', 'timestamp', 'payer_id', 'amount', 'currency']

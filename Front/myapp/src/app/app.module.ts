@@ -1,3 +1,4 @@
+// app.module.ts
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -29,6 +30,8 @@ import { ArtistPageComponent } from './components/artist-page/artist-page.compon
 import { CartPanelComponent } from './components/cart-panel/cart-panel.component';
 import { LoginComponent } from './components/login/login.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { PaypalComponent } from './components/paypal/paypal.component';
+import { OrderConfirmationComponent } from './components/order-confirmation/order-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +45,8 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
     CartPanelComponent,
     LoginComponent,
     CheckoutComponent,
+    PaypalComponent,
+    OrderConfirmationComponent,
     // MatdesComponent,
   ],
   imports: [

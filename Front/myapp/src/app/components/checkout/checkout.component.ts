@@ -5,11 +5,13 @@ import { CustomerService } from '../../services/customer.service';
 import { CartService } from '../../services/cart.service';
 import { Customer } from '../../models/customer';
 import { CartItem } from '../../models/cart-item';
+import { Order } from '../../models/order';
+import { OrderItem } from '../../models/order-item';
 import { Router } from '@angular/router';
 import { BASE_API_URL } from 'src/app/api.config';
+import { HttpClient } from '@angular/common/http';
 
 
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-checkout',
@@ -76,85 +78,107 @@ export class CheckoutComponent implements OnInit {
     return this.email.hasError('email') ? 'Not a valid email' : '';
   }
 
-  // getPhoneErrorMessage() {
-  //   if (this.custPhone.hasError('required')) {
-  //     return 'You must enter a numeric value';
-  //   }
+  handlePayment(order: any): void {
+    console.log('Payment Approved: ', order);
 
-  //   return this.custPhone.hasError('[0-9]{10}') ? 'Numeric values only' : '';
+    // order object contains information about the transaction
+    const payer = order.payer;
+    const payerName = payer.name.given_name + ' ' + payer.name.surname;  // customer name
+    const payerEmail = payer.email_address;  // customer email
+    const transactionId = order.purchase_units[0].payments.captures[0].id;  // transaction id
+    const timestamp = order.create_time;  // timestamp
+    const payerId = payer.payer_id;  // payer id
+
+    // New full Address
+    const shippingDetails = order.purchase_units[0].shipping;
+    const payerAddress = shippingDetails.address;  // shipping address
+
+    const addressLine1 = payerAddress.address_line_1;  // street
+    const addressLine2 = payerAddress.address_line_2 || 'N/A';  // street 2
+    const city = payerAddress.admin_area_2;  // city
+    const state = payerAddress.admin_area_1;  // state
+    const postalCode = payerAddress.postal_code;  // postal code
+    const country = payerAddress.country_code;
+
+    // Log information for debugging
+    console.log('Payer Name: ', payerName);
+    console.log('Payer Email: ', payerEmail);
+    console.log('Transaction ID: ', transactionId);
+    console.log('Timestamp: ', timestamp);
+    console.log('Payer ID: ', payerId);
+    console.log('Shipping Address: ', payerAddress);
+    console.log('Address Line 1: ', addressLine1);
+    console.log('Address Line 2: ', addressLine2);
+    console.log('City: ', city);
+    console.log('State: ', state);
+    console.log('Postal Code: ', postalCode);
+    console.log('Country: ', country);
+
+    // Create the new Customer based on the order details
+    const customer: Customer = {
+      firstName: payerName,
+      lastName: payerName,
+      addressLine1: addressLine1,
+      addressLine2: addressLine2,
+      city: city,
+      state: state,
+      zipcode: postalCode,
+      email: payerEmail
+    };
+
+    // Create the new Order based on the order details
+    const newOrder: Order = {
+      customer: customer,
+      transaction_id: transactionId,
+      total: this.total,
+      payer_id: payerId
+    };
+
+    // Log the new Order for debugging
+    console.log('New Order: ', newOrder);
+  }
+
+
+  // handlePayment(order: any): void {
+  //   console.log('Payment Approved: ', order);
+  //   // order object contains information about the transaction
+  //   const payer = order.payer;
+  //   const payerName = payer.name.given_name + ' ' + payer.name.surname;  // customer name
+  //   const payerEmail = payer.email_address;  // customer email
+
+  //   const transactionId = order.purchase_units[0].payments.captures[0].id;  // transaction id
+  //   const timestamp = order.create_time;  // timestamp
+  //   const payerId = payer.payer_id;  // payer id
+
+  //   // New full Address
+  //   const shippingDetails = order.purchase_units[0].shipping;
+  //   const payerAddress = shippingDetails.address;  // shipping address
+
+  //   const addressLine1 = payerAddress.address_line_1;  // street
+  //   const addressLine2 = payerAddress.address_line_2 || 'N/A';  // street 2
+  //   const city = payerAddress.admin_area_2;  // city
+  //   const state = payerAddress.admin_area_1;  // state
+  //   const postalCode = payerAddress.postal_code;  // postal code
+  //   const country = payerAddress.country_code;
+
+  //   console.log('Payer Name: ', payerName);
+  //   console.log('Payer Email: ', payerEmail);
+  //   console.log('Transaction ID: ', transactionId);
+  //   console.log('Timestamp: ', timestamp);
+  //   console.log('Payer ID: ', payerId);
+
+  //   console.log('Shipping Address: ', payerAddress);
+  //   console.log('Address Line 1: ', addressLine1);
+  //   console.log('Address Line 2: ', addressLine2);
+
+  //   console.log('City: ', city);
+  //   console.log('State: ', state);
+  //   console.log('Postal Code: ', postalCode);
+  //   console.log('Country: ', country);
   // }
+
+  handlePaymentError(err: any): void {
+    console.log('Payment Error: ', err);
+    // Handle payment errors here
+  }
 }
-
-
-
-
-// // checkout.component.ts
-// import { Component, OnInit } from '@angular/core';
-// import { FormBuilder, Validators } from '@angular/forms';
-// import { CustomerService } from '../../services/customer.service';
-// import { CartService } from '../../services/cart.service';
-// import { Customer } from '../../models/customer';
-// import { CartItem } from '../../models/cart-item';
-// import { Location } from '@angular/common';
-
-
-
-// @Component({
-//   selector: 'app-checkout',
-//   templateUrl: './checkout.component.html',
-//   styleUrls: ['./checkout.component.css']
-// })
-// export class CheckoutComponent implements OnInit {
-//   isLinear = false;
-//   cartItems: CartItem[] = [];
-//   // cartTotal: cartTotal[] = [];
-//   customerForm = this.fb.group({
-//     firstName: ['', Validators.required],
-//     lastName: ['', Validators.required],
-//     custPhone: ['', Validators.required],
-//     email: ['', [Validators.required, Validators.email]],
-//     address: ['', Validators.required],
-//     city: ['', Validators.required],
-//     state: ['', Validators.required],
-//     zipcode: ['', Validators.required]
-//   });
-
-//   constructor(private fb: FormBuilder,
-//     private customerService: CustomerService,
-//     private cartService: CartService,
-//     private location: Location
-//   ) { }
-
-//   ngOnInit(): void {
-//     this.cartItems = this.cartService.getCart();
-//     // this.cartTotal = this.cartService.getCartSummary();
-//   }
-
-//   onSubmit(): void {
-//     const customer: Customer = {
-//       firstName: this.customerForm.value.firstName!,
-//       lastName: this.customerForm.value.lastName!,
-//       custPhone: this.customerForm.value.custPhone!,
-//       email: this.customerForm.value.email!,
-//       address: this.customerForm.value.address!,
-//       city: this.customerForm.value.city!,
-//       state: this.customerForm.value.state!,
-//       zipcode: this.customerForm.value.zipcode!
-//     };
-//     this.customerService.createCustomer(customer).subscribe({
-//       next: res => {
-//         console.log(res);
-//         // handle response here. Possibly navigate to the next step
-//       },
-//       error: err => {
-//         console.log(err);
-//         // handle error here. Showing error message to user
-//       }
-//     });
-//   }
-
-//   goBack() {
-//     this.location.back();
-//   }
-
-// }

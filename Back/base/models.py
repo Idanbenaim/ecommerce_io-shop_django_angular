@@ -1,3 +1,4 @@
+# models.py
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -34,30 +35,6 @@ class Album(models.Model):
         return self.album_title
 
 
-class Inventory(models.Model):
-    album = models.ForeignKey(Album,on_delete=models.CASCADE)
-    qty = models.IntegerField()
-
-    def __str__(self):
-        return self.album.album_title
-
-
-class Customer(models.Model):
-    user =models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
-    firstName = models.CharField(max_length=35)
-    lastName = models.CharField(max_length=35)
-    custPhone = models.CharField(max_length=16)
-    email = models.EmailField(max_length=100, blank=False)
-    address = models.CharField(max_length=100, blank=False)
-    city = models.CharField(max_length=35)
-    state = models.CharField(max_length=35)
-    zipcode = models.CharField(max_length=35)
-        # order = models.ForeignKey(Order,on_delete=models.CASCADE)
-
-    def __str__(self):
-       return self.firstName
-
-
 class Cart(models.Model):
     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -75,19 +52,17 @@ class CartItem(models.Model):
     def __str__(self):
         return self.album.album_title
 
-class Order(models.Model):
-    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
-    orderDate = models.DateTimeField(auto_now_add=True)
-    totalAmount = models.DecimalField(max_digits=5, decimal_places=2)
-    cart = models.ForeignKey(Cart,on_delete=models.CASCADE)
-    paypalOrderID = models.CharField(max_length=100)
 
-    # def __str__(self):
-    #     return self.customer.firstName
+class Order(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    transaction_id = models.CharField(max_length=100)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    payer_id = models.CharField(max_length=50)
+    total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    currency = models.CharField(max_length=3)
 
     def __str__(self):
         return f'Order #{self.id} by {self.customer.firstName} {self.customer.lastName}'
-
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE)
@@ -98,31 +73,35 @@ class OrderItem(models.Model):
         return self.album.album_title
 
 
-class Payment(models.Model):
-    order = models.ForeignKey(Order,on_delete=models.CASCADE)
-    paymentDate = models.DateTimeField(auto_now_add=True)
-    paymentMethod = models.CharField(max_length=35)
-    amount = models.DecimalField(max_digits=5, decimal_places=2)
+class Customer(models.Model):
+    user =models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+    firstName = models.CharField(max_length=35)
+    lastName = models.CharField(max_length=35)
+    email = models.EmailField(max_length=100, blank=False)
+    address = models.CharField(max_length=100, blank=False)
+    city = models.CharField(max_length=35)
+    state = models.CharField(max_length=35)
+    zipcode = models.CharField(max_length=35)
 
     def __str__(self):
-        return self.paymentMethod
-
-class Review(models.Model):
-    album = models.ForeignKey(Album,on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
-    reviewDate = models.DateTimeField(auto_now_add=True)
-    reviewText = models.CharField(max_length=1000)
-
-    def __str__(self):
-        return self.album.album_title
+       return self.firstName
 
 
-# class ShippingAddress(models.Model):
-#     order = models.ForeignKey(Order,on_delete=models.CASCADE)
-#     address = models.CharField(max_length=100)
-#     city = models.CharField(max_length=35)
-#     state = models.CharField(max_length=35)
-#     zipcode = models.CharField(max_length=35)
+
+# class Review(models.Model):
+#     album = models.ForeignKey(Album,on_delete=models.CASCADE)
+#     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
+#     reviewDate = models.DateTimeField(auto_now_add=True)
+#     reviewText = models.CharField(max_length=1000)
 
 #     def __str__(self):
-#         return self.address
+#         return self.album.album_title
+
+
+# class Inventory(models.Model):
+#     album = models.ForeignKey(Album,on_delete=models.CASCADE)
+#     qty = models.IntegerField()
+
+#     def __str__(self):
+#         return self.album.album_title
+

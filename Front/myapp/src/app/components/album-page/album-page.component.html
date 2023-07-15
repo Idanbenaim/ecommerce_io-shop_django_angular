@@ -8,7 +8,6 @@
           [src]="BASE_API_URL + album?.album_cover"
           alt="Album cover"
         />
-
       </div>
       <div class="col-md-6">
         <!-- Bind the title of the album. This dynamically sets the text of the h1 tag -->
@@ -40,30 +39,18 @@
         </ol>
         <!-- Static elements -->
         <div class="d-flex align-items-center">
-          <button (click)="decrementQuantity()">-</button>
-          <span>{{ quantity }}</span>
-          <button (click)="incrementQuantity()">+</button>
-
-          <!-- <button (click)="addToCart()">
-            <mat-icon>add_shopping_cart</mat-icon>
-            Add to cart
-          </button> -->
-        </div><br>
-
-
-        <!-- <div class="d-flex align-items-center">
-          <mat-form-field appearance="fill">
-            <mat-label>Quantity</mat-label>
-            <input matInput type="number" min="1" [(ngModel)]="quantity" />
-          </mat-form-field>
-
-          <button (click)="addToCart()">
-            <mat-icon>add_shopping_cart</mat-icon>
-            Add to cart
-          </button>
-        </div> -->
-
+          <div *ngIf="quantity === 0">
+            <button (click)="incrementQuantity()">Add to Cart</button>
+          </div>
+          <div *ngIf="quantity > 0">
+            <button (click)="decrementQuantity()">-</button>
+            <span>{{ quantity }}</span>
+            <button (click)="incrementQuantity()">+</button>
+          </div>
+        </div>
+        <br />
       </div>
     </div>
-  </div><br>
+  </div>
+  <br />
 </section>

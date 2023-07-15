@@ -11,21 +11,16 @@ export class CartService {
   cartUpdated = new EventEmitter<CartItem>();
 
   constructor() {
-    // this.loadCart();
+    this.loadCart();
   }
 
-  // loadCart(): void {
-  //   const storedCart = localStorage.getItem('cart');
-  //   if (storedCart) {
-  //     const parsedCart = JSON.parse(storedCart);
-  //     this.cart = parsedCart.map((item: any) => new CartItem(Object.assign(new Album(), item.album), item.quantity));
-  //   }
-  // }
-  //   const storedCart = localStorage.getItem('cart');
-  //   if (storedCart) {
-  //     this.cart = JSON.parse(storedCart);
-  //   }
-  // }
+  loadCart(): void {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      const parsedCart = JSON.parse(storedCart);
+      this.cart = parsedCart.map((item: any) => new CartItem(Object.assign(new Album(), item.album), item.quantity));
+    }
+  }
 
   saveCart(): void {
     localStorage.setItem('cart', JSON.stringify(this.cart));
@@ -59,7 +54,7 @@ export class CartService {
       this.cart.splice(index, 1);
     }
     this.saveCart();
-    this.cartUpdated.emit();
+    this.cartUpdated.emit(new CartItem(album, 0));
   }
 
   getCart(): CartItem[] {

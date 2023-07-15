@@ -97,6 +97,7 @@ h2 {
   display: flex;
   align-items: center;
   height: 100px;
+  max-width: 450px;
 }
 
 .album-title {
@@ -104,9 +105,9 @@ h2 {
   margin-bottom: 5px;
 }
 
-.quantity,
-.price {
-  margin-right: 10px;
+.subtotal {
+  align-items: center;
+  margin-right: 100px;
 }
 
 button {
