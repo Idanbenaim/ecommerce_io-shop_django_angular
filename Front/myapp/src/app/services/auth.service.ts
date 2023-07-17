@@ -1,9 +1,9 @@
 // Auth Service
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Login } from '../models/login';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { BASE_API_URL } from '../api.config';
 
 @Injectable({
@@ -24,21 +24,42 @@ export class AuthService {
       tap((res: any) => {
         // The access token is stored in the local storage for future use
         localStorage.setItem('token', res.access);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        // create an error message string
+        let errorMsg: string;
+        if (error.error instanceof ErrorEvent) {
+          errorMsg = `Please enter a valid username and password`;
+        } else if (error.status === 401) {
+          errorMsg = "Username does not exist in our database. Please create an account.";
+        } else {
+          errorMsg = `Please enter a valid username and password`;
+        }
+        // create an observable with the error message
+        return of({ error: errorMsg });
       })
+
+
     );
   }
 
-  // Method to get the token from local storage
+  // get the token from local storage
   getToken(): string {
     return localStorage.getItem('token') || "";
   }
 
-  // Method to remove the token from local storage
+  // remove the token from local storage
   logout(): void {
     localStorage.removeItem('token');
   }
 
   isLoggedIn(): boolean {
     return !!this.getToken();
+  }
+
+  // registration method
+  register(user: Login): Observable<any> {
+    const url = `${this.MY_SERVER}/register/`;
+    return this.http.post(url, user);
   }
 }

@@ -3,7 +3,8 @@ export class Customer {
   firstName: string;
   lastName: string;
   email: string;
-  address: string;
+  addressLine1: string | undefined;
+  addressLine2: string | undefined;
   city: string;
   state: string;
   zipcode: string;
@@ -14,7 +15,8 @@ export class Customer {
     this.firstName = '';
     this.lastName = '';
     this.email = '';
-    this.address = '';
+    this.addressLine1 = '';
+    this.addressLine2 = '';
     this.city = '';
     this.state = '';
     this.zipcode = '';

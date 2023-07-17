@@ -5,9 +5,9 @@ export class Order {
   id: number;
   customer: Customer;
   transaction_id: string;
-  timestamp: Date;
+  timestamp: Date | string;
   payer_id: string;
-  total_amount: number;
+  total_amount: number | string;
   currency: string;
 
   constructor() {

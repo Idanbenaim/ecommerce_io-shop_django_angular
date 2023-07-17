@@ -11,3 +11,19 @@ a.mat-button:hover {
   background-color: #FFC107; /* Amber for active link */
   color: black;
 }
+
+/* snackbar notifications*/
+.mat-primary {
+  background-color: #673AB7;
+  color: white;
+}
+
+.mat-warn {
+  background-color: #D32F2F;
+  color: white;
+}
+
+.mat-info {
+  background-color: #0288D1;
+  color: white;
+}

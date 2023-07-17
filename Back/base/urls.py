@@ -1,3 +1,4 @@
+# urls.py
 from django.contrib import admin
 from django.urls import path, include
 from . import views
@@ -6,7 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 urlpatterns = [
 
     path('auth/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('register/', views.register),
+    path('register/', views.register, name='register'),
     
     path('customers/<int:id>',views.manageCustomers.as_view()),
     path('customers/', views.manageCustomers.as_view()),

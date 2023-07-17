@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Artist, Genre, Album, Cart, CartItem, Order, OrderItem, Customer,
+from .models import Artist, Genre, Album, Cart, CartItem, Order, OrderItem, Customer
 
 #################### Artist ####################
 class ArtistSerializer(serializers.ModelSerializer):

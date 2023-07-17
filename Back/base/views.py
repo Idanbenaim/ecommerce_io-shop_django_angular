@@ -1,34 +1,56 @@
 # views.py
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.core.mail import send_mail
+
+
 from rest_framework.response import Response
 from rest_framework import serializers, status, viewsets, permissions, generics 
 from rest_framework.views import APIView
-from .serializers import (CustomerSerializer, ArtistSerializer, GenreSerializer, 
-                        AlbumSerializer, CartSerializer,CartItemSerializer,) 
-
-
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 
-
-from .models import (Customer, Artist, Genre, Album, Cart, CartItem)
+from .serializers import (CustomerSerializer, ArtistSerializer, GenreSerializer, 
+                        AlbumSerializer, CartSerializer,CartItemSerializer,) 
+from .models import (Customer, Artist, Genre, Album, Cart, CartItem, Order, OrderItem,)
 
 
 # register new user
 @api_view(['POST'])
 def register(request):
-    user = User.objects.create_user(
-                username=request.data['username'],
-                #    email=request.data['email'],
-                password=request.data['password']
-            )
+    username = request.data['username']
+    password = request.data['password']
+
+    # Validate email
+    try:
+        validate_email(username)
+    except ValidationError:
+        return Response({'message': 'Invalid email format.'}, status=400)
+
+    # Check if the user already exists
+    if User.objects.filter(username=username).exists():
+        return Response({'message': 'Username already exists.'}, status=400)
+
+    user = User.objects.create_user(username=username, password=password)
     user.is_active = True
     user.is_staff = False
+    user.is_superuser = False
     user.save()
-    return Response("new user born")
+
+    # Send confirmation email
+    send_mail(
+        'Hello from ioRecords',  # subject
+        'Thank you for registering!',  # message
+        'iorecords0@gmail.com',  # from email
+        [user.username],  # recipient list
+        fail_silently=False,
+    )
+
+    return Response({'message': 'User created successfully.'}, status=201)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -51,6 +73,40 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 # Create your views here.
+#################### Customer ####################
+
+class manageCustomers(APIView):
+    def get(self, request, id=-1):  # axios.get
+        if id > -1:
+            my_model = Customer.objects.get(id=id)
+            serializer = CustomerSerializer(my_model, many=False)
+        else:
+            my_model = Customer.objects.all()
+            serializer = CustomerSerializer(my_model, many=True)
+        return Response(serializer.data)
+
+
+    def post(self, request):  # axios.post
+        serializer = CustomerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def put(self, request, id):  # axios.put
+        my_model = Customer.objects.get(id=id)
+        serializer = CustomerSerializer(my_model, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request, id):  # axios.delete
+        my_model = Customer.objects.get(id=id)
+        my_model.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 #################### Artist ####################
 class manageArtists(APIView):
@@ -242,42 +298,6 @@ class manageCartItems(APIView):
         my_model.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-#################### Customer ####################
-
-class manageCustomers(APIView):
-    def get(self, request, id=-1):  # axios.get
-        if id > -1:
-            my_model = Customer.objects.get(id=id)
-            serializer = CustomerSerializer(my_model, many=False)
-        else:
-            my_model = Customer.objects.all()
-            serializer = CustomerSerializer(my_model, many=True)
-        return Response(serializer.data)
-
-
-    def post(self, request):  # axios.post
-        serializer = CustomerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-    def put(self, request, id):  # axios.put
-        my_model = Customer.objects.get(id=id)
-        serializer = CustomerSerializer(my_model, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-    def delete(self, request, id):  # axios.delete
-        my_model = Customer.objects.get(id=id)
-        my_model.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
 #################### Order ####################
 class manageOrders(APIView):
     def get(self, request, id=-1):  # axios.get
@@ -315,7 +335,7 @@ class manageOrders(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #################### Order Item ####################
-Class manageOrderItems(APIView):
+class manageOrderItems(APIView):
     def get(self, request, id=-1):  # axios.get
         if id > -1:
             my_model = OrderItem.objects.get(id=id)
@@ -347,3 +367,4 @@ Class manageOrderItems(APIView):
         my_model.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
+

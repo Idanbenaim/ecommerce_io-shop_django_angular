@@ -123,15 +123,20 @@ export class CheckoutComponent implements OnInit {
       city: city,
       state: state,
       zipcode: postalCode,
-      email: payerEmail
+      email: payerEmail,
+      id: 0,
+      user: 0
     };
 
     // Create the new Order based on the order details
     const newOrder: Order = {
       customer: customer,
       transaction_id: transactionId,
-      total: this.total,
-      payer_id: payerId
+      total_amount: this.total,
+      payer_id: payerId,
+      id: 0,
+      timestamp: timestamp,
+      currency: ''
     };
 
     // Log the new Order for debugging

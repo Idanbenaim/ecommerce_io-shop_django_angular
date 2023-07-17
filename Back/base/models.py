@@ -34,6 +34,20 @@ class Album(models.Model):
     def __str__(self):
         return self.album_title
 
+class Customer(models.Model):
+    user =models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+    firstName = models.CharField(max_length=35)
+    lastName = models.CharField(max_length=35)
+    email = models.EmailField(max_length=100, blank=False)
+    addressLine1 = models.CharField(max_length=100, blank=True)
+    addressLine2 = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=35)
+    state = models.CharField(max_length=35)
+    zipcode = models.CharField(max_length=35)
+
+    def __str__(self):
+       return self.firstName
+
 
 class Cart(models.Model):
     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
@@ -71,20 +85,6 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return self.album.album_title
-
-
-class Customer(models.Model):
-    user =models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
-    firstName = models.CharField(max_length=35)
-    lastName = models.CharField(max_length=35)
-    email = models.EmailField(max_length=100, blank=False)
-    address = models.CharField(max_length=100, blank=False)
-    city = models.CharField(max_length=35)
-    state = models.CharField(max_length=35)
-    zipcode = models.CharField(max_length=35)
-
-    def __str__(self):
-       return self.firstName
 
 
 

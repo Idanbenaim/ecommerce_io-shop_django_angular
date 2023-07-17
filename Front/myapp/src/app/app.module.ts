@@ -32,6 +32,7 @@ import { LoginComponent } from './components/login/login.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { PaypalComponent } from './components/paypal/paypal.component';
 import { OrderConfirmationComponent } from './components/order-confirmation/order-confirmation.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { OrderConfirmationComponent } from './components/order-confirmation/orde
     CheckoutComponent,
     PaypalComponent,
     OrderConfirmationComponent,
+    RegisterComponent,
     // MatdesComponent,
   ],
   imports: [

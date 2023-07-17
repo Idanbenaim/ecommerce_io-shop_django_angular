@@ -1,5 +1,5 @@
-<!-- login.component.html -->
-<div class="login-container">
+<!-- register.component.html -->
+<div class="register-container">
   <form (ngSubmit)="onSubmit()">
     <mat-form-field class="example-full-width">
       <mat-label>Username</mat-label>
@@ -11,8 +11,8 @@
       <input matInput type="password" [(ngModel)]="user.password" name="password" required>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">Login</button>
+    <button mat-raised-button color="primary" type="submit">Register</button>
   </form>
-  <a routerLink="/register">Create an Account</a>
+  Already have an account?<a routerLink="/auth"> Sign in</a>
 
 </div>

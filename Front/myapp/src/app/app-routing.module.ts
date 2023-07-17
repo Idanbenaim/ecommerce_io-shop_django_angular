@@ -6,6 +6,7 @@ import { AlbumsComponent } from './components/albums/albums.component';
 import { ArtistPageComponent } from './components/artist-page/artist-page.component';
 import { ArtistsComponent } from './components/artists/artists.component';
 import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 import { MatdesComponent } from './components/matdes/matdes.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 
@@ -16,6 +17,7 @@ const routes: Routes = [
     { path: 'album/:id', component: AlbumPageComponent },
     { path: "artists/:id", component: ArtistPageComponent },
     { path: 'auth', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
     { path: 'checkout', component: CheckoutComponent },
 ];
 
