@@ -63,9 +63,11 @@ export class CartPanelComponent implements OnInit {
     if (this.authService.isLoggedIn()) {
       // If the user is logged in, navigate to the checkout page
       this.router.navigate(['/checkout']);
+      this.close()
     } else {
       // If the user is not logged in, prompt the user to login and then redirect to the checkout page
       this.router.navigate(['/auth'], { queryParams: { returnUrl: '/checkout' } });
+      this.close()
     }
   }
 }
