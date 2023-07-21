@@ -3,12 +3,12 @@ export class Customer {
   firstName: string;
   lastName: string;
   email: string;
-  addressLine1: string | undefined;
+  addressLine1: string;
   addressLine2: string | undefined;
   city: string;
   state: string;
   zipcode: string;
-  user: number; // Assuming user is referenced by its ID
+  user: string; // Assuming user is referenced by its ID
 
   constructor() {
     this.id = 0;
@@ -20,6 +20,6 @@ export class Customer {
     this.city = '';
     this.state = '';
     this.zipcode = '';
-    this.user = 0;
+    this.user = '';
   }
 }

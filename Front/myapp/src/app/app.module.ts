@@ -33,6 +33,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { PaypalComponent } from './components/paypal/paypal.component';
 import { OrderConfirmationComponent } from './components/order-confirmation/order-confirmation.component';
 import { RegisterComponent } from './components/register/register.component';
+import { OrderService } from './services/order.service';
 
 @NgModule({
   declarations: [
@@ -69,10 +70,9 @@ import { RegisterComponent } from './components/register/register.component';
     MatInputModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [OrderService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 
 }
-

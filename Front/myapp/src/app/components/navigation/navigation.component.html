@@ -5,8 +5,10 @@
   <a mat-button routerLink="/artists" routerLinkActive="active-link" color="accent">Artists</a>
   <a mat-button routerLink="/about" routerLinkActive="active-link" color="accent">About</a>
   <a mat-button routerLink="/register" routerLinkActive="active-link" color="accent">Register</a>
-  <a mat-button (click)="toggleTag()" routerLinkActive="active-link" color="accent"><mat-icon matBadge="{{itemCount}}" matBadgeColor="warn">shopping_cart</mat-icon></a>
-<!-- Other navigation items -->
+
+  <!-- Cart -->
+  <a mat-button (click)="toggleTag()" routerLinkActive="active-link" color="accent"><mat-icon matBadgeSize="small" matBadge="{{itemCount}}" matBadgeColor="accent" >shopping_cart</mat-icon></a>
+  <!-- Other navigation items -->
   <div *ngIf="!authService.isLoggedIn()">
     <a mat-button routerLink="/auth" routerLinkActive="active-link" color="accent">Login</a>
   </div>

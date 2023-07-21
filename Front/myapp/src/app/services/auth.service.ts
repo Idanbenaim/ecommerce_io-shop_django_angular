@@ -20,6 +20,7 @@ export class AuthService {
     return this.http.post(url, user).pipe(
       tap((res: any) => {
         localStorage.setItem('token', res.access);
+        // localStorage.setItem('userId', res.user.id);  // assuming 'user' is in response and has an 'id' field
         this.startInactivityTimer();
       }),
       catchError((error: HttpErrorResponse) => {
@@ -34,6 +35,10 @@ export class AuthService {
         return of({ error: errorMsg });
       })
     );
+  }
+
+  getUserId(): string {
+    return localStorage.getItem('userId') || "";
   }
 
   getToken(): string {

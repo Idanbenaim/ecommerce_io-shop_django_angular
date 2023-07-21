@@ -21,10 +21,22 @@ export class CartService {
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {
       const parsedCart = JSON.parse(storedCart);
-      this.cart = parsedCart.map((item: any) => new CartItem(Object.assign(new Album(), item.album), item.quantity));
+      this.cart = parsedCart.map((item: any) => {
+        const album = new Album();
+        album.id = item.album.id;
+        album.album_title = item.album.name;
+        album.artist = item.album.artist;
+        album.price = item.album.price;
+        album.description = item.album.description;
+        album.album_cover = item.album.album_cover;
+
+        return new CartItem(album, item.quantity);
+      });
     }
     this.updateItemCount();
   }
+
+
 
   saveCart(): void {
     localStorage.setItem('cart', JSON.stringify(this.cart));

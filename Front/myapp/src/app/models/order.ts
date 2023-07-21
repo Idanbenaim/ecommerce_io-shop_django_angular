@@ -1,6 +1,7 @@
 // order.ts
+import { UseBadgeParameters } from "@mui/base";
 import { Customer } from "./customer";
-
+import { OrderItem } from "./order-item";
 export class Order {
   id: number;
   customer: Customer;
@@ -9,6 +10,8 @@ export class Order {
   payer_id: string;
   total_amount: number | string;
   currency: string;
+  user: Customer["user"];
+  order_items: OrderItem[];
 
   constructor() {
     this.id = 0;
@@ -18,5 +21,7 @@ export class Order {
     this.payer_id = '';
     this.total_amount = 0;
     this.currency = '';
+    this.user = new Customer().user;
+    this.order_items = [];
   }
 }
