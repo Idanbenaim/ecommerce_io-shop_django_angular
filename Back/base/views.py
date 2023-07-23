@@ -15,9 +15,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import api_view, permission_classes
 
 from .serializers import (CustomerSerializer, ArtistSerializer, GenreSerializer, 
-                        AlbumSerializer, CartSerializer,CartItemSerializer,) 
+                        AlbumSerializer, CartSerializer,CartItemSerializer, OrderItemSerializer, OrderSerializer,) 
 from .models import (Customer, Artist, Genre, Album, Cart, CartItem, Order, OrderItem,)
-
 
 # register new user
 @api_view(['POST'])
@@ -59,15 +58,16 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         # Add custom claims
         token['email'] = user.email
+        # token['userid'] = user.id
         # ...
         return token
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-    def create(self, validated_data):
-        user = self.context['user']
-        print(user)
-        return Customer.objects.create(**validated_data,user=user)
+    # def create(self, validated_data):
+    #     user = self.context['user']
+    #     print(user)
+    #     return Customer.objects.create(**validated_data,user=user)
 
 
 

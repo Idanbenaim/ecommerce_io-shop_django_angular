@@ -34,6 +34,7 @@ import { PaypalComponent } from './components/paypal/paypal.component';
 import { OrderConfirmationComponent } from './components/order-confirmation/order-confirmation.component';
 import { RegisterComponent } from './components/register/register.component';
 import { OrderService } from './services/order.service';
+import { OrderItemService } from './services/order-item.service';
 
 @NgModule({
   declarations: [

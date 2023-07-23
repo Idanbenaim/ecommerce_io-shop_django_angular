@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 urlpatterns = [
 
     path('auth/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('/user-details/<int:id>', views.userDetails.as_view()),
     path('register/', views.register, name='register'),
     
     path('customers/<int:id>',views.manageCustomers.as_view()),
@@ -24,7 +25,12 @@ urlpatterns = [
 
     path('cart/<int:id>',views.manageCarts.as_view()),
     path('cart/', views.manageCarts.as_view()),
-    # path('cart/current', views.getCurrentCart),   # Get the current user's cart
-    # path('cart/add', views.addItemToCart),        # Add an item to the user's cart
+
+    # path('orders/<int:id>', views.manageOrders.as_view()),
+    # path('orders/', views.manageOrders.as_view()),
+    path('orders/', views.manageOrders.as_view()),
+    path('orders/<int:id>/', views.manageOrders.as_view()),
+    path('orderitems/', views.manageOrderItems.as_view()),
+    path('orderitems/<int:id>/', views.manageOrderItems.as_view()),
 
 ]

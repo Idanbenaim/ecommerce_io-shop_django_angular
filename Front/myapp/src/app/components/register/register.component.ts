@@ -20,18 +20,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // onSubmit(): void {
-  //   this.authService.register(this.user)
-  //     .subscribe({
-  //       next: res => {
-  //         console.log(res);
-  //         this.router.navigate(['/login']);
-  //       },
-  //       error: err => {
-  //         console.log(err);
-  //       }
-  //     });
-  // }
   onSubmit(): void {
     this.authService.register(this.user)
       .subscribe({

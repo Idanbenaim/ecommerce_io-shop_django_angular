@@ -1,3 +1,4 @@
+// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Login } from '../models/login';
@@ -19,8 +20,10 @@ export class AuthService {
     const url = `${this.MY_SERVER}/auth/`;
     return this.http.post(url, user).pipe(
       tap((res: any) => {
+        localStorage.setItem('userId', String(res.id));
+        console.log(res.id)
         localStorage.setItem('token', res.access);
-        // localStorage.setItem('userId', res.user.id);  // assuming 'user' is in response and has an 'id' field
+        console.log('token');
         this.startInactivityTimer();
       }),
       catchError((error: HttpErrorResponse) => {
@@ -37,8 +40,10 @@ export class AuthService {
     );
   }
 
-  getUserId(): string {
-    return localStorage.getItem('userId') || "";
+  getUserId(): number {
+    const userId = localStorage.getItem('userId');
+    console.log(userId)
+    return userId ? Number(userId) : 0;
   }
 
   getToken(): string {

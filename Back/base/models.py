@@ -52,7 +52,7 @@ class Customer(models.Model):
 class Cart(models.Model):
     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
-    totalAmount = models.DecimalField(max_digits=5, decimal_places=2)
+    totalAmount = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
         return f'Cart #{self.id} by {self.customer.firstName} {self.customer.lastName}'
@@ -68,15 +68,23 @@ class CartItem(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user =models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+    firstName = models.CharField(max_length=35)
+    lastName = models.CharField(max_length=35)
+    email = models.EmailField(max_length=100, blank=False)
+    addressLine1 = models.CharField(max_length=100, blank=True)
+    addressLine2 = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=35)
+    state = models.CharField(max_length=35)
+    zipcode = models.CharField(max_length=35)
     transaction_id = models.CharField(max_length=100)
     timestamp = models.DateTimeField(auto_now_add=True)
     payer_id = models.CharField(max_length=50)
-    total_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=6, decimal_places=2)
     currency = models.CharField(max_length=3)
 
     def __str__(self):
-        return f'Order #{self.id} by {self.customer.firstName} {self.customer.lastName}'
+        return f'Order #{self.id}'
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE)

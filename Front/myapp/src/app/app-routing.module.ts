@@ -19,6 +19,7 @@ const routes: Routes = [
     { path: 'auth', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'checkout', component: CheckoutComponent },
+
 ];
 
 @NgModule({

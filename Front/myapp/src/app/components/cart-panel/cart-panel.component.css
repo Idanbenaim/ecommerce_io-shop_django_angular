@@ -19,7 +19,7 @@
 
 
 .side_filter.active_filter {
-  transform: translate(0, 7%);
+  transform: translate(0);
   transition: transform 0.4s ease-in;
   -webkit-transition: 0.4s ease;
   -moz-transition: 0.4s ease;
@@ -120,3 +120,4 @@ hr {
 .remove {
 margin-left: 100px;
 }
+

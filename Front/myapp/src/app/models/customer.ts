@@ -1,3 +1,4 @@
+// customer.ts
 export class Customer {
   id: number;
   firstName: string;
@@ -8,7 +9,7 @@ export class Customer {
   city: string;
   state: string;
   zipcode: string;
-  user: string; // Assuming user is referenced by its ID
+  user: number;
 
   constructor() {
     this.id = 0;
@@ -20,6 +21,6 @@ export class Customer {
     this.city = '';
     this.state = '';
     this.zipcode = '';
-    this.user = '';
+    this.user = 0;
   }
 }
