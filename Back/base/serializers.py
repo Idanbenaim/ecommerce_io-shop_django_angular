@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Artist, Genre, Album, Cart, CartItem, Order, OrderItem, Customer
+from .models import Artist, Genre, Album, Cart, CartItem, Order, OrderItem
 
 #################### Artist ####################
 class ArtistSerializer(serializers.ModelSerializer):
@@ -57,10 +57,10 @@ class OrderItemSerializer(serializers.ModelSerializer):
          fields = '__all__'
 
 #################### Customer ####################
-class CustomerSerializer(serializers.ModelSerializer):
-   class Meta:
-       model = Customer
-       fields = '__all__'
+# class CustomerSerializer(serializers.ModelSerializer):
+#    class Meta:
+#        model = Customer
+#        fields = '__all__'
 
 # #################### Payment ####################
 # class PaymentSerializer(serializers.ModelSerializer):

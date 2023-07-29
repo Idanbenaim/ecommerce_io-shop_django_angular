@@ -1,6 +1,8 @@
 # models.py
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
+
 
 
 # Create your models here.
@@ -19,7 +21,6 @@ class Genre(models.Model):
     def __str__(self):
         return self.genre_name
 
-
 class Album(models.Model):
     artist = models.ForeignKey(Artist,on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre,on_delete=models.CASCADE)
@@ -33,42 +34,23 @@ class Album(models.Model):
 
     def __str__(self):
         return self.album_title
-
-class Customer(models.Model):
-    user =models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
-    firstName = models.CharField(max_length=35)
-    lastName = models.CharField(max_length=35)
-    email = models.EmailField(max_length=100, blank=False)
-    addressLine1 = models.CharField(max_length=100, blank=True)
-    addressLine2 = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=35)
-    state = models.CharField(max_length=35)
-    zipcode = models.CharField(max_length=35)
+    
+class CartItem(models.Model):
+    album = models.ForeignKey('Album', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-       return self.firstName
-
+        return f"{self.quantity} of {self.album.name}"
 
 class Cart(models.Model):
-    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
-    date_created = models.DateTimeField(auto_now_add=True)
-    totalAmount = models.DecimalField(max_digits=6, decimal_places=2)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
+    items = models.ManyToManyField('CartItem')
 
     def __str__(self):
-        return f'Cart #{self.id} by {self.customer.firstName} {self.customer.lastName}'
-
-
-class CartItem(models.Model):
-    cart = models.ForeignKey(Cart,on_delete=models.CASCADE)
-    album = models.ForeignKey(Album,on_delete=models.CASCADE)
-    qty = models.IntegerField()
-
-    def __str__(self):
-        return self.album.album_title
-
+        return str(self.id)
 
 class Order(models.Model):
-    user =models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
     firstName = models.CharField(max_length=35)
     lastName = models.CharField(max_length=35)
     email = models.EmailField(max_length=100, blank=False)
@@ -96,6 +78,36 @@ class OrderItem(models.Model):
 
 
 
+# class Cart(models.Model):
+#     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
+#     date_created = models.DateTimeField(auto_now_add=True)
+#     totalAmount = models.DecimalField(max_digits=6, decimal_places=2)
+
+#     def __str__(self):
+#         return f'Cart #{self.id} by {self.customer.firstName} {self.customer.lastName}'
+
+# class CartItem(models.Model):
+#     cart = models.ForeignKey(Cart,on_delete=models.CASCADE)
+#     album = models.ForeignKey(Album,on_delete=models.CASCADE)
+#     qty = models.IntegerField()
+
+#     def __str__(self):
+#         return self.album.album_title
+
+# class Customer(models.Model):
+#     user =models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+#     firstName = models.CharField(max_length=35)
+#     lastName = models.CharField(max_length=35)
+#     email = models.EmailField(max_length=100, blank=False)
+#     addressLine1 = models.CharField(max_length=100, blank=True)
+#     addressLine2 = models.CharField(max_length=100, blank=True)
+#     city = models.CharField(max_length=35)
+#     state = models.CharField(max_length=35)
+#     zipcode = models.CharField(max_length=35)
+
+#     def __str__(self):
+#        return self.firstName
+    
 # class Review(models.Model):
 #     album = models.ForeignKey(Album,on_delete=models.CASCADE)
 #     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
@@ -104,7 +116,6 @@ class OrderItem(models.Model):
 
 #     def __str__(self):
 #         return self.album.album_title
-
 
 # class Inventory(models.Model):
 #     album = models.ForeignKey(Album,on_delete=models.CASCADE)

@@ -10,9 +10,6 @@ urlpatterns = [
     # path('/user-details/<int:id>', views.userDetails.as_view()),
     path('register/', views.register, name='register'),
     
-    path('customers/<int:id>',views.manageCustomers.as_view()),
-    path('customers/', views.manageCustomers.as_view()),
-    
     path('artists/<int:id>',views.manageArtists.as_view()),
     path('artists/', views.manageArtists.as_view()),
     path('artists/<int:artist_id>/albums/', views.manageArtistAlbums.as_view()),
@@ -33,4 +30,10 @@ urlpatterns = [
     path('orderitems/', views.manageOrderItems.as_view()),
     path('orderitems/<int:id>/', views.manageOrderItems.as_view()),
 
+    # get the user id
+    path('get_user_id/', views.get_user_id, name='get_user_id'),
 ]
+
+    
+    # path('customers/<int:id>',views.manageCustomers.as_view()),
+    # path('customers/', views.manageCustomers.as_view()),

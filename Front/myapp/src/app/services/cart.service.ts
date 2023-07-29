@@ -36,8 +36,6 @@ export class CartService {
     this.updateItemCount();
   }
 
-
-
   saveCart(): void {
     localStorage.setItem('cart', JSON.stringify(this.cart));
   }

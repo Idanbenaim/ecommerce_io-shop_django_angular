@@ -1,6 +1,12 @@
-// export class Cart {
-//   id?: number;
-//   customer_id: number = 0;
-//   date_created: Date = new Date();
-//   totalAmount: number = 0;
-// }
+// cart.ts
+import { CartItem } from './cart-item';
+
+export class Cart {
+  user_id: number;
+  items: CartItem[];
+
+  constructor(user_id: number, items: CartItem[]) {
+    this.user_id = user_id;
+    this.items = items;
+  }
+}

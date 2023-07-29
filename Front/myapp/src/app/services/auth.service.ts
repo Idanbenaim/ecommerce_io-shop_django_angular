@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Login } from '../models/login';
 import { Observable, of, timer, Subscription } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { BASE_API_URL } from '../api.config';
 
@@ -31,7 +31,7 @@ export class AuthService {
         if (error.error instanceof ErrorEvent) {
           errorMsg = `Please enter a valid username and password`;
         } else if (error.status === 401) {
-          errorMsg = "Username does not exist in our database. Please create an account.";
+          errorMsg = "Please enter a valid username and password, or proceed to create an account.";
         } else {
           errorMsg = `Please enter a valid username and password`;
         }
@@ -40,10 +40,14 @@ export class AuthService {
     );
   }
 
-  getUserId(): number {
-    const userId = localStorage.getItem('userId');
-    console.log(userId)
-    return userId ? Number(userId) : 0;
+  getUserId(): Observable<number> {
+    {
+      const userId = `${this.MY_SERVER}/get_user_id/`;
+      console.log(userId)
+      return this.http.get<{ user_id: number }>(userId).pipe(
+        map(response => response.user_id)
+      );
+    }
   }
 
   getToken(): string {

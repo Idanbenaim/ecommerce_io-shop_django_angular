@@ -1,7 +1,7 @@
 // // checkout.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomerService } from '../../services/customer.service';
+// import { CustomerService } from '../../services/customer.service';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { OrderService } from '../../services/order.service';
@@ -31,7 +31,7 @@ export class CheckoutComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private cartService: CartService,
-    private customerService: CustomerService,
+    // private customerService: CustomerService,
     private authService: AuthService,
     private orderService: OrderService,
     private orderItemService: OrderItemService,
@@ -41,17 +41,6 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.cartItems = this.cartService.getCart();
     this.total = this.cartService.getCartSummary().total;
-    // this.customerForm = this._formBuilder.group({
-    //   firstName: ['', Validators.required],
-    //   lastName: ['', Validators.required],
-    //   custPhone: ['', Validators.required],
-    //   email: ['', Validators.required],
-    //   address1: ['', Validators.required],
-    //   address2: [''],
-    //   city: ['', Validators.required],
-    //   state: ['', Validators.required],
-    //   zipcode: ['', Validators.required]
-    // });
   }
 
   goBack(): void {
@@ -70,7 +59,64 @@ export class CheckoutComponent implements OnInit {
     // this.processOrder(newOrder, orderItems);
   }
 
-  // buildCustomer(order: any, userId: number): Customer {
+  processOrder(newOrder: Order, orderItems: OrderItem[]): void {
+    this.orderService.createOrder(newOrder).subscribe(createdOrder => {
+      for (const orderItem of orderItems) {
+        this.orderItemService.createOrderItem(orderItem).subscribe(() => {
+          console.log('Order created successfully', createdOrder);
+          this.cartService.clearCart();
+          this.router.navigate(['/success']);
+        });
+      }
+    });
+  }
+
+  transformCartItemsToOrderItems(cartItems: CartItem[]): OrderItem[] {
+    return cartItems.map(item => {
+      return {
+        album: item.album,
+        qty: item.quantity,
+      } as OrderItem;
+    });
+  }
+
+  handleError(message: string, error: any): void {
+    console.log(message, error);
+    // further error handling logic here
+  }
+
+  handlePaymentError(err: any): void {
+    console.log('Payment Error: ', err);
+    // Handle payment errors here
+  }
+}
+
+  // getEmailErrorMessage() {
+  //   if (this.email.hasError('required')) {
+  //     return 'You must enter a value';
+  //   }
+
+  //   return this.email.hasError('email') ? 'Not a valid email' : '';
+  // }
+
+    // onSubmit(): void {
+  //   if (this.customerForm.valid) {
+  //     const customer: Customer = this.customerForm.value;
+  //     this.customerService.createCustomer(customer).subscribe({
+  //       next: res => {
+  //         console.log(res);
+  //         // handle response here. Possibly redirecting to another page
+  //       },
+  //       error: err => {
+  //         console.log(err);
+  //         // handle error here. Showing error message to user
+  //       }
+  //     });
+  //   }
+  // }
+
+
+    // buildCustomer(order: any, userId: number): Customer {
   //   const payer = order.payer;
   //   const payerName = payer.name.given_name + ' ' + payer.name.surname;
   //   const payerEmail = payer.email_address;
@@ -118,61 +164,4 @@ export class CheckoutComponent implements OnInit {
 
   //   console.log(newOrder)
   //   return newOrder;
-  // }
-
-  processOrder(newOrder: Order, orderItems: OrderItem[]): void {
-    this.orderService.createOrder(newOrder).subscribe(createdOrder => {
-      for (const orderItem of orderItems) {
-        this.orderItemService.createOrderItem(orderItem).subscribe(() => {
-          console.log('Order created successfully', createdOrder);
-          this.cartService.clearCart();
-          this.router.navigate(['/success']);
-        });
-      }
-    });
-  }
-
-
-  transformCartItemsToOrderItems(cartItems: CartItem[]): OrderItem[] {
-    return cartItems.map(item => {
-      return {
-        album: item.album,
-        qty: item.quantity,
-      } as OrderItem;
-    });
-  }
-
-  handleError(message: string, error: any): void {
-    console.log(message, error);
-    // further error handling logic here
-  }
-
-  handlePaymentError(err: any): void {
-    console.log('Payment Error: ', err);
-    // Handle payment errors here
-  }
-}
-
-  // getEmailErrorMessage() {
-  //   if (this.email.hasError('required')) {
-  //     return 'You must enter a value';
-  //   }
-
-  //   return this.email.hasError('email') ? 'Not a valid email' : '';
-  // }
-
-    // onSubmit(): void {
-  //   if (this.customerForm.valid) {
-  //     const customer: Customer = this.customerForm.value;
-  //     this.customerService.createCustomer(customer).subscribe({
-  //       next: res => {
-  //         console.log(res);
-  //         // handle response here. Possibly redirecting to another page
-  //       },
-  //       error: err => {
-  //         console.log(err);
-  //         // handle error here. Showing error message to user
-  //       }
-  //     });
-  //   }
   // }
