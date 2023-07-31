@@ -77,7 +77,6 @@ class OrderItem(models.Model):
         return self.album.album_title
 
 
-
 # class Cart(models.Model):
 #     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
 #     date_created = models.DateTimeField(auto_now_add=True)

@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.core.mail import send_mail
 
-
 from rest_framework.response import Response
 from rest_framework import serializers, status, viewsets, permissions, generics 
 from rest_framework.views import APIView
@@ -64,8 +63,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         # Add custom claims
-        token['email'] = user.email
-        # token['userid'] = user.id
+        token['username'] = user.username
+        token['user_id'] = user.id
         # ...
         return token
 
@@ -75,8 +74,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
     #     user = self.context['user']
     #     print(user)
     #     return Customer.objects.create(**validated_data,user=user)
-
-
 
 
 # Create your views here.

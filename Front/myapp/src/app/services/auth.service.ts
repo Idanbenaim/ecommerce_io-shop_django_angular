@@ -6,6 +6,8 @@ import { Observable, of, timer, Subscription } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { BASE_API_URL } from '../api.config';
+import jwt_decode from 'jwt-decode';
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,43 +18,63 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  login(user: Login): Observable<any> {
-    const url = `${this.MY_SERVER}/auth/`;
-    return this.http.post(url, user).pipe(
-      tap((res: any) => {
-        localStorage.setItem('userId', String(res.id));
-        console.log(res.id)
-        localStorage.setItem('token', res.access);
-        console.log('token');
-        this.startInactivityTimer();
-      }),
-      catchError((error: HttpErrorResponse) => {
-        let errorMsg: string;
-        if (error.error instanceof ErrorEvent) {
-          errorMsg = `Please enter a valid username and password`;
-        } else if (error.status === 401) {
-          errorMsg = "Please enter a valid username and password, or proceed to create an account.";
-        } else {
-          errorMsg = `Please enter a valid username and password`;
-        }
-        return of({ error: errorMsg });
-      })
-    );
-  }
+login(user: Login): Observable < any > {
+  const url = `${this.MY_SERVER}/auth/`;
+  return this.http.post(url, user).pipe(
+    tap((res: any) => {
+      localStorage.setItem('token', res.access);
 
-  getUserId(): Observable<number> {
-    {
-      const userId = `${this.MY_SERVER}/get_user_id/`;
-      console.log(userId)
-      return this.http.get<{ user_id: number }>(userId).pipe(
-        map(response => response.user_id)
-      );
-    }
-  }
+      // use type assertion to let TypeScript know decodedToken is an object
+      const decodedToken = jwt_decode(res.access) as any;
+      console.log('User ID: ', decodedToken.user_id, 'Username: ', decodedToken.username); // log the user id from the decoded token
+
+      this.startInactivityTimer();
+    }),
+    catchError((error: HttpErrorResponse) => {
+      let errorMsg: string;
+      if (error.error instanceof ErrorEvent) {
+        errorMsg = `Please enter a valid username and password`;
+      } else if (error.status === 401) {
+        errorMsg = "Please enter a valid username and password, or proceed to create an account.";
+      } else {
+        errorMsg = `Please enter a valid username and password`;
+      }
+      return of({ error: errorMsg });
+    })
+  );
+}
 
   getToken(): string {
     return localStorage.getItem('token') || "";
   }
+
+  getUserId(): Observable<number | null> {
+    const token = this.getToken();
+    if (!token) {
+      // If the token is not available, return an observable with null value
+      return of(null);
+    }
+
+    // Decode the token to get the user_id
+    const decodedToken = jwt_decode<any>(token); // Ensure you have imported `jwt_decode` at the top of the AuthService file.
+
+    // Return the user_id as an observable
+    return of(decodedToken.user_id);
+  }
+
+  // getUserId(): Observable<number> {
+  //   {
+  //     const userId = `${this.MY_SERVER}/get_user_id/`;
+  //     console.log(userId)
+  //     return this.http.get<{ user_id: number }>(userId).pipe(
+  //       map(response => response.user_id)
+  //     );
+  //   }
+  // }
+
+  // getToken(): string {
+  //   return localStorage.getItem('token') || "";
+  // }
 
   logout(): void {
     localStorage.removeItem('token');
@@ -89,70 +111,3 @@ export class AuthService {
   }
 }
 
-
-
-// // Auth Service
-// import { Injectable } from '@angular/core';
-// import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-// import { Login } from '../models/login';
-// import { Observable, of } from 'rxjs';
-// import { catchError, tap } from 'rxjs/operators';
-// import { BASE_API_URL } from '../api.config';
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class AuthService {
-
-//   // Base URL for the API
-//   private MY_SERVER = BASE_API_URL;
-
-//   constructor(private http: HttpClient) { }
-
-//   // The login method will make a post request to the server with the user's username and password
-//   // The server should respond with a token that can be used to authenticate future requests
-//   login(user: Login): Observable<any> {
-//     const url = `${this.MY_SERVER}/auth/`;
-//     return this.http.post(url, user).pipe(
-//       tap((res: any) => {
-//         // The access token is stored in the local storage for future use
-//         localStorage.setItem('token', res.access);
-//       }),
-//       catchError((error: HttpErrorResponse) => {
-//         // create an error message string
-//         let errorMsg: string;
-//         if (error.error instanceof ErrorEvent) {
-//           errorMsg = `Please enter a valid username and password`;
-//         } else if (error.status === 401) {
-//           errorMsg = "Username does not exist in our database. Please create an account.";
-//         } else {
-//           errorMsg = `Please enter a valid username and password`;
-//         }
-//         // create an observable with the error message
-//         return of({ error: errorMsg });
-//       })
-
-
-//     );
-//   }
-
-//   // get the token from local storage
-//   getToken(): string {
-//     return localStorage.getItem('token') || "";
-//   }
-
-//   // remove the token from local storage
-//   logout(): void {
-//     localStorage.removeItem('token');
-//   }
-
-//   isLoggedIn(): boolean {
-//     return !!this.getToken();
-//   }
-
-//   // registration method
-//   register(user: Login): Observable<any> {
-//     const url = `${this.MY_SERVER}/register/`;
-//     return this.http.post(url, user);
-//   }
-// }
