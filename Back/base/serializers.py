@@ -32,17 +32,26 @@ class AlbumSerializer(serializers.ModelSerializer):
             return obj.songs_list.split(', ')
         return []
 
-#################### Cart ####################
-class CartSerializer(serializers.ModelSerializer):
-    class Meta:
-         model = Cart
-         fields = '__all__'
-
 #################### CartItem ####################
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
          model = CartItem
-         fields = '__all__'
+         fields = ['album', 'quantity']
+
+#################### Cart ####################
+class CartSerializer(serializers.ModelSerializer):
+    cart_items = CartItemSerializer(many=True, source='items')
+
+    class Meta:
+        model = Cart
+        fields = ['user', 'cart_items']
+
+    def create(self, validated_data):
+        cart_items_data = validated_data.pop('items')
+        cart = Cart.objects.create(**validated_data)
+        for cart_item_data in cart_items_data:
+            CartItem.objects.create(cart=cart, **cart_item_data)
+        return cart
 
 #################### Order ####################
 class OrderSerializer(serializers.ModelSerializer):
@@ -55,6 +64,19 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
          model = OrderItem
          fields = '__all__'
+
+
+# #################### Cart ####################
+# class CartSerializer(serializers.ModelSerializer):
+#     class Meta:
+#          model = Cart
+#          fields = '__all__'
+
+# #################### CartItem ####################
+# class CartItemSerializer(serializers.ModelSerializer):
+#     class Meta:
+#          model = CartItem
+#          fields = '__all__'
 
 #################### Customer ####################
 # class CustomerSerializer(serializers.ModelSerializer):

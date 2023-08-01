@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { BASE_API_URL } from '../api.config';
 import jwt_decode from 'jwt-decode';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -62,20 +61,6 @@ login(user: Login): Observable < any > {
     return of(decodedToken.user_id);
   }
 
-  // getUserId(): Observable<number> {
-  //   {
-  //     const userId = `${this.MY_SERVER}/get_user_id/`;
-  //     console.log(userId)
-  //     return this.http.get<{ user_id: number }>(userId).pipe(
-  //       map(response => response.user_id)
-  //     );
-  //   }
-  // }
-
-  // getToken(): string {
-  //   return localStorage.getItem('token') || "";
-  // }
-
   logout(): void {
     localStorage.removeItem('token');
     if (this.inactivityTimer) {
@@ -110,4 +95,3 @@ login(user: Login): Observable < any > {
     }
   }
 }
-

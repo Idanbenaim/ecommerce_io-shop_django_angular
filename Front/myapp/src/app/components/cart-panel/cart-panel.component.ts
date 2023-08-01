@@ -1,9 +1,7 @@
 // cart-panel.component.ts
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
-import { Album } from 'src/app/models/album';
 import { CartItem } from 'src/app/models/cart-item';
-import { NavigationComponent } from '../navigation/navigation.component';
 import { BASE_API_URL } from 'src/app/api.config';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';

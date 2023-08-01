@@ -15,3 +15,4 @@ export class Album {
   album_cover?: string;
   quantity?: number;
 }
+

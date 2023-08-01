@@ -4,9 +4,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 
-
 # Create your models here.
-
 class Artist(models.Model):
     artist_name = models.CharField(max_length=250)
     artist_bio = models.CharField(max_length=1000, blank=True, null=True)
@@ -35,19 +33,27 @@ class Album(models.Model):
     def __str__(self):
         return self.album_title
     
-class CartItem(models.Model):
-    album = models.ForeignKey('Album', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.quantity} of {self.album.name}"
-
 class Cart(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
-    items = models.ManyToManyField('CartItem')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
 
-    def __str__(self):
-        return str(self.id)
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE, null=True)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    
+# class CartItem(models.Model):
+#     album = models.ForeignKey('Album', on_delete=models.CASCADE)
+#     quantity = models.PositiveIntegerField(default=1)
+
+#     def __str__(self):
+#         return str(self.id)
+
+# class Cart(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
+#     items = models.ManyToManyField('CartItem')
+
+#     def __str__(self):
+#         return str(self.id)
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)

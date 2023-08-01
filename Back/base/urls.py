@@ -1,6 +1,6 @@
 # urls.py
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from . import views
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -28,8 +28,8 @@ urlpatterns = [
     path('cart/', views.manageCarts.as_view()), # URL for getting all carts or creating a new cart
     path('cart/<int:id>/', views.manageCarts.as_view()), # URL for getting, updating, or deleting a specific cart by ID
 
-    path('cart-item/', views.manageCartItems.as_view()), # URL for getting all cart items or creating a new cart item
-    path('cart-item/<int:id>/', views.manageCartItems.as_view()), # URL for getting, updating, or deleting a specific cart item by ID
+    path('cart-item/', views.manageCartItems.as_view(), name='cart_items'), # URL for getting all cart items or creating a new cart item
+    path('cart-item/<int:id>/', views.manageCartItems.as_view(), name='cart_item'), # URL for getting, updating, or deleting a specific cart item by ID
 
     ####  ORDER ####
     path('orders/', views.manageOrders.as_view()),
@@ -38,7 +38,6 @@ urlpatterns = [
     path('orderitems/<int:id>/', views.manageOrderItems.as_view()),
 
 ]
-
 
     # path('customers/<int:id>',views.manageCustomers.as_view()),
     # path('customers/', views.manageCustomers.as_view()),

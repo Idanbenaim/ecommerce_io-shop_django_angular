@@ -228,13 +228,29 @@ class manageCarts(APIView):
 
 #################### Cart-item ####################
 class manageCartItems(APIView):
-    def get(self, request, id=-1):  # axios.get
-        if id > -1:
-            my_model = CartItem.objects.get(id=id)
-            serializer = CartItemSerializer(my_model, many=False)
-        else:
-            my_model = CartItem.objects.all()
-            serializer = CartItemSerializer(my_model, many=True)
+    # def get(self, request, id=-1):  # axios.get
+    #     if id > -1:
+    #         my_model = CartItem.objects.get(id=id)
+    #         serializer = CartItemSerializer(my_model, many=False)
+    #     else:
+    #         my_model = CartItem.objects.all()
+    #         serializer = CartItemSerializer(my_model, many=True)
+    #     return Response(serializer.data)
+
+    # def get(self, request, id=-1):  # axios.get
+    #     if id > -1:
+    #         try:
+    #             my_model = Cart.objects.get(id=id)
+    #             serializer = CartSerializer(my_model)
+    #         except Cart.DoesNotExist:
+    #             return Response({"error": "Cart not found."}, status=status.HTTP_404_NOT_FOUND)
+    #     else:
+    #         my_model = Cart.objects.all()
+    #         serializer = CartSerializer(my_model, many=True)
+    #     return Response(serializer.data)
+    def get(self, request):  # axios.get
+        carts = Cart.objects.all()
+        serializer = CartSerializer(carts, many=True)
         return Response(serializer.data)
 
 
