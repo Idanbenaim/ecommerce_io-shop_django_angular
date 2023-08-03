@@ -34,24 +34,36 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 #################### CartItem ####################
 class CartItemSerializer(serializers.ModelSerializer):
+    album = serializers.IntegerField(write_only=True)
+
     class Meta:
-         model = CartItem
-         fields = ['album', 'quantity']
+        model = CartItem
+        fields = ['album', 'quantity']
+
 
 #################### Cart ####################
 class CartSerializer(serializers.ModelSerializer):
-    cart_items = CartItemSerializer(many=True, source='items')
+    cart_items = CartItemSerializer(many=True, source='items')  # Use 'items' related_name here
 
     class Meta:
         model = Cart
         fields = ['user', 'cart_items']
 
     def create(self, validated_data):
-        cart_items_data = validated_data.pop('items')
+        cart_items_data = validated_data.pop('items')  # Use 'items' related_name here
         cart = Cart.objects.create(**validated_data)
         for cart_item_data in cart_items_data:
             CartItem.objects.create(cart=cart, **cart_item_data)
         return cart
+
+    def update(self, instance, validated_data):
+        print(validated_data)
+        cart_items_data = validated_data.pop('items', [])
+        print(cart_items_data)
+        cart_items_serializer = CartItemSerializer(instance=instance.items.all(), data=cart_items_data, many=True)
+        cart_items_serializer.is_valid(raise_exception=True)
+        cart_items_serializer.save()
+        return instance
 
 #################### Order ####################
 class OrderSerializer(serializers.ModelSerializer):

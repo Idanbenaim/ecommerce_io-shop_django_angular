@@ -31,7 +31,7 @@ class Album(models.Model):
     album_cover = models.ImageField(upload_to='static/images', blank=True, null=True)
 
     def __str__(self):
-        return self.album_title
+        return str(self.pk)
     
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
