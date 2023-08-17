@@ -1,4 +1,6 @@
 # views.py
+from http.client import NOT_FOUND
+from xml.dom import NOT_FOUND_ERR, NotFoundErr
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -17,12 +19,12 @@ from .serializers import ( ArtistSerializer, GenreSerializer,
                         AlbumSerializer, CartSerializer,CartItemSerializer, OrderItemSerializer, OrderSerializer,) 
 from .models import ( Artist, Genre, Album, Cart, CartItem, Order, OrderItem,)
 
-# get the user id
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_user_id(request):
-    user_id = request.user.id
-    return Response({'user_id': user_id})
+# # get the user id
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def get_user_id(request):
+#     user_id = request.user.id
+#     return Response({'user_id': user_id})
 
 # register new user
 @api_view(['POST'])
@@ -57,7 +59,6 @@ def register(request):
 
     return Response({'message': 'User created successfully.'}, status=201)
 
-
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -65,6 +66,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token['username'] = user.username
         token['user_id'] = user.id
+        token['cart_id'] = user.cart.id
         # ...
         return token
 
@@ -74,7 +76,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
     #     user = self.context['user']
     #     print(user)
     #     return Customer.objects.create(**validated_data,user=user)
-
 
 # Create your views here.
 #################### Artist ####################
@@ -191,42 +192,110 @@ class manageAlbums(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #################### Cart ####################
+@permission_classes([IsAuthenticated])
 class manageCarts(APIView):
-    def get(self, request, id=-1):  # axios.get
+    def get(self, request, id=-1):
+        # print(self, request, id)
+        user_id = request.user.id  # Get the user ID from the request
+        # print("request:", request, user_id)
         if id > -1:
-            my_model = Cart.objects.get(id=id)
-            serializer = CartSerializer(my_model, many=False)
+            try:
+                my_model = get_object_or_404(Cart, id=id, user=user_id)
+            except Cart.DoesNotExist:
+                raise NotFoundErr("Cart not found")
         else:
-            my_model = Cart.objects.all()
-            serializer = CartSerializer(my_model, many=True)
-        return Response(serializer.data)
+            # If the cart ID is not specified, retrieve all carts for the current user
+            my_model = Cart.objects.filter(user=user_id)
 
-    def post(self, request):  # axios.post
+        serializer = CartSerializer(my_model, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        try:
+            user = request.user
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
         serializer = CartSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            cart = serializer.save(user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, id):  # axios.put
-        print(self, request, id)
-        my_model = Cart.objects.get(id=id)
-        print(my_model)
-        serializer = CartSerializer(my_model, data=request.data)
-        print(serializer.is_valid())
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            updated_cart_data = serializer.data  # This will contain the updated data
-            print(updated_cart_data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, id):
+        try:
+            cart = Cart.objects.get(id=id, user=request.user.id)
+        except Cart.DoesNotExist:
+            raise NotFoundErr("Cart not found, or you don't have permission to access it")
 
+        cart_items_data = request.data.get('cart_items')
+        if not cart_items_data:
+            return Response({"error": "No cart items provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        for item_data in cart_items_data:
+            item_id = item_data.get('id')
+            quantity = item_data.get('quantity')
+
+            if item_id:  # Existing cart item, update its quantity or remove if quantity is 0
+                try:
+                    cart_item = CartItem.objects.get(id=item_id, cart=cart)
+                    if quantity is not None:
+                        cart_item.quantity = quantity
+                        if quantity == 0:
+                            cart_item.delete()  # Remove the cart item if quantity is 0
+                        else:
+                            cart_item.save()
+                    else:
+                        cart_item.delete()  # Remove the cart item if quantity is not provided
+                except CartItem.DoesNotExist:
+                    return Response({"error": f"Cart item with ID {item_id} not found in the cart"},
+                                        status=status.HTTP_404_NOT_FOUND)
+            else:  # New cart item, create it
+                album_id = item_data.get('album')
+                if album_id is None:
+                    return Response({"error": "Missing album ID in cart_items"}, status=status.HTTP_400_BAD_REQUEST)
+
+                album = Album.objects.get(id=album_id)
+                if quantity is not None:
+                    if quantity > 0:
+                        CartItem.objects.create(cart=cart, album=album, quantity=quantity)
+                    else:
+                        return Response({"error": "Quantity must be greater than 0"}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    CartItem.objects.create(cart=cart, album=album, quantity=1)
+
+        serializer = CartSerializer(cart)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    ##### this method deletes the cart from the database. It will no lnger be associated with the user
+    ##### we are not sure this functionality is needed, unless legal requests it
+    ##### ** maybe delete method ** #####
     def delete(self, request, id):  # axios.delete
-        my_model = Cart.objects.get(id=id)
-        my_model.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            try:
+                cart = Cart.objects.get(id=id)
+            except Cart.DoesNotExist:
+                raise NOT_FOUND_ERR("Cart not found")
+
+            album_id = request.data.get('album_id')
+            if album_id is None:
+                return Response({"error": "Missing album_id in request data"}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                cart_item = CartItem.objects.get(cart=cart, album_id=album_id)
+            except CartItem.DoesNotExist:
+                return Response({"error": f"Album with ID {album_id} not found in the cart"},
+                                status=status.HTTP_404_NOT_FOUND)
+
+            cart_item.delete()
+
+            serializer = CartSerializer(cart)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        # def delete(self, request, id):  # axios.delete
+        #     my_model = Cart.objects.get(id=id)
+        #     my_model.delete()
+        #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 #################### Cart-item ####################
 class manageCartItems(APIView):
@@ -373,26 +442,3 @@ class manageOrderItems(APIView):
 #         my_model = Customer.objects.get(id=id)
 #         my_model.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-####CART#####
-    # def get(self, request, id=-1):  # axios.get
-    #     if id > -1:
-    #         my_model = CartItem.objects.get(id=id)
-    #         serializer = CartItemSerializer(my_model, many=False)
-    #     else:
-    #         my_model = CartItem.objects.all()
-    #         serializer = CartItemSerializer(my_model, many=True)
-    #     return Response(serializer.data)
-
-    # def get(self, request, id=-1):  # axios.get
-    #     if id > -1:
-    #         try:
-    #             my_model = Cart.objects.get(id=id)
-    #             serializer = CartSerializer(my_model)
-    #         except Cart.DoesNotExist:
-    #             return Response({"error": "Cart not found."}, status=status.HTTP_404_NOT_FOUND)
-    #     else:
-    #         my_model = Cart.objects.all()
-    #         serializer = CartSerializer(my_model, many=True)
-    #     return Response(serializer.data)

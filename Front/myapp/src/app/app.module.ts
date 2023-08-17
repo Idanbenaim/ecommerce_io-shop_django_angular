@@ -35,6 +35,8 @@ import { OrderConfirmationComponent } from './components/order-confirmation/orde
 import { RegisterComponent } from './components/register/register.component';
 import { OrderService } from './services/order.service';
 import { OrderItemService } from './services/order-item.service';
+import { HomeComponent } from './components/home/home.component';
+import { FiltersComponent } from './components/filters/filters.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { OrderItemService } from './services/order-item.service';
     PaypalComponent,
     OrderConfirmationComponent,
     RegisterComponent,
+    HomeComponent,
+    FiltersComponent,
     // MatdesComponent,
   ],
   imports: [

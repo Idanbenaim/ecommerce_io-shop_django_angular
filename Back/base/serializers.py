@@ -1,6 +1,7 @@
 # serializers.py
 from rest_framework import serializers
 from .models import Artist, Genre, Album, Cart, CartItem, Order, OrderItem
+import json
 
 #################### Artist ####################
 class ArtistSerializer(serializers.ModelSerializer):
@@ -34,36 +35,34 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 #################### CartItem ####################
 class CartItemSerializer(serializers.ModelSerializer):
-    album = serializers.IntegerField(write_only=True)
-
+    # album = serializers.IntegerField(write_only=True)
+    # print(album)
     class Meta:
         model = CartItem
-        fields = ['album', 'quantity']
+        fields = ['id','album', 'quantity']
+        
 
 
 #################### Cart ####################
 class CartSerializer(serializers.ModelSerializer):
-    cart_items = CartItemSerializer(many=True, source='items')  # Use 'items' related_name here
+    cart_items = CartItemSerializer(many=True, source='items', required=False)  # Use 'items' related_name here
 
     class Meta:
         model = Cart
-        fields = ['user', 'cart_items']
+        fields = ['user', 'cart_items', 'id']
 
-    def create(self, validated_data):
-        cart_items_data = validated_data.pop('items')  # Use 'items' related_name here
-        cart = Cart.objects.create(**validated_data)
-        for cart_item_data in cart_items_data:
-            CartItem.objects.create(cart=cart, **cart_item_data)
-        return cart
+    """
+    Update a cart object.
 
-    def update(self, instance, validated_data):
-        print(validated_data)
-        cart_items_data = validated_data.pop('items', [])
-        print(cart_items_data)
-        cart_items_serializer = CartItemSerializer(instance=instance.items.all(), data=cart_items_data, many=True)
-        cart_items_serializer.is_valid(raise_exception=True)
-        cart_items_serializer.save()
-        return instance
+    Args:
+        instance: The cart object to update.
+        validated_data: The validated JSON data.
+
+    Returns:
+        The updated cart object.
+    """
+
+
 
 #################### Order ####################
 class OrderSerializer(serializers.ModelSerializer):
@@ -77,18 +76,6 @@ class OrderItemSerializer(serializers.ModelSerializer):
          model = OrderItem
          fields = '__all__'
 
-
-# #################### Cart ####################
-# class CartSerializer(serializers.ModelSerializer):
-#     class Meta:
-#          model = Cart
-#          fields = '__all__'
-
-# #################### CartItem ####################
-# class CartItemSerializer(serializers.ModelSerializer):
-#     class Meta:
-#          model = CartItem
-#          fields = '__all__'
 
 #################### Customer ####################
 # class CustomerSerializer(serializers.ModelSerializer):
@@ -114,11 +101,6 @@ class OrderItemSerializer(serializers.ModelSerializer):
 #    class Meta:
 #        model = Inventory
 #        fields = '__all__'
-
-# class CustomerSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Customer
-#         fields = ['first_name', 'last_name', 'phone', 'email', 'address', 'city', 'state', 'zipcode']
 
 # class TransactionSerializer(serializers.ModelSerializer):
 #     class Meta:

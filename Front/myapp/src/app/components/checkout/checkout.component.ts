@@ -39,7 +39,7 @@ export class CheckoutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cartItems = this.cartService.getCart();
+    // this.cartItems = this.cartService.getCart();
     this.total = this.cartService.getCartSummary().total;
   }
 
@@ -51,8 +51,8 @@ export class CheckoutComponent implements OnInit {
     // console.log('Payment Approved: ', order);
 
     const userId = this.authService.getUserId();
-    const cartItems = this.cartService.getCart();
-    const orderItems = this.transformCartItemsToOrderItems(cartItems);
+    // const cartItems = this.cartService.getCart();
+    // const orderItems = this.transformCartItemsToOrderItems(cartItems);
     // const customer = this.buildCustomer(order, userId);
     // const newOrder = this.buildOrder(order, userId, customer, orderItems);
 

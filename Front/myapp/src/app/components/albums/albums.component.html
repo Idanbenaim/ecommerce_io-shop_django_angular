@@ -1,30 +1,50 @@
+<!-- albums.component.html -->
+
+<!-- filters toolbar -->
+<p>
+  <mat-toolbar>
+    <app-filters></app-filters>
+  </mat-toolbar>
+</p>
+
 <!-- This container div will be used for flexbox layout -->
 <div class="container">
-
-  <div class="item" *ngFor="let item of ar$ | async">
-    <!-- This div contains the styling for each album card. -->
-    <div class="album-card">
-      <!-- The mat-card component from Angular Material to create a card. -->
-      <mat-card>
-        <mat-card-header>
-          <div mat-card-avatar class="album-header-image"></div>
-          <mat-card-title>{{ item.album_title }}</mat-card-title>
-          <mat-card-subtitle>Artist: {{ item.artist.artist_name }}</mat-card-subtitle>
-        </mat-card-header>
-        <img mat-card-image [src]="BASE_API_URL + item.album_cover" alt="Album Cover Image" />
-        <mat-card-content>
-          <p>
-            Release year: {{ item.albumYear }}<br>
-            {{ item.description }}
-          </p>
-        </mat-card-content>
-        <!-- mat-card-actions holds the card's actions (buttons). -->
-        <mat-card-actions>
-          <!-- We use mat-button directive on a button to style it with Material Design. -->
-          <button mat-button>Buy</button>
-          <button mat-button [routerLink]="['/album', item.id]" color="accent">See More</button>
-        </mat-card-actions>
-      </mat-card>
+  <div class="item" *ngFor="let item of allAlbums$ | async">
+      <!-- This div contains the styling for each album card. -->
+      <div class="album-card">
+        <!-- The mat-card component from Angular Material to create a card. -->
+        <mat-card>
+          <mat-card-header>
+            <div mat-card-avatar class="album-header-image"></div>
+            <mat-card-title>{{ item.album_title }}</mat-card-title>
+            <mat-card-subtitle
+              >Artist: {{ item.artist.artist_name }}</mat-card-subtitle
+            >
+          </mat-card-header>
+          <img
+            mat-card-image
+            [src]="BASE_API_URL + item.album_cover"
+            alt="Album Cover Image"
+          />
+          <mat-card-content>
+            <p>
+              Release year: {{ item.albumYear }}<br />
+              {{ item.description }}
+            </p>
+          </mat-card-content>
+          <!-- mat-card-actions holds the card's actions (buttons). -->
+          <mat-card-actions>
+            <!-- We use mat-button directive on a button to style it with Material Design. -->
+            <button mat-button>Buy</button>
+            <button
+              mat-button
+              [routerLink]="['/album', item.id]"
+              color="accent"
+            >
+              See More
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
     </div>
   </div>
-</div>

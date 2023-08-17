@@ -5,7 +5,7 @@ import { Genre } from './genre';
 export class Album {
   id?: number;
   artist!: Artist;
-  genre!: Genre;
+  genre!: string;
   album_title: string = "";
   albumYear: number = 0;
   description: string = "";
@@ -15,4 +15,5 @@ export class Album {
   album_cover?: string;
   quantity?: number;
 }
+export { Genre };
 

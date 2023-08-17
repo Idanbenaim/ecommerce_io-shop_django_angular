@@ -18,8 +18,8 @@ const routes: Routes = [
     { path: "artists/:id", component: ArtistPageComponent },
     { path: 'auth', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'checkout', component: CheckoutComponent },
-
+    { path: 'checkout', component: CheckoutComponent},
+    // { path: 'cart', component: CartComponent }
 ];
 
 @NgModule({

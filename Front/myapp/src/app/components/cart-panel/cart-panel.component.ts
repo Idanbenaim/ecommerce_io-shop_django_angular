@@ -20,7 +20,11 @@ export class CartPanelComponent implements OnInit {
   total: number = 0;
   itemCount: number = 0;
 
-  constructor(private cartService: CartService, private authService: AuthService, private router: Router) { }
+  constructor(
+    private cartService: CartService,
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.cart = this.cartService.getCart();
@@ -69,4 +73,3 @@ export class CartPanelComponent implements OnInit {
     }
   }
 }
-

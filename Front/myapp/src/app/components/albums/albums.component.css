@@ -1,4 +1,4 @@
-
+/* albums.component.css */
 .album-card {
   max-width: 400px;
   display: flex;
@@ -37,7 +37,7 @@
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 

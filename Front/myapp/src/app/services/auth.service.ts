@@ -7,6 +7,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { BASE_API_URL } from '../api.config';
 import jwt_decode from 'jwt-decode';
+import { CartService } from './cart.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,33 +17,44 @@ export class AuthService {
   private MY_SERVER = BASE_API_URL;
   private inactivityTimer!: Subscription;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private userService: UserService,
+    private cartService: CartService
+  ) { }
 
-login(user: Login): Observable < any > {
-  const url = `${this.MY_SERVER}/auth/`;
-  return this.http.post(url, user).pipe(
-    tap((res: any) => {
-      localStorage.setItem('token', res.access);
+  login(user: Login): Observable<any> {
+    const url = `${this.MY_SERVER}/auth/`;
+    return this.http.post(url, user).pipe(
+      tap((res: any) => {
+        localStorage.setItem('token', res.access);
 
-      // use type assertion to let TypeScript know decodedToken is an object
-      const decodedToken = jwt_decode(res.access) as any;
-      console.log('User ID: ', decodedToken.user_id, 'Username: ', decodedToken.username); // log the user id from the decoded token
+        this.userService.setUserIdFromToken(res.access);
+        this.userService.setCartIdFromToken(res.access);
 
-      this.startInactivityTimer();
-    }),
-    catchError((error: HttpErrorResponse) => {
-      let errorMsg: string;
-      if (error.error instanceof ErrorEvent) {
-        errorMsg = `Please enter a valid username and password`;
-      } else if (error.status === 401) {
-        errorMsg = "Please enter a valid username and password, or proceed to create an account.";
-      } else {
-        errorMsg = `Please enter a valid username and password`;
-      }
-      return of({ error: errorMsg });
-    })
-  );
-}
+        // use type assertion to let TypeScript know decodedToken is an object
+        const decodedToken = jwt_decode(res.access) as any;
+        console.log('User ID: ', decodedToken.user_id, 'Username: ', decodedToken.username); // log the user id from the decoded token
+
+        this.startInactivityTimer();
+
+        // Call the loadCart method after successful login
+        this.cartService.loadCart();
+      }),
+      catchError((error: HttpErrorResponse) => {
+        let errorMsg: string;
+        if (error.error instanceof ErrorEvent) {
+          errorMsg = `Please enter a valid username and password`;
+        } else if (error.status === 401) {
+          errorMsg = "Please enter a valid username and password, or proceed to create an account.";
+        } else {
+          errorMsg = `Please enter a valid username and password`;
+        }
+        return of({ error: errorMsg });
+      })
+    );
+  }
 
   getToken(): string {
     return localStorage.getItem('token') || "";

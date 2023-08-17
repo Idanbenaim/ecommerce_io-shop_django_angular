@@ -9,7 +9,7 @@ urlpatterns = [
     ####  AUTHENTICATION ####
     path('auth/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('register/', views.register, name='register'),
-    path('get_user_id/', views.get_user_id, name='get_user_id'),  # get the user id from the token
+    # path('get_user_id/', views.get_user_id, name='get_user_id'),  # get the user id from the token
     
     ####  ARTIST ####
     path('artists/<int:id>',views.manageArtists.as_view()),
@@ -26,10 +26,7 @@ urlpatterns = [
 
     ####  CART ####
     path('cart/', views.manageCarts.as_view()), # URL for getting all carts or creating a new cart
-    path('cart/<int:id>/', views.manageCarts.as_view()), # URL for getting, updating, or deleting a specific cart by ID
-
-    path('cart-item/', views.manageCartItems.as_view(), name='cart_items'), # URL for getting all cart items or creating a new cart item
-    path('cart-item/<int:id>/', views.manageCartItems.as_view(), name='cart_item'), # URL for getting, updating, or deleting a specific cart item by ID
+    path('cart/<int:id>/', views.manageCarts.as_view()), # URL with cart id for getting, updating, or deleting a specific cart by ID
 
     ####  ORDER ####
     path('orders/', views.manageOrders.as_view()),
@@ -39,5 +36,9 @@ urlpatterns = [
 
 ]
 
+
     # path('customers/<int:id>',views.manageCustomers.as_view()),
     # path('customers/', views.manageCustomers.as_view()),
+
+    # path('cart-item/', views.manageCartItems.as_view(), name='cart_items'), # URL for getting all cart items or creating a new cart item
+    # path('cart-item/<int:id>/', views.manageCartItems.as_view(), name='cart_item'), # URL for getting, updating, or deleting a specific cart item by ID

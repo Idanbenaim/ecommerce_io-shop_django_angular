@@ -41,6 +41,7 @@ class CartItem(models.Model):
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     
+
 # class CartItem(models.Model):
 #     album = models.ForeignKey('Album', on_delete=models.CASCADE)
 #     quantity = models.PositiveIntegerField(default=1)
