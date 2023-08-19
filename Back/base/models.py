@@ -40,21 +40,6 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE, null=True)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    
-
-# class CartItem(models.Model):
-#     album = models.ForeignKey('Album', on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField(default=1)
-
-#     def __str__(self):
-#         return str(self.id)
-
-# class Cart(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
-#     items = models.ManyToManyField('CartItem')
-
-#     def __str__(self):
-#         return str(self.id)
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)

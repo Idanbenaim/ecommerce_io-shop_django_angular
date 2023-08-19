@@ -27,6 +27,8 @@ urlpatterns = [
     ####  CART ####
     path('cart/', views.manageCarts.as_view()), # URL for getting all carts or creating a new cart
     path('cart/<int:id>/', views.manageCarts.as_view()), # URL with cart id for getting, updating, or deleting a specific cart by ID
+    path('cart/<int:cart_id>/<int:item_id>/', views.manageCarts.as_view()),
+
 
     ####  ORDER ####
     path('orders/', views.manageOrders.as_view()),

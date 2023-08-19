@@ -51,19 +51,6 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = ['user', 'cart_items', 'id']
 
-    """
-    Update a cart object.
-
-    Args:
-        instance: The cart object to update.
-        validated_data: The validated JSON data.
-
-    Returns:
-        The updated cart object.
-    """
-
-
-
 #################### Order ####################
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -77,6 +64,17 @@ class OrderItemSerializer(serializers.ModelSerializer):
          fields = '__all__'
 
 
+
+    """
+    Update a cart object.
+
+    Args:
+        instance: The cart object to update.
+        validated_data: The validated JSON data.
+
+    Returns:
+        The updated cart object.
+    """
 #################### Customer ####################
 # class CustomerSerializer(serializers.ModelSerializer):
 #    class Meta:

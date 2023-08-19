@@ -1,43 +1,69 @@
 // order.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, catchError, Observable, Subject, throwError } from 'rxjs';
 import { Order } from '../models/order';
-import { BASE_API_URL } from '../api.config';
+import { BASE_API_URL } from 'src/app/api.config';
+import { UserService } from './user.service';
+import { CartItem } from '../models/cart-item';
+import { CartService } from './cart.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
   private MY_SERVER = BASE_API_URL;
+  private cart: CartItem[] = [];
+  private headers: HttpHeaders;
+  private authToken = localStorage.getItem('token'); ///we were not sending token
+  private getCartUrl = `${this.MY_SERVER}/cart/`;
+  private cartId = this.userService.getCartId();
+  private updateCartUrl: string = "";
+  private userId: number = 0;
+  // private updateCartUrl = `${this.MY_SERVER}/cart/${this.cartId}`;
+  // private userId = this.userService.getUserId();
 
-  constructor(private http: HttpClient) { }
+  cartUpdated = new Subject<void>();
+  itemCount = new BehaviorSubject<number>(0);
+
+  constructor(
+    private httpClient: HttpClient,
+    private userService: UserService,
+    private cartService: CartService
+
+  ) {
+
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authToken}`
+    });
+    console.log("this.headers: ", this.headers)
+
+    this.userService.getUserId().subscribe(userId => {
+      if (userId) {
+        console.log('User is logged in. Loading cart from server...', userId);
+        this.cartService.loadCartFromServer(userId);
+      }
+    });
+    this.userService.getCartId().subscribe(cartId => {
+      if (cartId) {
+        this.updateCartUrl = `${this.MY_SERVER}/cart/${cartId}/`;
+      }
+    });
+  }
 
   createOrder(order: Order): Observable<Order> {
-    return this.http.post<Order>(`${this.MY_SERVER}/orders/`, order);
+    const url = `${this.MY_SERVER}/orders/`;
+    return this.httpClient.post<Order>(url, order, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(error);
+      })
+    );
   }
+
+
 }
 
 
-// // order.service.ts
-// import { Injectable } from '@angular/core';
-// import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-// import { catchError, Observable, throwError } from 'rxjs';
-// import { Order } from '../models/order';
-// import { BASE_API_URL } from 'src/app/api.config';
-// import { AuthService } from './auth.service';
-// import { Customer } from '../models/customer';
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class OrderService {
-//   private readonly BASE_URL: string = `${BASE_API_URL}/orders`;
-
-//   constructor(
-//     private httpClient: HttpClient,
-//     private authService: AuthService
-//   ) { }
 
 //   createOrder(order: Order): Observable<Order> {
 //     return this.httpClient.post<Order>(this.BASE_URL, order).pipe(
@@ -60,4 +86,3 @@ export class OrderService {
 //     order.user = this.authService.getUserId();
 //     return order;
 //   }
-// }

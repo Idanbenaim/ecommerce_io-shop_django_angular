@@ -14,6 +14,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import NotFound
 
 from .serializers import ( ArtistSerializer, GenreSerializer, 
                         AlbumSerializer, CartSerializer,CartItemSerializer, OrderItemSerializer, OrderSerializer,) 
@@ -271,77 +272,23 @@ class manageCarts(APIView):
 
         serializer = CartSerializer(cart)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def delete(self, request, cart_id, item_id):
+        try:
+            cart = Cart.objects.get(id=cart_id, user=request.user.id)
+        except Cart.DoesNotExist:
+            raise NotFoundErr("Cart not found, or you don't have permission to access it")
 
-    ##### this method deletes the cart from the database. It will no lnger be associated with the user
-    ##### we are not sure this functionality is needed, unless legal requests it
-    ##### ** maybe delete method ** #####
-    def delete(self, request, id):  # axios.delete
-            try:
-                cart = Cart.objects.get(id=id)
-            except Cart.DoesNotExist:
-                raise NOT_FOUND_ERR("Cart not found")
-
-            album_id = request.data.get('album_id')
-            if album_id is None:
-                return Response({"error": "Missing album_id in request data"}, status=status.HTTP_400_BAD_REQUEST)
-
-            try:
-                cart_item = CartItem.objects.get(cart=cart, album_id=album_id)
-            except CartItem.DoesNotExist:
-                return Response({"error": f"Album with ID {album_id} not found in the cart"},
-                                status=status.HTTP_404_NOT_FOUND)
-
+        try:
+            cart_item = CartItem.objects.get(id=item_id, cart=cart)
             cart_item.delete()
+        except CartItem.DoesNotExist:
+            return Response({"error": f"Cart item with ID {item_id} not found in the cart"},
+                            status=status.HTTP_404_NOT_FOUND)
 
-            serializer = CartSerializer(cart)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        
-        # def delete(self, request, id):  # axios.delete
-        #     my_model = Cart.objects.get(id=id)
-        #     my_model.delete()
-        #     return Response(status=status.HTTP_204_NO_CONTENT)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data, status=status.HTTP_200_OK)   
 
-#################### Cart-item ####################
-class manageCartItems(APIView):
-    def get(self, request):  # axios.get
-        carts = Cart.objects.all()
-        serializer = CartSerializer(carts, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):  # axios.post
-        serializer = CartItemSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # def put(self, request, id=None):  # axios.put
-    #     try:
-    #         cart = Cart.objects.get(id=id)
-    #     except Cart.DoesNotExist:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
-
-    #     serializer = CartSerializer(cart, data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     print(serializer.errors)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    def put(self, request, id):  # axios.put
-        print(self, request.data, id)
-        my_model = CartItem.objects.get(id=id)
-        serializer = CartItemSerializer(my_model, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        print(serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, id):  # axios.delete
-        my_model = CartItem.objects.get(id=id)
-        my_model.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 #################### Order ####################
 class manageOrders(APIView):
@@ -354,14 +301,28 @@ class manageOrders(APIView):
             serializer = OrderSerializer(my_model, many=True)
         return Response(serializer.data)
 
-
     def post(self, request):  # axios.post
         serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            order = serializer.save()  # Save the order instance to get its ID
+            cart_items = CartItem.objects.filter(cart__user=request.user)  # Retrieve cart items for the user
+            order_items = []
+            for cart_item in cart_items:
+                order_item = OrderItem(order=order, album=cart_item.album, qty=cart_item.quantity)
+                order_items.append(order_item)
+            OrderItem.objects.bulk_create(order_items)  # Bulk create order items from cart items
+            cart_items.delete()  # Delete cart items after creating order items
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # def post(self, request):  # axios.post
+    #     serializer = OrderSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     print(serializer.errors)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     def put(self, request, id):  # axios.put
@@ -446,3 +407,46 @@ class manageOrderItems(APIView):
 #         my_model = Customer.objects.get(id=id)
 #         my_model.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
+
+#################### Cart-item ####################
+# class manageCartItems(APIView):
+#     def get(self, request):  # axios.get
+#         carts = Cart.objects.all()
+#         serializer = CartSerializer(carts, many=True)
+#         return Response(serializer.data)
+
+#     def post(self, request):  # axios.post
+#         serializer = CartItemSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         print(serializer.errors)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     # def put(self, request, id=None):  # axios.put
+#     #     try:
+#     #         cart = Cart.objects.get(id=id)
+#     #     except Cart.DoesNotExist:
+#     #         return Response(status=status.HTTP_404_NOT_FOUND)
+
+#     #     serializer = CartSerializer(cart, data=request.data)
+#     #     if serializer.is_valid():
+#     #         serializer.save()
+#     #         return Response(serializer.data, status=status.HTTP_200_OK)
+#     #     print(serializer.errors)
+#     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def put(self, request, id):  # axios.put
+#         print(self, request.data, id)
+#         my_model = CartItem.objects.get(id=id)
+#         serializer = CartItemSerializer(my_model, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         print(serializer.errors)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     def delete(self, request, id):  # axios.delete
+#         my_model = CartItem.objects.get(id=id)
+#         my_model.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+

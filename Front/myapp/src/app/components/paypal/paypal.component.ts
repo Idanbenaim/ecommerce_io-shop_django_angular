@@ -86,41 +86,42 @@ export class PaypalComponent implements OnInit {
             newOrder.currency = order.purchase_units[0].amount.currency_code;
 
             console.log(newOrder)
-            // Step 5: Update the URL path to match the new URL path in Django urls.py
-            // const url = BASE_API_URL + '/get_user_id/';
 
-            // Step 7: Include the authentication token in the HTTP request headers
-            const headers = new HttpHeaders({
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`, // Assuming you have a method to retrieve the auth token from the authService
-            });
-
-            // Step 8: Call the orderService to create the order
-            // this.http
-            //   .post(url, newOrder, { headers })
-            //   .pipe(
-            //     catchError((error) => {
-            //       console.error(error);
-            //       return [];
-            //     })
-            //   )
-            //   .subscribe((response) => {
-            //     // You can handle the response from the backend if needed
-            //     console.log(response);
-            //     // Step 7: Emit the event with the created order data
-            //     this.onApprove.emit(newOrder);
-          // }
-              // );
+            // Step 5: Call the createOrder() method of the OrderService class
+            this.orderService.createOrder(newOrder).subscribe(
+              (createdOrder) => {
+                this.onApprove.emit(createdOrder);  // Emit the created order
+              },
+              (error) => {
+                console.error('Error creating order:', error);
+                this.onError.emit('Error creating order.');
+              }
+            );
           } else {
-            // Handle the scenario when the user is not authenticated
             console.error('User is not authenticated.');
             this.onError.emit('User is not authenticated.');
           }
-        },
-        onError: (err: any) => {
-          this.onError.emit(err);
-        },
+        }
       })
       .render(this.paypalElement.nativeElement);
   }
 }
+              // next: (order: Order) => {
+              //   // Step 6: Emit the order instance to the parent component
+              //   this.onApprove.emit(order);
+              // },
+
+
+//           } else {
+//             // Handle the scenario when the user is not authenticated
+//             console.error('User is not authenticated.');
+//             this.onError.emit('User is not authenticated.');
+//           }
+//         },
+//         onError: (err: any) => {
+//           this.onError.emit(err);
+//         },
+//       })
+//       .render(this.paypalElement.nativeElement);
+//   }
+// }

@@ -31,7 +31,6 @@ import { CartPanelComponent } from './components/cart-panel/cart-panel.component
 import { LoginComponent } from './components/login/login.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { PaypalComponent } from './components/paypal/paypal.component';
-import { OrderConfirmationComponent } from './components/order-confirmation/order-confirmation.component';
 import { RegisterComponent } from './components/register/register.component';
 import { OrderService } from './services/order.service';
 import { OrderItemService } from './services/order-item.service';
@@ -46,12 +45,10 @@ import { FiltersComponent } from './components/filters/filters.component';
     ArtistsComponent,
     AlbumPageComponent,
     ArtistPageComponent,
-    // CartComponent,
     CartPanelComponent,
     LoginComponent,
     CheckoutComponent,
     PaypalComponent,
-    OrderConfirmationComponent,
     RegisterComponent,
     HomeComponent,
     FiltersComponent,

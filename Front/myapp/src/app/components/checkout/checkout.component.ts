@@ -1,11 +1,9 @@
-// // checkout.component.ts
+// checkout.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-// import { CustomerService } from '../../services/customer.service';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { OrderService } from '../../services/order.service';
-import { Customer } from '../../models/customer';
 import { CartItem } from '../../models/cart-item';
 import { Order } from '../../models/order';
 import { OrderItem } from '../../models/order-item';
@@ -39,7 +37,7 @@ export class CheckoutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.cartItems = this.cartService.getCart();
+    this.cartItems = this.cartService.getCart();
     this.total = this.cartService.getCartSummary().total;
   }
 
@@ -59,17 +57,17 @@ export class CheckoutComponent implements OnInit {
     // this.processOrder(newOrder, orderItems);
   }
 
-  processOrder(newOrder: Order, orderItems: OrderItem[]): void {
-    this.orderService.createOrder(newOrder).subscribe(createdOrder => {
-      for (const orderItem of orderItems) {
-        this.orderItemService.createOrderItem(orderItem).subscribe(() => {
-          console.log('Order created successfully', createdOrder);
-          this.cartService.clearCart();
-          this.router.navigate(['/success']);
-        });
-      }
-    });
-  }
+  // processOrder(newOrder: Order, orderItems: OrderItem[]): void {
+  //   this.orderService.createOrder(newOrder).subscribe(createdOrder => {
+  //     for (const orderItem of orderItems) {
+  //       this.orderItemService.createOrderItem(orderItem).subscribe(() => {
+  //         console.log('Order created successfully', createdOrder);
+  //         this.cartService.clearCart();
+  //         this.router.navigate(['/success']);
+  //       });
+  //     }
+  //   });
+  // }
 
   transformCartItemsToOrderItems(cartItems: CartItem[]): OrderItem[] {
     return cartItems.map(item => {

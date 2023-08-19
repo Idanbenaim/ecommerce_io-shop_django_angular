@@ -1,11 +1,10 @@
 // cart.service.ts
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Album } from '../models/album';
 import { CartItem } from '../models/cart-item';
-import { Subject, BehaviorSubject, map, catchError, firstValueFrom, switchMap, Observable, throwError } from 'rxjs';
+import { Subject, BehaviorSubject, map, catchError, firstValueFrom, Observable, throwError } from 'rxjs';
 import { BASE_API_URL } from '../api.config';
-import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 import { AlbumPageService } from './album-page.service';
 
@@ -15,9 +14,15 @@ import { AlbumPageService } from './album-page.service';
 export class CartService {
   private MY_SERVER = BASE_API_URL;
   private cart: CartItem[] = [];
+  private headers: HttpHeaders;
+  private authToken = localStorage.getItem('token'); ///we were not sending token
+  private getCartUrl = `${this.MY_SERVER}/cart/`;
+  private cartId = this.userService.getCartId();
+  private updateCartUrl = `${this.MY_SERVER}/cart/${this.cartId}`;
+  private userId = this.userService.getUserId();
+
   cartUpdated = new Subject<void>();
   itemCount = new BehaviorSubject<number>(0);
-  private headers: HttpHeaders;
 
   // Constractor:
   // 1. It initializes the headers for HTTP requests.
@@ -29,6 +34,7 @@ export class CartService {
     private http: HttpClient,
     private userService: UserService,
     private albumPageService: AlbumPageService,
+
   ) {
     this.headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authToken}`
@@ -55,15 +61,6 @@ export class CartService {
     // this.loadCart();
   }
 
-  //// TOKEN, CART ID, GET CART URL, and UPDATE CART URL //////////////////////////////
-  private authToken = localStorage.getItem('token'); ///we were not sending token
-  private getCartUrl = `${this.MY_SERVER}/cart/`;
-  cartId = this.userService.getCartId();
-  private updateCartUrl = `${this.MY_SERVER}/cart/${this.cartId}/`;
-
-  userId = this.userService.getUserId();
-  ////////////////////////////////////////////////////////////////////////////////////
-
   private loadCartFromLocalStorage(): void {
     console.log('local storage START...')
     const storedCart = localStorage.getItem('cart');
@@ -87,10 +84,12 @@ export class CartService {
   //// gets the cart items from the database//////////////////////////////
   private fetchServerCartItems(getCartUrl: string): Observable<any[]> {
     console.log("fetchServerCartItems START!!!!!!!!!!!!!!", this.headers)
+
     return this.http.get<any[]>(getCartUrl, { params: {}, headers: this.headers, observe: 'response' })
       .pipe(
         map(response => {
           if (response.body && response.body.length > 0) {
+            console.log("response.body: ", response.body)
             return response.body[0].cart_items;
           } else {
             return [];
@@ -187,7 +186,7 @@ export class CartService {
             });
 
             const cartData = { cart_items: itemsToUpdate };
-            console.log(cartData);
+            console.log("cartData: ", cartData);
 
             console.log(this.updateCartUrl)
             this.http.put(this.updateCartUrl, cartData, { headers: this.headers })
@@ -209,7 +208,7 @@ export class CartService {
 
   // loads items from the database and
   // sends it to be merged with local storage cart items
-  private loadCartFromServer(userId: number): void {
+  loadCartFromServer(userId: number): void {
     console.log('loadCartFromServer START!!!!!!!!!!!!!!', this.getCartUrl)
 
     this.fetchServerCartItems(this.getCartUrl)
@@ -250,15 +249,56 @@ export class CartService {
     this.updateServerCart()
   }
 
+  // removes a specific item from the user's cart locally
+  // and calls removeCartItemFromServer method to remove the item on the server side
   removeFromCart(album: Album): void {
     const index = this.cart.findIndex(item => item.album.id === album.id);
     if (index > -1) {
+      if (this.userId) this.removeCartItemFromServer(album)
       this.cart.splice(index, 1);
     }
     this.saveCart();
     this.cartUpdated.next();
     this.updateItemCount();
-    this.updateServerCart()
+  }
+
+  // removes a specific item from the user's cart on the server side
+  removeCartItemFromServer(album: Album): void {
+    const albumId = album.id;
+    console.log(this.updateCartUrl)
+
+    if (this.userId) {
+      this.fetchServerCartItems(this.getCartUrl).subscribe({
+        next: async (serverCartItems: any[]) => {
+          const serverCartItem = serverCartItems.find(
+            serverItem => serverItem.album === albumId
+          );
+
+          if (serverCartItem) {
+            const serverItemId = serverCartItem.id;
+
+            this.http.delete<void>(`${this.updateCartUrl}${serverItemId}/`, { headers: this.headers })
+              .pipe(
+                catchError(error => {
+                  console.error('Error updating server cart:', error);
+                  return throwError(() => error);
+                })
+              )
+              .subscribe({
+                next: () => {
+                  console.log('Server cart updated successfully');
+                },
+                error: (error: any) => {
+                  console.error('Error updating server cart:', error);
+                }
+              });
+          }
+        },
+        error: (error: any) => {
+          console.error('Error retrieving server cart items:', error);
+        }
+      });
+    }
   }
 
   getCartSummary(): { total: number; itemCount: number } {
@@ -283,115 +323,3 @@ export class CartService {
   }
 }
 
-
-//   /////////////////////
-  // private loadCartFromServer(userId: number): void {
-  //   const url = `${this.MY_SERVER}/cart/`;
-
-  //   this.http.get<any[]>(url, { params: {}, headers: this.headers, observe: 'response' })
-  //     .subscribe({
-  //       next: async (response: any) => {
-  //         // Extract cart_items from the response
-  //         const cartItems = response.body[0].cart_items;
-
-  //         await this.mergeAndUpdateLocalStorage(cartItems);
-
-  //         // Notify other parts of your app that the cart has been updated
-  //         this.cartUpdated.next();
-  //       },
-  //       error: (error: any) => {
-  //         console.error('Error loading cart from server:', error);
-  //       }
-  //     });
-  // }
-  ///////////////////// without cart item id ////////////////////////
-  // updateServerCart(): void {
-  //   console.log('To The Cart and Beyond !!!!!!!!!!!')
-  //   const userId = this.userService.getUserId();
-  //   const cartId = this.userService.getCartId();
-
-  //   console.log('userId: ', userId, 'cartId: ', cartId )
-
-  //   if (userId) {
-  //     const url = `${this.MY_SERVER}/cart/${cartId}/`;
-
-  //     const cartData = this.cart.map(item => ({
-  //       // id: item.id,
-  //       album: item.album.id,
-  //       quantity: item.quantity
-  //     }));
-  //     console.log(cartData)
-
-  //     this.http.put(url, { cart: cartData }, { headers: this.headers }).subscribe({
-  //       next: () => {
-  //         console.log('Server cart updated successfully');
-  //       },
-  //       error: (error: any) => {
-  //         console.error('Error updating server cart:', error);
-  //       }
-  //     });
-  //   }
-  // }
-
-  //////////////////// with get cart item id /////////////////////////
-  // async updateServerCart(): Promise<void> {
-  //   console.log('To The Cart and Beyond !!!!!!!!!!!');
-  //   const userId = this.userService.getUserId();
-  //   const cartId = this.userService.getCartId();
-
-  //   console.log('userId: ', userId, 'cartId: ', cartId);
-
-  //   if (userId && cartId) {
-  //     const url = `${this.MY_SERVER}/cart/${cartId}/`;
-
-  //     const headers = new HttpHeaders({
-  //       'Authorization': `Bearer ${this.authToken}`
-  //     });
-
-  //     this.http.get<any[]>(url, { params: {}, headers: headers, observe: 'response' })
-  //       .subscribe({
-  //         next: async (response: any) => {
-  //           try {
-  //             const serverCartItems = response.body[0].cart_items;
-
-  //             const updatedCartItems = this.cart.map(localCartItem => {
-  //               const serverCartItem = serverCartItems.find(
-  //                 (serverItem: any) => serverItem.album === localCartItem.album.id
-  //               );
-
-  //               if (serverCartItem) {
-  //                 return {
-  //                   id: serverCartItem.id,
-  //                   quantity: localCartItem.quantity
-  //                 };
-  //               } else {
-  //                 return {
-  //                   album: localCartItem.album.id,
-  //                   quantity: localCartItem.quantity
-  //                 };
-  //               }
-  //             });
-
-  //             const cartData = { cart_items: updatedCartItems };
-  //             console.log(cartData);
-
-  //             this.http.put(url, cartData, { headers })
-  //               .subscribe({
-  //                 next: () => {
-  //                   console.log('Server cart updated successfully');
-  //                 },
-  //                 error: (error: any) => {
-  //                   console.error('Error updating server cart:', error);
-  //                 }
-  //               });
-  //           } catch (error) {
-  //             console.error('Error updating server cart:', error);
-  //           }
-  //         },
-  //         error: (error: any) => {
-  //           console.error('Error retrieving server cart:', error);
-  //         }
-  //       });
-  //   }
-  // }
-  /////////////////////////////////////////////
