@@ -224,18 +224,22 @@ class manageCarts(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, id):
+        print("PUT START !!!!!!!!!!!", self, request.data, id)
         try:
             cart = Cart.objects.get(id=id, user=request.user.id)
+            print("line 229: ", cart)
         except Cart.DoesNotExist:
             raise NotFoundErr("Cart not found, or you don't have permission to access it")
 
         cart_items_data = request.data.get('cart_items')
+        print("line 234: ", cart_items_data)
         if not cart_items_data:
             return Response({"error": "No cart items provided"}, status=status.HTTP_400_BAD_REQUEST)
 
         for item_data in cart_items_data:
             item_id = item_data.get('id')
             quantity = item_data.get('quantity')
+            print("line 241: ","item_id: ", item_id, "quantity: ", quantity)
 
             if item_id:  # Existing cart item, update its quantity or remove if quantity is 0
                 try:
