@@ -36,6 +36,7 @@ import { OrderService } from './services/order.service';
 import { OrderItemService } from './services/order-item.service';
 import { HomeComponent } from './components/home/home.component';
 import { FiltersComponent } from './components/filters/filters.component';
+import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { FiltersComponent } from './components/filters/filters.component';
     RegisterComponent,
     HomeComponent,
     FiltersComponent,
+    MyOrdersComponent,
     // MatdesComponent,
   ],
   imports: [

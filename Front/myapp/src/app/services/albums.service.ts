@@ -19,39 +19,7 @@ export class AlbumsService {
   getAllData(): Observable<Album[]> {
     return this.http.get<Album[]>(this.MY_SERVER);
   }
-  // getFilteredData(selectedGenres: string[]): Observable<Album[]> {
-  //   return this.http.get<Album[]>(this.MY_SERVER).pipe(
-  //     map(albums => {
-  //       if (selectedGenres.length === 0) {
-  //         return albums; // Return all albums if no genres are selected
-  //       } else {
-  //         return albums.filter(album => selectedGenres.includes(album.genre));
-  //       }
-  //     })
-  //   );
-  // }
 
-  // getFilteredData(selectedGenres: string[], selectedDecades: string[]): Observable<Album[]> {
-  //   return this.http.get<Album[]>(this.MY_SERVER).pipe(
-  //     map(albums => {
-  //       let filteredAlbums = albums;
-
-  //       if (selectedGenres.length > 0) {
-  //         filteredAlbums = filteredAlbums.filter(album => selectedGenres.includes(album.genre));
-  //       }
-
-  //       if (selectedDecades.length > 0) {
-  //         filteredAlbums = filteredAlbums.filter(album => {
-  //           const decade = Math.floor(album.albumYear / 10) * 10; // Calculate the decade
-  //           console.log(decade);
-  //           return selectedDecades.includes(`${decade}s`);
-  //         });
-  //       }
-
-  //       return filteredAlbums;
-  //     })
-  //   );
-  // }
   getFilteredData(selectedGenres: string[], selectedDecades: string[]): Observable<Album[]> {
     return this.http.get<Album[]>(this.MY_SERVER).pipe(
       map(albums => {

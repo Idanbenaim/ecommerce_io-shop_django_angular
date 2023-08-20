@@ -15,6 +15,7 @@
 
   <div *ngIf="authService.isLoggedIn()">
     <a mat-button (click)="logout()" routerLinkActive="active-link" color="accent">Logout</a>
+    <a mat-button routerLink="/orders" routerLinkActive="active-link" color="accent">My Orders</a>
   </div>
 
 </mat-toolbar>

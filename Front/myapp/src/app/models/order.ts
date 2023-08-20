@@ -1,3 +1,5 @@
+import { OrderItem } from "./order-item";
+
 // order.ts
 export class Order {
   id?: number;
@@ -15,6 +17,7 @@ export class Order {
   payer_id: string;
   total_amount: number;
   currency: string;
+  orderItems: OrderItem[];
 
   constructor() {
     this.id = undefined;
@@ -32,35 +35,7 @@ export class Order {
     this.payer_id = '';
     this.total_amount = 0;
     this.currency = 'USD';
+    this.orderItems = [];
   }
 }
 
-
-
-// order.ts
-// import { UseBadgeParameters } from "@mui/base";
-// import { Customer } from "./customer";
-// import { OrderItem } from "./order-item";
-// export class Order {
-//   id: number;
-//   customer: Customer["id"];
-//   transaction_id: string;
-//   timestamp: Date | string;
-//   payer_id: string;
-//   total_amount: number | string;
-//   currency: string;
-//   user: number;
-//   order_items: OrderItem[];
-
-//   constructor() {
-//     this.id = 0;
-//     this.customer = 0;
-//     this.transaction_id = '';
-//     this.timestamp = new Date();
-//     this.payer_id = '';
-//     this.total_amount = 0;
-//     this.currency = 'USD';
-//     this.user = 0;
-//     this.order_items = [];
-//   }
-// }

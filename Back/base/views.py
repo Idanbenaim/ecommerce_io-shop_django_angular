@@ -20,13 +20,6 @@ from .serializers import ( ArtistSerializer, GenreSerializer,
                         AlbumSerializer, CartSerializer,CartItemSerializer, OrderItemSerializer, OrderSerializer,) 
 from .models import ( Artist, Genre, Album, Cart, CartItem, Order, OrderItem,)
 
-# # get the user id
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def get_user_id(request):
-#     user_id = request.user.id
-#     return Response({'user_id': user_id})
-
 # register new user
 @api_view(['POST'])
 def register(request):
@@ -73,10 +66,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-    # def create(self, validated_data):
-    #     user = self.context['user']
-    #     print(user)
-    #     return Customer.objects.create(**validated_data,user=user)
 
 # Create your views here.
 #################### Artist ####################
@@ -289,16 +278,19 @@ class manageCarts(APIView):
         serializer = CartSerializer(cart)
         return Response(serializer.data, status=status.HTTP_200_OK)   
 
-
 #################### Order ####################
+@permission_classes([IsAuthenticated])
 class manageOrders(APIView):
-    def get(self, request, id=-1):  # axios.get
+    def get(self, request, id=-1):  
+        user_id = request.user.id
+        
         if id > -1:
-            my_model = Order.objects.get(id=id)
-            serializer = OrderSerializer(my_model, many=False)
+            my_model = Order.objects.get(id=id, user=user_id)
+            serializer = OrderSerializer(my_model)
         else:
-            my_model = Order.objects.all()
+            my_model = Order.objects.filter(user=user_id)
             serializer = OrderSerializer(my_model, many=True)
+        
         return Response(serializer.data)
 
     def post(self, request):  # axios.post
@@ -315,14 +307,6 @@ class manageOrders(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    # def post(self, request):  # axios.post
-    #     serializer = OrderSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     print(serializer.errors)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     def put(self, request, id):  # axios.put

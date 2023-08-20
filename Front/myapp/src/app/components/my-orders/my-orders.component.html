@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div *ngFor="let order of orders" class="order-container">
+      <div class="order-details">
+        <h2>Order #{{ order.id }}</h2>
+        <p><strong>Name:</strong> {{ order.firstName }} {{ order.lastName }}</p>
+        <p><strong>Email:</strong> {{ order.email }}</p>
+        <p>
+          <strong>Address:</strong> {{ order.addressLine1 }},
+          {{ order.addressLine2 }}, {{ order.city }}, {{ order.state }},
+          {{ order.zipcode }}
+        </p>
+        <p>
+          <strong>Total Amount:</strong> {{ order.total_amount }}
+          {{ order.currency }}
+        </p>
+        <p><strong>Transaction ID:</strong> {{ order.transaction_id }}</p>
+        <p>
+          <strong>Timestamp:</strong>
+          {{ order.timestamp | date : "yyyy-MM-dd HH:mm:ss" }}
+        </p>
+      </div>
+      <div class="order-items">
+        <h3>Order Items</h3>
+        <!-- <ul>
+          <li *ngFor="let item of order.orderItems">
+            {{ item.qty }} x {{ (item.album | async)?.album_title }}
+          </li>
+        </ul> -->
+
+        <ul>
+          <li *ngFor="let item of order.orderItems">
+            {{ item.qty }} x {{ item.album.album_title }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

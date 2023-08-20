@@ -13,7 +13,7 @@ export class AlbumPageService {
   private MY_SERVER = `${BASE_API_URL}/albums`;
 
   constructor(private http: HttpClient) { }
-  
+
   getAlbum(id: number): Observable<Album> {
     const url = `${this.MY_SERVER}/${id}`;
     return this.http.get<Album>(url).pipe(
@@ -24,10 +24,6 @@ export class AlbumPageService {
     );
   }
 
-  // getAlbum(id: number): Observable<Album> {
-  //   const url = `${this.MY_SERVER}/${id}`;
-  //   return this.http.get<Album>(url);
-  // }
 }
 export { Album };
 

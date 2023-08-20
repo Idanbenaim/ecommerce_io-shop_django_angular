@@ -9,6 +9,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { MatdesComponent } from './components/matdes/matdes.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 
 const routes: Routes = [
     { path: "albums",component:AlbumsComponent },
@@ -18,7 +19,9 @@ const routes: Routes = [
     { path: "artists/:id", component: ArtistPageComponent },
     { path: 'auth', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'checkout', component: CheckoutComponent},
+    { path: 'checkout', component: CheckoutComponent },
+    { path: 'orders', component: MyOrdersComponent },
+
 ];
 
 @NgModule({
