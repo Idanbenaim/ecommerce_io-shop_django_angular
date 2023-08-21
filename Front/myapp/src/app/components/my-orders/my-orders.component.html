@@ -1,12 +1,46 @@
+<!-- my-orders.componenet.html -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div *ngFor="let order of orders" class="order-container">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Summary</title>
+  <style>
+    @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+    .order-container {
+      margin: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .order-details {
+      margin-top: 10px;
+    }
+    .album-info {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+    }
+    .album-cover {
+      width: 80px;
+      height: 80px;
+      margin-right: 10px;
+    }
+    .album-title {
+      font-weight: bold;
+    }
+    .artist {
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div *ngFor="let order of orders" class="order-container">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Order #{{ order.id }} - {{ order.timestamp | date : "MM-dd-yyyy" }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
       <div class="order-details">
         <h2>Order #{{ order.id }}</h2>
         <p><strong>Name:</strong> {{ order.firstName }} {{ order.lastName }}</p>
@@ -28,18 +62,26 @@
       </div>
       <div class="order-items">
         <h3>Order Items</h3>
-        <!-- <ul>
-          <li *ngFor="let item of order.orderItems">
-            {{ item.qty }} x {{ (item.album | async)?.album_title }}
-          </li>
-        </ul> -->
-
         <ul>
-          <li *ngFor="let item of order.orderItems">
-            {{ item.qty }} x {{ item.album.album_title }}
-          </li>
+          <div *ngFor="let item of order.order_items">
+            <div class="album-info">
+              <img
+                class="album-cover"
+                [src]="BASE_API_URL + item.album.album_cover"
+                alt="Album cover"
+              />
+              <div>
+                <div class="album-title">Title: {{ item.album.album_title }}</div>
+                <div class="artist">Artist: {{ item?.album?.artist?.artist_name }}</div>
+                <div class="quantity">Quantity: {{ item.qty }}</div>
+                <div class="price">Price: ${{ item.album.price }}</div>
+              </div>
+              <app-album-rating></app-album-rating>
+            </div>
+          </div>
         </ul>
       </div>
-    </div>
-  </body>
+    </mat-expansion-panel>
+  </div>
+</body>
 </html>

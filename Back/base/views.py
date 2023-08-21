@@ -18,7 +18,7 @@ from rest_framework.exceptions import NotFound
 
 from .serializers import ( ArtistSerializer, GenreSerializer, 
                         AlbumSerializer, CartSerializer,CartItemSerializer, OrderItemSerializer, OrderSerializer,) 
-from .models import ( Artist, Genre, Album, Cart, CartItem, Order, OrderItem,)
+from .models import ( AlbumRating, Artist, Genre, Album, Cart, CartItem, Order, OrderItem,)
 
 # register new user
 @api_view(['POST'])
@@ -150,9 +150,7 @@ class manageAlbums(APIView):
         if id > -1:
             my_model = Album.objects.get(id=id)
             serializer = AlbumSerializer(my_model, many=False)
-        # elif artist_id > -1:
-        #     my_model = Album.objects.filter(artist__id=artist_id)
-        #     serializer = AlbumSerializer(my_model, many=True)
+
         else:
             my_model = Album.objects.all()
             serializer = AlbumSerializer(my_model, many=True)
@@ -181,6 +179,37 @@ class manageAlbums(APIView):
         my_model.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+#################### Album Rating #############
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+class manageAlbumRatings(APIView):
+    def get_album_ratings(request, album_id):
+        album_ratings = AlbumRating.objects.filter(album_id=album_id)
+        up_votes = album_ratings.filter(vote=1).count()
+        down_votes = album_ratings.filter(vote=-1).count()
+
+        return Response({
+            'up_votes': up_votes,
+            'down_votes': down_votes,
+            'total_votes': up_votes + down_votes
+        })
+    
+    def create_album_rating(request):
+        album_id = request.data.get('album')
+        vote = request.data.get('vote')
+        user = request.user
+
+        # Ensure user has not voted before
+        existing_rating = AlbumRating.objects.filter(album_id=album_id, user=user).first()
+        if existing_rating:
+            return Response({'error': 'You have already voted for this album.'}, status=400)
+
+        # Create a new rating
+        album_rating = AlbumRating(album_id=album_id, user=user, vote=vote)
+        album_rating.save()
+
+        return Response({'message': 'Vote submitted successfully.'})
+    
 #################### Cart ####################
 @permission_classes([IsAuthenticated])
 class manageCarts(APIView):
@@ -357,80 +386,3 @@ class manageOrderItems(APIView):
         my_model.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
-
-#################### Customer ####################
-# class manageCustomers(APIView):
-#     def get(self, request, id=-1):  # axios.get
-#         if id > -1:
-#             my_model = Customer.objects.get(id=id)
-#             serializer = CustomerSerializer(my_model, many=False)
-#         else:
-#             my_model = Customer.objects.all()
-#             serializer = CustomerSerializer(my_model, many=True)
-#         return Response(serializer.data)
-
-
-#     def post(self, request):  # axios.post
-#         serializer = CustomerSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-#     def put(self, request, id):  # axios.put
-#         my_model = Customer.objects.get(id=id)
-#         serializer = CustomerSerializer(my_model, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-#     def delete(self, request, id):  # axios.delete
-#         my_model = Customer.objects.get(id=id)
-#         my_model.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
-#################### Cart-item ####################
-# class manageCartItems(APIView):
-#     def get(self, request):  # axios.get
-#         carts = Cart.objects.all()
-#         serializer = CartSerializer(carts, many=True)
-#         return Response(serializer.data)
-
-#     def post(self, request):  # axios.post
-#         serializer = CartItemSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         print(serializer.errors)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     # def put(self, request, id=None):  # axios.put
-#     #     try:
-#     #         cart = Cart.objects.get(id=id)
-#     #     except Cart.DoesNotExist:
-#     #         return Response(status=status.HTTP_404_NOT_FOUND)
-
-#     #     serializer = CartSerializer(cart, data=request.data)
-#     #     if serializer.is_valid():
-#     #         serializer.save()
-#     #         return Response(serializer.data, status=status.HTTP_200_OK)
-#     #     print(serializer.errors)
-#     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#     def put(self, request, id):  # axios.put
-#         print(self, request.data, id)
-#         my_model = CartItem.objects.get(id=id)
-#         serializer = CartItemSerializer(my_model, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         print(serializer.errors)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     def delete(self, request, id):  # axios.delete
-#         my_model = CartItem.objects.get(id=id)
-#         my_model.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-

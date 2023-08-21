@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Artist, Genre, Album, Cart, CartItem, Order, OrderItem
+from .models import AlbumRating, Artist, Genre, Album, Cart, CartItem, Order, OrderItem
 import json
 
 #################### Artist ####################
@@ -33,6 +33,12 @@ class AlbumSerializer(serializers.ModelSerializer):
             return obj.songs_list.split(', ')
         return []
 
+#################### AlbumRating ####################
+class AlbumRatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlbumRating
+        fields = '__all__'
+
 #################### CartItem ####################
 class CartItemSerializer(serializers.ModelSerializer):
     # album = serializers.IntegerField(write_only=True)
@@ -48,7 +54,6 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = ['user', 'cart_items', 'id']
-
 
 #################### OrderItem ####################
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -78,6 +83,9 @@ class OrderSerializer(serializers.ModelSerializer):
     Returns:
         The updated cart object.
     """
+
+
+
 #################### Customer ####################
 # class CustomerSerializer(serializers.ModelSerializer):
 #    class Meta:

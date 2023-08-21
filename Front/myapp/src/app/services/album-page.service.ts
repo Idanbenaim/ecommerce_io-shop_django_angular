@@ -14,7 +14,7 @@ export class AlbumPageService {
 
   constructor(private http: HttpClient) { }
 
-  getAlbum(id: number): Observable<Album> {
+  getAlbum(id: any): Observable<Album> {
     const url = `${this.MY_SERVER}/${id}`;
     return this.http.get<Album>(url).pipe(
       catchError((error: any) => {

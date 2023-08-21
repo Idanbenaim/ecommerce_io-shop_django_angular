@@ -7,6 +7,8 @@ import { OrderItem } from 'src/app/models/order-item';
 import { AlbumPageService } from 'src/app/services/album-page.service';
 import { Album } from 'src/app/models/album';
 import { OrderService } from 'src/app/services/order.service';
+import { BASE_API_URL } from 'src/app/api.config';
+
 
 @Component({
   selector: 'app-order-details',
@@ -14,8 +16,9 @@ import { OrderService } from 'src/app/services/order.service';
   styleUrls: ['./my-orders.component.css']
 })
 export class MyOrdersComponent implements OnInit, OnDestroy {
+  BASE_API_URL = BASE_API_URL;
   orders: Order[] = [];
-  orderItems: OrderItem[] | null = null;
+  order_items: OrderItem[] | null = null;
   subscription: Subscription | undefined;
   albumId: number = 0;
 
@@ -26,6 +29,42 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
 
   ) { }
 
+ngOnInit(): void {
+  this.subscription = this.orderService.getAllOrders().subscribe({
+    next: async (orders: Order[]) => {
+      this.orders = orders;
+      console.log("this.orders: ", this.orders);
+
+      for (const order of this.orders) {
+        // console.log("line 74 my-orders order: ", order)
+        for (const item of order.order_items) {
+          // console.log("line 76 my-orders item: ", item)
+          try {
+            // console.log("line 81 my-orders item.album: ", item.album)
+            const album = await firstValueFrom(this.albumPageService.getAlbum(item.album)); //this.albumId
+            // console.log("line 82 my-orders item.album: ", album)
+            item.album = album;
+            console.log("line 84 my-orders item.album: ", item.album);
+          } catch (error) {
+            console.error('Error fetching album:', error);
+          }
+        }
+      }
+    },
+    error: (error) => {
+      console.error('Error fetching orders:', error);
+    }
+  });
+}
+
+
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+}
   // ngOnInit(): void {
   //   this.subscription = this.orderService.getAllOrders().subscribe({
   //     next: (orders: Order[]) => {
@@ -64,37 +103,6 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   // }
 
 
-ngOnInit(): void {
-  this.subscription = this.orderService.getAllOrders().subscribe({
-    next: async (orders: Order[]) => {
-      this.orders = orders;
-      console.log("this.orders: ", this.orders);
-
-      for (const order of this.orders) {
-        console.log("line 74 my-orders order: ", order)
-        for (const item of order.orderItems) {
-          console.log("line 76 my-orders item: ", item)
-          const albumId = item.album;
-          console.log("line 78 my-orders albumId: ", albumId);
-
-          try {
-            const album = await firstValueFrom(this.albumPageService.getAlbum(this.albumId));
-            item.album = album;
-            console.log("line 83 my-orders item.album: ", item.album);
-          } catch (error) {
-            console.error('Error fetching album:', error);
-          }
-        }
-      }
-    },
-    error: (error) => {
-      console.error('Error fetching orders:', error);
-    }
-  });
-}
-
-
-
   // ngOnInit(): void {
   //   this.subscription = this.orderService.getAllOrders().subscribe({
   //     next: (orders: Order[]) => {
@@ -115,13 +123,6 @@ ngOnInit(): void {
   // }
 
 
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-}
 
   //   // Get order items
   //   this.orderService.getOrderItems(orderId).subscribe({

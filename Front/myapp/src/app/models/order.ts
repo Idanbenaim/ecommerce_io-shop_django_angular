@@ -17,7 +17,7 @@ export class Order {
   payer_id: string;
   total_amount: number;
   currency: string;
-  orderItems: OrderItem[];
+  order_items: OrderItem[];
 
   constructor() {
     this.id = undefined;
@@ -35,7 +35,7 @@ export class Order {
     this.payer_id = '';
     this.total_amount = 0;
     this.currency = 'USD';
-    this.orderItems = [];
+    this.order_items = [];
   }
 }
 

@@ -15,7 +15,7 @@ export class CartService {
   private MY_SERVER = BASE_API_URL;
   private cart: CartItem[] = [];
   private headers: HttpHeaders;
-  private authToken = localStorage.getItem('token'); ///we were not sending token
+  private authToken = localStorage.getItem('token');
   private getCartUrl = `${this.MY_SERVER}/cart/`;
   private cartId = this.userService.getCartId();
   private updateCartUrl = `${this.MY_SERVER}/cart/${this.cartId}`;
@@ -36,14 +36,20 @@ export class CartService {
     private albumPageService: AlbumPageService,
 
   ) {
-    this.headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.authToken}`
-    });
-    console.log("this.headers: ", this.headers)
+    // this.headers = new HttpHeaders({
+    //   'Authorization': `Bearer ${this.authToken}`
+    // });
+    // console.log("this.headers: ", this.headers)
 
     this.userService.getUserId().subscribe(userId => {
       if (userId) {
         console.log('User is logged in. Loading cart from server...', userId);
+        ////////////////////////
+        this.authToken = localStorage.getItem('token');
+        this.headers = new HttpHeaders({
+          'Authorization': `Bearer ${this.authToken}`
+        });
+        ///////////////////
         this.loadCartFromServer(userId);
       } else {
         console.log('User is not logged in. Loading cart from local storage...');
@@ -57,8 +63,12 @@ export class CartService {
         this.updateCartUrl = `${this.MY_SERVER}/cart/${cartId}/`;
       }
     });
-    ////////////////////
-    // this.loadCart();
+
+    // Fetch and update the token here after user login or token refresh
+    this.authToken = localStorage.getItem('token');
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authToken}`
+    });
   }
 
   private loadCartFromLocalStorage(): void {
@@ -135,7 +145,6 @@ export class CartService {
     //   console.log('User is not logged in. Loading cart from local storage...');
     //   this.loadCartFromLocalStorage(); // Call the method to load cart from local storage
     // }
-
     this.updateItemCount();
   }
 

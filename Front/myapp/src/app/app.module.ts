@@ -37,6 +37,7 @@ import { OrderItemService } from './services/order-item.service';
 import { HomeComponent } from './components/home/home.component';
 import { FiltersComponent } from './components/filters/filters.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
+import { AlbumRatingComponent } from './components/album-rating/album-rating.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { MyOrdersComponent } from './components/my-orders/my-orders.component';
     HomeComponent,
     FiltersComponent,
     MyOrdersComponent,
+    AlbumRatingComponent,
     // MatdesComponent,
   ],
   imports: [

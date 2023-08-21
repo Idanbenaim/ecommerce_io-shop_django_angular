@@ -32,7 +32,15 @@ class Album(models.Model):
 
     def __str__(self):
         return str(self.pk)
-    
+
+class AlbumRating(models.Model):
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Assuming you have a User model
+    vote = models.IntegerField(choices=[(1, 'Up'), (-1, 'Down')])
+
+    class Meta:
+        unique_together = ('album', 'user')
+   
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -67,51 +75,4 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return self.album.album_title
-
-
-# class Cart(models.Model):
-#     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
-#     date_created = models.DateTimeField(auto_now_add=True)
-#     totalAmount = models.DecimalField(max_digits=6, decimal_places=2)
-
-#     def __str__(self):
-#         return f'Cart #{self.id} by {self.customer.firstName} {self.customer.lastName}'
-
-# class CartItem(models.Model):
-#     cart = models.ForeignKey(Cart,on_delete=models.CASCADE)
-#     album = models.ForeignKey(Album,on_delete=models.CASCADE)
-#     qty = models.IntegerField()
-
-#     def __str__(self):
-#         return self.album.album_title
-
-# class Customer(models.Model):
-#     user =models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
-#     firstName = models.CharField(max_length=35)
-#     lastName = models.CharField(max_length=35)
-#     email = models.EmailField(max_length=100, blank=False)
-#     addressLine1 = models.CharField(max_length=100, blank=True)
-#     addressLine2 = models.CharField(max_length=100, blank=True)
-#     city = models.CharField(max_length=35)
-#     state = models.CharField(max_length=35)
-#     zipcode = models.CharField(max_length=35)
-
-#     def __str__(self):
-#        return self.firstName
-    
-# class Review(models.Model):
-#     album = models.ForeignKey(Album,on_delete=models.CASCADE)
-#     customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
-#     reviewDate = models.DateTimeField(auto_now_add=True)
-#     reviewText = models.CharField(max_length=1000)
-
-#     def __str__(self):
-#         return self.album.album_title
-
-# class Inventory(models.Model):
-#     album = models.ForeignKey(Album,on_delete=models.CASCADE)
-#     qty = models.IntegerField()
-
-#     def __str__(self):
-#         return self.album.album_title
 
