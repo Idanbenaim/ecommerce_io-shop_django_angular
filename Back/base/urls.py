@@ -36,6 +36,12 @@ urlpatterns = [
     path('orderitems/', views.manageOrderItems.as_view()),
     path('orderitems/<int:id>/', views.manageOrderItems.as_view()),
 
+    ####  RATINGS ####
+    path('create_album_rating/', views.manageAlbumRatings.as_view()),
+    path('get_album_ratings/<int:album_id>/', views.manageAlbumRatings.as_view()),
+    # path('ratings/<int:album_id>/', views.manageAlbumRatings.as_view()),
+    # path('ratings/<int:album_id>/<int:user_id>/', views.manageAlbumRatings.as_view()),
+
 ]
 
 

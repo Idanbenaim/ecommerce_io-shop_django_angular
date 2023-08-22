@@ -1,3 +1,4 @@
+// album-rating.ts
 import { Album } from './album';
 
 export class AlbumRating {
@@ -6,7 +7,7 @@ export class AlbumRating {
   user?: number ;
   vote?: number;
 
-  constractor() {
+  constructor() {
   this.id = 0;
   this.album = 0;
   this.user = 0;

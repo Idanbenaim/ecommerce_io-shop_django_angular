@@ -10,6 +10,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { MatdesComponent } from './components/matdes/matdes.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
+import { AlbumRatingComponent } from './components/album-rating/album-rating.component';
 
 const routes: Routes = [
     { path: "albums",component:AlbumsComponent },
@@ -21,6 +22,7 @@ const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'checkout', component: CheckoutComponent },
     { path: 'orders', component: MyOrdersComponent },
+    { path: 'get_album_ratings/:id', component: AlbumPageComponent},
 
 ];
 

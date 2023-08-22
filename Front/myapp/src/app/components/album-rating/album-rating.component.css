@@ -18,6 +18,26 @@
   color: #f39c12; /* Customize hover color */
 }
 
+.vote-button {
+  font-size: 16px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.vote-button:hover {
+  background-color: #f39c12; /* Customize hover background color */
+  color: white; /* Customize hover text color */
+}
+
 .voted {
-  color: #3498db; /* Customize voted color */
+  background-color: #3498db; /* Customize voted background color */
+  color: white; /* Customize voted text color */
+}
+
+.active {
+  background-color: #12f330; /* Customize active/voted background color */
+  color: rgb(255, 255, 255); /* Customize active/voted text color */
 }

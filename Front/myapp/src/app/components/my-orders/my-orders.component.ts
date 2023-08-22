@@ -8,6 +8,7 @@ import { AlbumPageService } from 'src/app/services/album-page.service';
 import { Album } from 'src/app/models/album';
 import { OrderService } from 'src/app/services/order.service';
 import { BASE_API_URL } from 'src/app/api.config';
+import { AlbumRating } from 'src/app/models/album-rating';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   order_items: OrderItem[] | null = null;
   subscription: Subscription | undefined;
-  albumId: number = 0;
+  album_id: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -64,6 +65,12 @@ ngOnInit(): void {
       this.subscription.unsubscribe();
     }
   }
+
+  handleVoteChanged(vote: number): void {
+    console.log('Vote changed:', vote);
+    // You can add your logic here to handle the vote change event
+  }
+
 }
   // ngOnInit(): void {
   //   this.subscription = this.orderService.getAllOrders().subscribe({

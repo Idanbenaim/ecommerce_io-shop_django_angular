@@ -181,9 +181,8 @@ class manageAlbums(APIView):
 
 #################### Album Rating #############
 @permission_classes([IsAuthenticated])
-@api_view(['GET'])
 class manageAlbumRatings(APIView):
-    def get_album_ratings(request, album_id):
+    def get(self, request, album_id):
         album_ratings = AlbumRating.objects.filter(album_id=album_id)
         up_votes = album_ratings.filter(vote=1).count()
         down_votes = album_ratings.filter(vote=-1).count()
@@ -194,7 +193,7 @@ class manageAlbumRatings(APIView):
             'total_votes': up_votes + down_votes
         })
     
-    def create_album_rating(request):
+    def post(self, request):
         album_id = request.data.get('album')
         vote = request.data.get('vote')
         user = request.user

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Summary</title>
   <style>
-    @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+    /* @import '~@angular/material/prebuilt-themes/indigo-pink.css'; */
     .order-container {
       margin: 20px;
       border: 1px solid #ccc;
@@ -76,7 +76,10 @@
                 <div class="quantity">Quantity: {{ item.qty }}</div>
                 <div class="price">Price: ${{ item.album.price }}</div>
               </div>
-              <app-album-rating></app-album-rating>
+              <app-album-rating
+              [album_id]="item.album.id || 0"
+              (voteChanged)="handleVoteChanged($event)"
+              ></app-album-rating>
             </div>
           </div>
         </ul>
