@@ -36,9 +36,7 @@ export class ArtistsComponent implements OnInit {
     }
   }
 
-  // onCardClick(id: number) {
-  //   this.router.navigate(['/artist', id]);
-  // }
+
 
 }
 

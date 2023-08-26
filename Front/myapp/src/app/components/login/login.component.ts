@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { Login } from '../../models/login';
 import { Router, ActivatedRoute } from '@angular/router'; // Import ActivatedRoute here
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute // Inject ActivatedRoute here
+    private route: ActivatedRoute, // Inject ActivatedRoute here
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -32,15 +34,18 @@ export class LoginComponent implements OnInit {
         next: res => {
           if (res.error) {
             this.snackBar.open(res.error, 'Close', {
-              duration: 10000,
+              duration: 5000,
               verticalPosition: 'top',
               panelClass: ['mat-toolbar', 'mat-warn']
             });
           } else {
-            console.log(res);
+
+            // console.log(res);
             // Navigate to returnUrl here instead of always to '/albums'
             this.router.navigate([this.returnUrl]);
+            // window.location.reload();
           }
+
         },
         error: err => {
           this.snackBar.open(err, 'Close', {

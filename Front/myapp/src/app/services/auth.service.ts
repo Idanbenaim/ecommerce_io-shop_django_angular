@@ -17,8 +17,6 @@ export class AuthService {
   private MY_SERVER = BASE_API_URL;
   private inactivityTimer!: Subscription;
 
-
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -37,7 +35,7 @@ export class AuthService {
 
         // use type assertion to let TypeScript know decodedToken is an object
         const decodedToken = jwt_decode(res.access) as any;
-        console.log('User ID: ', decodedToken.user_id, 'Username: ', decodedToken.username); // log the user id from the decoded token
+        // console.log('User ID: ', decodedToken.user_id, 'Username: ', decodedToken.username); // log the user id from the decoded token
 
         this.startInactivityTimer();
 

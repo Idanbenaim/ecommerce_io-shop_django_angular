@@ -14,8 +14,8 @@ import { AlbumPageService } from './album-page.service';
 export class CartService {
   private MY_SERVER = BASE_API_URL;
   private cart: CartItem[] = [];
-  private headers: HttpHeaders;
   private authToken = localStorage.getItem('token');
+  private headers: HttpHeaders;
   private getCartUrl = `${this.MY_SERVER}/cart/`;
   private cartId = this.userService.getCartId();
   private updateCartUrl = `${this.MY_SERVER}/cart/${this.cartId}`;
@@ -24,35 +24,24 @@ export class CartService {
   cartUpdated = new Subject<void>();
   itemCount = new BehaviorSubject<number>(0);
 
-  // Constractor:
-  // 1. It initializes the headers for HTTP requests.
-  // 2. It subscribes to changes in the userId using the userService.getUserId() Observable. When the userId changes, it loads the cart either from the server(if the user is logged in) or from local storage(if the user is not logged in), and updates the item count.
-  // 3. It subscribes to changes in the cartId using the userService.getCartId() Observable.When the cartId changes, it updates the updateCartUrl.
-  // 4. It then calls this.loadCart() at the end, which essentially updates the item count.This is just a minor step since the bulk of the initial loading logic is already handled through the subscriptions to userId and cartId.
-
   constructor(
     private http: HttpClient,
     private userService: UserService,
     private albumPageService: AlbumPageService,
 
   ) {
-    // this.headers = new HttpHeaders({
-    //   'Authorization': `Bearer ${this.authToken}`
-    // });
-    // console.log("this.headers: ", this.headers)
-
     this.userService.getUserId().subscribe(userId => {
       if (userId) {
-        console.log('User is logged in. Loading cart from server...', userId);
-        ////////////////////////
+        // console.log('User is logged in. Loading cart from server...', userId);
+
         this.authToken = localStorage.getItem('token');
         this.headers = new HttpHeaders({
           'Authorization': `Bearer ${this.authToken}`
         });
-        ///////////////////
+
         this.loadCartFromServer(userId);
       } else {
-        console.log('User is not logged in. Loading cart from local storage...');
+        // console.log('User is not logged in. Loading cart from local storage...');
         this.loadCartFromLocalStorage();
       }
       this.updateItemCount();
@@ -72,7 +61,7 @@ export class CartService {
   }
 
   private loadCartFromLocalStorage(): void {
-    console.log('local storage START...')
+    // console.log('local storage START...')
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {
       const parsedCart = JSON.parse(storedCart);
@@ -87,19 +76,19 @@ export class CartService {
 
         return new CartItem(album, item.quantity);
       });
-      console.log('Cart loaded from local storage:', this.cart);
+      // console.log('Cart loaded from local storage:', this.cart);
     }
   }
 
   //// gets the cart items from the database//////////////////////////////
   private fetchServerCartItems(getCartUrl: string): Observable<any[]> {
-    console.log("fetchServerCartItems START!!!!!!!!!!!!!!", this.headers)
+    // console.log("fetchServerCartItems START!!!!!!!!!!!!!!", this.headers)
 
     return this.http.get<any[]>(getCartUrl, { params: {}, headers: this.headers, observe: 'response' })
       .pipe(
         map(response => {
           if (response.body && response.body.length > 0) {
-            console.log("response.body: ", response.body)
+            // console.log("response.body: ", response.body)
             return response.body[0].cart_items;
           } else {
             return [];
@@ -135,16 +124,6 @@ export class CartService {
   }
 
   loadCart(): void {
-    // const userId = this.userService.getUserId();
-    // console.log('userId: ', this.userId)
-
-    // if (this.userId) {
-    //   console.log('User is logged in. Loading cart from server...');
-    //   this.loadCartFromServer(this.userId); // Call the method to load cart from server
-    // } else {
-    //   console.log('User is not logged in. Loading cart from local storage...');
-    //   this.loadCartFromLocalStorage(); // Call the method to load cart from local storage
-    // }
     this.updateItemCount();
   }
 
@@ -160,8 +139,8 @@ export class CartService {
   // with the album id and quantity, then compares database cart items
   // to local cart items and updates the database cart items
   async updateServerCart(): Promise<void> {
-    console.log('To The Cart and Beyond !!!!!!!!!!!');
-    console.log('userId: ', this.userId, 'cartId: ', this.cartId);
+    // console.log('To The Cart and Beyond !!!!!!!!!!!');
+    // console.log('userId: ', this.userId, 'cartId: ', this.cartId);
 
     if (this.userId && this.cartId) {
       // const url = `${this.MY_SERVER}/cart/${cartId}/`;
@@ -195,13 +174,13 @@ export class CartService {
             });
 
             const cartData = { cart_items: itemsToUpdate };
-            console.log("cartData: ", cartData);
+            // console.log("cartData: ", cartData);
 
-            console.log(this.updateCartUrl)
+            // console.log(this.updateCartUrl)
             this.http.put(this.updateCartUrl, cartData, { headers: this.headers })
               .subscribe({
                 next: () => {
-                  console.log('Server cart updated successfully');
+                  // console.log('Server cart updated successfully');
                 },
                 error: (error: any) => {
                   console.error('Error updating server cart:', error);
@@ -218,7 +197,7 @@ export class CartService {
   // loads items from the database and
   // sends it to be merged with local storage cart items
   loadCartFromServer(userId: number): void {
-    console.log('loadCartFromServer START!!!!!!!!!!!!!!', this.getCartUrl)
+    // console.log('loadCartFromServer START!!!!!!!!!!!!!!', this.getCartUrl)
 
     this.fetchServerCartItems(this.getCartUrl)
       .subscribe({
@@ -274,7 +253,7 @@ export class CartService {
   // removes a specific item from the user's cart on the server side
   removeCartItemFromServer(album: Album): void {
     const albumId = album.id;
-    console.log(this.updateCartUrl)
+    // console.log(this.updateCartUrl)
 
     if (this.userId) {
       this.fetchServerCartItems(this.getCartUrl).subscribe({
@@ -295,7 +274,7 @@ export class CartService {
               )
               .subscribe({
                 next: () => {
-                  console.log('Server cart updated successfully');
+                  // console.log('Server cart updated successfully');
                 },
                 error: (error: any) => {
                   console.error('Error updating server cart:', error);
@@ -331,4 +310,3 @@ export class CartService {
     this.updateItemCount();
   }
 }
-

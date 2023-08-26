@@ -6,34 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Summary</title>
   <style>
-    /* @import '~@angular/material/prebuilt-themes/indigo-pink.css'; */
-    .order-container {
-      margin: 20px;
-      border: 1px solid #ccc;
-      padding: 10px;
-    }
-    .order-details {
-      margin-top: 10px;
-    }
-    .album-info {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-    }
-    .album-cover {
-      width: 80px;
-      height: 80px;
-      margin-right: 10px;
-    }
-    .album-title {
-      font-weight: bold;
-    }
-    .artist {
-      color: #888;
-    }
   </style>
 </head>
 <body>
+  <h1 style = text-align:center >Your Orders</h1>
   <div *ngFor="let order of orders" class="order-container">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -76,15 +52,18 @@
                 <div class="quantity">Quantity: {{ item.qty }}</div>
                 <div class="price">Price: ${{ item.album.price }}</div>
               </div>
+            </div>
               <app-album-rating
               [album_id]="item.album.id || 0"
               (voteChanged)="handleVoteChanged($event)"
               ></app-album-rating>
-            </div>
           </div>
         </ul>
       </div>
     </mat-expansion-panel>
   </div>
+  <div *ngIf="orders.length === 0" class="no-orders-message">
+      You don't have any orders.
+    </div>
 </body>
 </html>

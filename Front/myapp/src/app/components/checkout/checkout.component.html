@@ -1,4 +1,12 @@
 <!-- checkout.component.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
 <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
   <mat-step>
     <ng-template matStepLabel>Review your order</ng-template>
@@ -41,3 +49,6 @@
 </mat-stepper>
 <div class="subtotal"> Order total: ${{ total }}</div>
 <button mat-raised-button class="subtotal" (click)="goBack()">Back</button>
+
+</body>
+</html>

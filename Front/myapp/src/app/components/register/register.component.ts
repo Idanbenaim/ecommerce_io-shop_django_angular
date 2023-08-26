@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
             verticalPosition: 'top',
             panelClass: ['mat-toolbar', 'mat-primary']
           });
-          this.router.navigate(['/login']);
+          this.router.navigate(['/auth']);
         },
         error: err => {
           this.snackBar.open(err.error.message, 'Close', {

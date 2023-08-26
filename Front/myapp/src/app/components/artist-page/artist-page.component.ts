@@ -1,3 +1,4 @@
+// artists-page.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Artist } from 'src/app/models/artist';
@@ -15,7 +16,7 @@ import { Observable } from 'rxjs';
 export class ArtistPageComponent implements OnInit {
   BASE_API_URL = BASE_API_URL;
   artist$!: Observable<Artist>; // The artist details
-  albums$!: Observable<Album[]>; // The artist's albums ar$: Observable<Album[]>;
+  albums$!: Observable<Album[]>; // The artist's albums
 
   constructor(
     private artistService: ArtistPageService,
@@ -30,14 +31,12 @@ export class ArtistPageComponent implements OnInit {
   getArtist(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
     this.artist$ = this.artistService.getArtist(id);
-    // this.artistService.getArtist(id)
-    //   .subscribe(artist => this.artist = artist);
+
   }
 
   getAlbums(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
     this.albums$ = this.artistService.getArtistAlbums(id);
-    // this.artistService.getArtistAlbums(id)
-    //   .subscribe(albums => this.albums = albums);
+
   }
 }

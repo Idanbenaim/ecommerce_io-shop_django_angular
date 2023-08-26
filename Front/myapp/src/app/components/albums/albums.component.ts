@@ -5,6 +5,8 @@ import { AlbumsService } from 'src/app/services/albums.service';
 import { BASE_API_URL } from 'src/app/api.config';
 import { Album } from 'src/app/models/album';
 import { FiltersService } from 'src/app/services/filters.service';
+// import { AlbumRatingService } from 'src/app/services/album-rating.service';
+
 
 @Component({
   selector: 'app-albums',
@@ -19,33 +21,10 @@ export class AlbumsComponent implements OnInit {
 
   constructor(
     private albumsService: AlbumsService,
-    private filtersService: FiltersService
-  ) {
-    // this.allAlbums$ = this.filtersService.selectedGenres$.pipe(
-    //   switchMap(selectedGenres => {
-    //     if (selectedGenres.length > 0) {
-    //       return this.albumsService.getFilteredData(selectedGenres);
-    //     } else {
-    //       return this.albumsService.getAllData();
-    //     }
-    //   })
-    // );
-  }
+    private filtersService: FiltersService,
+    // private albumRatingService: AlbumRatingService
+  ) {}
   ngOnInit() {
-    //   this.allAlbums$ = this.albumsService.getAllData();
-
-    //   this.filtersService.selectedGenres$.pipe(
-    //     switchMap(selectedGenres => {
-    //       return this.filtersService.selectedDecades$.pipe(
-    //         map(selectedDecades => {
-    //           return { selectedGenres, selectedDecades };
-    //         })
-    //       );
-    //     }),
-    //   ).subscribe(({ selectedGenres, selectedDecades }) => {
-    //     this.allAlbums$ = this.albumsService.getFilteredData(selectedGenres, selectedDecades);
-    //   });
-    // }
     this.filtersService.selectedGenres$.pipe(
       switchMap(selectedGenres => {
         return this.filtersService.selectedDecades$.pipe(
@@ -67,6 +46,3 @@ export class AlbumsComponent implements OnInit {
 
   }
 }
-
-    // We're assigning the Observable returned from albums.getAllData() to our ar$ property.
-    // So ar$ is now an Observable that will emit an array of albums when someone subscribes to it.

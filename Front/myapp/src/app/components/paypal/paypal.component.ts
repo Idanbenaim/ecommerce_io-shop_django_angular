@@ -85,7 +85,7 @@ export class PaypalComponent implements OnInit {
             newOrder.total_amount = parseFloat(order.purchase_units[0].amount.value);
             newOrder.currency = order.purchase_units[0].amount.currency_code;
 
-            console.log(newOrder)
+            // console.log(newOrder)
 
             // Step 5: Call the createOrder() method of the OrderService class
             this.orderService.createOrder(newOrder).subscribe(
@@ -106,22 +106,3 @@ export class PaypalComponent implements OnInit {
       .render(this.paypalElement.nativeElement);
   }
 }
-              // next: (order: Order) => {
-              //   // Step 6: Emit the order instance to the parent component
-              //   this.onApprove.emit(order);
-              // },
-
-
-//           } else {
-//             // Handle the scenario when the user is not authenticated
-//             console.error('User is not authenticated.');
-//             this.onError.emit('User is not authenticated.');
-//           }
-//         },
-//         onError: (err: any) => {
-//           this.onError.emit(err);
-//         },
-//       })
-//       .render(this.paypalElement.nativeElement);
-//   }
-// }

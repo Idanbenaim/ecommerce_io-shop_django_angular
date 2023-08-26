@@ -16,3 +16,20 @@
 .countBadge {
   margin-top: 10px;
 }
+
+.logo {
+  width: 40px; /* Adjust as needed */
+  height: auto;
+  margin-right: 10px; /* Adjust spacing */
+}
+
+.left-items {
+  display: flex;
+  align-items: center; /* Vertically align items */
+}
+
+.right-items {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  margin-left: auto; /* Push items to the right */
+}

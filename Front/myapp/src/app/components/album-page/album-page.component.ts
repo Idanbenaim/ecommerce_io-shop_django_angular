@@ -1,22 +1,35 @@
+// album-page.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlbumPageService } from 'src/app/services/album-page.service';
 import { Album } from 'src/app/models/album';
 import { BASE_API_URL } from 'src/app/api.config';
 import { CartService } from 'src/app/services/cart.service';
-import { CartItem } from 'src/app/models/cart-item';
+import { AlbumRatingService } from 'src/app/services/album-rating.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-album-page',
   templateUrl: './album-page.component.html',
   styleUrls: ['./album-page.component.css']
+
 })
 export class AlbumPageComponent implements OnInit {
   BASE_API_URL = BASE_API_URL;
   album?: Album;
   quantity: number = 0;
+  upVotes: number | undefined;
+  downVotes: number | undefined;
+  safeYtLink: SafeResourceUrl = "";
 
-  constructor(private albumPageService: AlbumPageService, private route: ActivatedRoute, private cartService: CartService) { }
+  constructor(
+    private albumPageService: AlbumPageService,
+    private route: ActivatedRoute,
+    private cartService: CartService,
+    private albumRatingService: AlbumRatingService,
+    private sanitizer: DomSanitizer
+  ) { }
 
   ngOnInit(): void {
     this.getAlbum();
@@ -35,9 +48,21 @@ export class AlbumPageComponent implements OnInit {
       this.albumPageService.getAlbum(idNumber).subscribe(albm => {
         this.album = albm;
         this.updateQuantity();
-      });
+        // Fetch album ratings here
+        this.albumRatingService.getAlbumRatings(idNumber).subscribe(ratings => {
+          // console.log("ratings: ", ratings)
+          this.upVotes = ratings.up_votes;
+          this.downVotes = ratings.down_votes;
+        });
+        // this.safeYtLink; async () => await this.sanitizer.bypassSecurityTrustResourceUrl(this.album?.yt_link || "");
+
+      },
+        albumError => {
+          console.error('Error fetching album:', albumError);
+        }
+      );
     } else {
-      // id is null or undefined, handle this case here. For example, you could redirect to a 404 page.
+      console.error('Album ID is null or undefined.');
     }
   }
 

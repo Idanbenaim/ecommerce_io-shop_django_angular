@@ -1,4 +1,4 @@
-/* Include the font stylesheet request */
+/* album-rating.component.css */
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 /* Define the CSS styles for the icons */
@@ -38,6 +38,6 @@
 }
 
 .active {
-  background-color: #12f330; /* Customize active/voted background color */
+  background-color: #3498db; /* Customize active/voted background color */
   color: rgb(255, 255, 255); /* Customize active/voted text color */
 }

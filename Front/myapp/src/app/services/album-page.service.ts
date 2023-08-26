@@ -1,18 +1,35 @@
 // album page service
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { Album } from '../models/album';
 import { BASE_API_URL } from '../api.config';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlbumPageService {
   private MY_SERVER = `${BASE_API_URL}/albums`;
+  private authToken = localStorage.getItem('token');
+  // private headers: HttpHeaders;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    // private userService: UserService,
+  )
+  {
+
+    // if (userId) {
+    //   // console.log('User is logged in. Loading cart from server...', userId);
+
+    //   this.authToken = localStorage.getItem('token');
+    //   this.headers = new HttpHeaders({
+    //     'Authorization': `Bearer ${this.authToken}`
+    //   });
+    // }
+  }
 
   getAlbum(id: any): Observable<Album> {
     const url = `${this.MY_SERVER}/${id}`;
@@ -26,4 +43,3 @@ export class AlbumPageService {
 
 }
 export { Album };
-

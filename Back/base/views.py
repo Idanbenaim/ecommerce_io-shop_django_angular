@@ -5,7 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.core.mail import send_mail
+from django.db import transaction
+
 
 from rest_framework.response import Response
 from rest_framework import serializers, status, viewsets, permissions, generics 
@@ -22,6 +23,7 @@ from .models import ( AlbumRating, Artist, Genre, Album, Cart, CartItem, Order, 
 
 # register new user
 @api_view(['POST'])
+@transaction.atomic
 def register(request):
     username = request.data['username']
     password = request.data['password']
@@ -36,20 +38,16 @@ def register(request):
     if User.objects.filter(username=username).exists():
         return Response({'message': 'Username already exists.'}, status=400)
 
-    user = User.objects.create_user(username=username, password=password)
-    user.is_active = True
-    user.is_staff = False
-    user.is_superuser = False
-    user.save()
+    with transaction.atomic():
+        user = User.objects.create_user(username=username, password=password)
+        user.is_active = True
+        user.is_staff = False
+        user.is_superuser = False
+        user.save()
 
-    # Send confirmation email
-    send_mail(
-        'Hello from ioRecords',  # subject
-        'Thank you for registering!',  # message
-        'iorecords0@gmail.com',  # from email
-        [user.username],  # recipient list
-        fail_silently=False,
-    )
+        # Create a cart for the user
+        cart = Cart.objects.create(user=user)
+        cart.save()
 
     return Response({'message': 'User created successfully.'}, status=201)
 
@@ -353,6 +351,7 @@ class manageOrders(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #################### Order Item ####################
+@permission_classes([IsAuthenticated])
 class manageOrderItems(APIView):
     def get(self, request, id=-1):  # axios.get
         if id > -1:

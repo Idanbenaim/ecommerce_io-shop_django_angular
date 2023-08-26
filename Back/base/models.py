@@ -7,7 +7,7 @@ from django.conf import settings
 # Create your models here.
 class Artist(models.Model):
     artist_name = models.CharField(max_length=250)
-    artist_bio = models.CharField(max_length=1000, blank=True, null=True)
+    artist_bio = models.CharField(max_length=2000, blank=True, null=True)
     artist_image = models.ImageField(upload_to='static/images', blank=True, null=True)
 
     def __str__(self):

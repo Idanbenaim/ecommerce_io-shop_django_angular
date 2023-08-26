@@ -85,33 +85,3 @@ class OrderSerializer(serializers.ModelSerializer):
     """
 
 
-
-#################### Customer ####################
-# class CustomerSerializer(serializers.ModelSerializer):
-#    class Meta:
-#        model = Customer
-#        fields = '__all__'
-
-# #################### Payment ####################
-# class PaymentSerializer(serializers.ModelSerializer):
-#     class Meta:
-#          model = Payment
-#          fields = '__all__'
-
-# #################### Review ####################
-# class ReviewSerializer(serializers.ModelSerializer):
-#     class Meta:
-#          model = Review
-#          fields = '__all__'
-
-
-# #################### Inventory ####################
-# class InventorySerializer(serializers.ModelSerializer):
-#    class Meta:
-#        model = Inventory
-#        fields = '__all__'
-
-# class TransactionSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Transaction
-#         fields = ['customer', 'transaction_id', 'timestamp', 'payer_id', 'amount', 'currency']

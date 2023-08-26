@@ -9,6 +9,7 @@ urlpatterns = [
     ####  AUTHENTICATION ####
     path('auth/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('register/', views.register, name='register'),
+    # path('logout/', views.logout, name='logout'),
     # path('get_user_id/', views.get_user_id, name='get_user_id'),  # get the user id from the token
     
     ####  ARTIST ####

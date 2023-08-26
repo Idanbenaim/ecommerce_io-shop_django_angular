@@ -9,11 +9,7 @@ import { AlbumsService } from './services/albums.service';
 })
 export class AppComponent {
   title = 'myapp';
-  // ar=[]
-
-
-  // constructor(private albums: AlbumsService) {
-  //   albums.getAllData().subscribe(res => this.ar=res)
-  // }
+  
+  constructor() {}
 
 }

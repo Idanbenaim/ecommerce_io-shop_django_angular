@@ -1,4 +1,46 @@
 <!-- register.component.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration page</title>
+</head>
+<body>
+
+  <div class="register-frame">
+  <h1>Register</h1>
+  <form (ngSubmit)="onSubmit()">
+    <mat-form-field class="example-full-width">
+      <mat-label>Username email address</mat-label>
+      <input matInput [(ngModel)]="user.username" name="email" required type="email">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" [(ngModel)]="user.password" name="password" required>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Register</button>
+  </form>
+
+  <p>Already have an account? <a routerLink="/auth">Sign in</a></p>
+</div>
+
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+
 <div class="register-container">
   <form (ngSubmit)="onSubmit()">
     <mat-form-field class="example-full-width">
@@ -13,6 +55,9 @@
 
     <button mat-raised-button color="primary" type="submit">Register</button>
   </form>
-  Already have an account?<a routerLink="/auth"> Sign in</a>
 
+  Already have an account?<a routerLink="/auth"> Sign in</a>
 </div>
+
+</body> -->
+<!-- </html> -->

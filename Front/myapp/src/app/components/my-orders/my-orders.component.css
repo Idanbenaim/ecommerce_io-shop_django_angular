@@ -1,3 +1,4 @@
+/* my-orders.component.css */
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 .side_filter {
@@ -126,3 +127,47 @@ margin-left: 100px;
 .mat-mdc-form-field {
   margin-left: 8px;
 }
+
+
+
+.orders-container {
+  text-align: center;
+  margin: 20px;
+}
+
+.orders-header {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.no-orders-message {
+  font-size: 18px;
+  color: #888;
+  margin-top: 10px;
+}
+
+
+    .order-container {
+      margin: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .order-details {
+      margin-top: 10px;
+    }
+    .album-info {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+    }
+    .album-cover {
+      width: 80px;
+      height: 80px;
+      margin-right: 10px;
+    }
+    .album-title {
+      font-weight: bold;
+    }
+    .artist {
+      color: #888;
+    }

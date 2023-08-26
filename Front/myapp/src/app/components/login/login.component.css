@@ -1,0 +1,22 @@
+.login-frame {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+button {
+  margin-top: 10px;
+}
+
+p {
+  margin-top: 20px;
+}

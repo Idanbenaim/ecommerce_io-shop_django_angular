@@ -1,4 +1,12 @@
 <!-- Alphabetical menu -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
 
 <mat-toolbar class="alphabet-bar">
   <span *ngFor="let letter of uniqueLetters" (click)="navigateToLetter(letter)" class="letter-button">
@@ -16,7 +24,7 @@
         <mat-card-header>
           <mat-card-title-group>
             <mat-card-title>{{ artist.artist_name }}</mat-card-title>
-            <mat-card-subtitle>XXX</mat-card-subtitle>
+            <mat-card-subtitle></mat-card-subtitle>
             <img mat-card-md-image [src]="BASE_API_URL + artist.artist_image" alt="Artist Image">
           </mat-card-title-group>
         </mat-card-header>
@@ -28,7 +36,8 @@
   </div>
 </ng-container>
 
-
+</body>
+</html>
 <!-- <h3 class="title">Select the artist name:</h3>
 <ng-container *ngFor="let letter of uniqueLetters">
   <h2 id="letter-{{ letter }}" class="letter-title">{{ letter }}</h2>

@@ -31,16 +31,6 @@ export class FiltersComponent implements OnInit {
     this.filtersService.updateSelectedGenres(this.selectedGenres.value!);
   }
 
-  // onDecadesSelectionChange() {
-  //   this.filtersService.updateSelectedDecades(this.selectedDecades.value!);
-  // }
-  // onDecadesSelectionChange() {
-  //   const formattedDecades = (this.selectedDecades.value ?? []).map((decade: string) => {
-  //     const year = Number(decade.slice(0, 2));
-  //     return `${year}0s`;
-  //   });
-  //   this.filtersService.updateSelectedDecades(formattedDecades);
-  // }
   onDecadesSelectionChange() {
     const formattedDecades = this.selectedDecades.value?.map((decade: string) => {
       return decade.slice(0, 1); // Get the first character of the selected decade ("60s" -> "6")
