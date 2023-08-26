@@ -1,98 +1,173 @@
-<div align="center" id="top"> 
-  <img src="./.github/app.gif" alt="My Io Shop" />
+# Django + Angular Project - Music Store Web Application
+This project was created in collaboration with Oren Zylber (https://github.com/orenzylber)
 
-  &#xa0;
+This is an ecommerce site for album records built on Django and Angular. 
 
-  <!-- <a href="https://myioshop.netlify.app">Demo</a> -->
-</div>
+Welcome to the Music Store Web Application! This application is built using Django for the back end and Angular for the front end.
 
-<h1 align="center">My Io Shop</h1>
+## Backend Table of Contents
+This is the backend component of the Django + Angular project. It includes Django models, serializers, views, and URLs for managing artists, genres, albums, carts, orders, and more.
 
-<p align="center">
-  <img alt="Github top language" src="https://img.shields.io/github/languages/top/{{YOUR_GITHUB_USERNAME}}/my-io-shop?color=56BEB8">
+- [Models](#models)
+- [Serializers](#serializers)
+- [Views](#views)
+- [URLs](#urls)
 
-  <img alt="Github language count" src="https://img.shields.io/github/languages/count/{{YOUR_GITHUB_USERNAME}}/my-io-shop?color=56BEB8">
+### Models
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/{{YOUR_GITHUB_USERNAME}}/my-io-shop?color=56BEB8">
+#### Artist
 
-  <img alt="License" src="https://img.shields.io/github/license/{{YOUR_GITHUB_USERNAME}}/my-io-shop?color=56BEB8">
+- `artist_name`: CharField (max_length=250)
+- `artist_bio`: CharField (max_length=2000, blank=True, null=True)
+- `artist_image`: ImageField (upload_to='static/images', blank=True, null=True)
 
-  <!-- <img alt="Github issues" src="https://img.shields.io/github/issues/{{YOUR_GITHUB_USERNAME}}/my-io-shop?color=56BEB8" /> -->
+#### Genre
 
-  <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/{{YOUR_GITHUB_USERNAME}}/my-io-shop?color=56BEB8" /> -->
+- `genre_name`: CharField (max_length=100)
 
-  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/{{YOUR_GITHUB_USERNAME}}/my-io-shop?color=56BEB8" /> -->
-</p>
+#### Album
 
-<!-- Status -->
+- `artist`: ForeignKey to Artist
+- `genre`: ForeignKey to Genre
+- `album_title`: CharField (max_length=500)
+- `albumYear`: IntegerField
+- `description`: CharField (max_length=2500)
+- `price`: DecimalField (max_digits=5, decimal_places=2)
+- `yt_link`: CharField (max_length=1000, blank=True, null=True)
+- `songs_list`: CharField (max_length=1000, null=True)
+- `album_cover`: ImageField (upload_to='static/images', blank=True, null=True)
 
-<!-- <h4 align="center"> 
-	🚧  My Io Shop 🚀 Under construction...  🚧
-</h4> 
+#### AlbumRating
 
-<hr> -->
+- `album`: ForeignKey to Album
+- `user`: ForeignKey to User
+- `vote`: IntegerField (choices=[(1, 'Up'), (-1, 'Down')])
 
-<p align="center">
-  <a href="#dart-about">About</a> &#xa0; | &#xa0; 
-  <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
-  <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
-  <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
-  <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
-  <a href="#memo-license">License</a> &#xa0; | &#xa0;
-  <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">Author</a>
-</p>
+#### Cart
 
-<br>
+- `user`: OneToOneField to User
 
-## :dart: About ##
+#### CartItem
 
-Describe your project
+- `cart`: ForeignKey to Cart
+- `album`: ForeignKey to Album
+- `quantity`: PositiveIntegerField
 
-## :sparkles: Features ##
+#### Order
 
-:heavy_check_mark: Feature 1;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
+- `user`: ForeignKey to User
+- `firstName`: CharField (max_length=35)
+- `lastName`: CharField (max_length=35)
+- `email`: EmailField (max_length=100, blank=False)
 
-## :rocket: Technologies ##
+#### OrderItem
 
-The following tools were used in this project:
+- `order`: ForeignKey to Order
+- `album`: ForeignKey to Album
+- `qty`: IntegerField
 
-- [Expo](https://expo.io/)
-- [Node.js](https://nodejs.org/en/)
-- [React](https://pt-br.reactjs.org/)
-- [React Native](https://reactnative.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
+### Serializers
 
-## :white_check_mark: Requirements ##
+- `ArtistSerializer`
+- `GenreSerializer`
+- `AlbumSerializer`
+- `AlbumRatingSerializer`
+- `CartItemSerializer`
+- `CartSerializer`
+- `OrderItemSerializer`
+- `OrderSerializer`
 
-Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Node](https://nodejs.org/en/) installed.
+### Views
 
-## :checkered_flag: Starting ##
+#### Artists
 
-```bash
-# Clone this project
-$ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/my-io-shop
+- `manageArtists`: APIView for managing artists (GET, POST, PUT, DELETE)
 
-# Access
-$ cd my-io-shop
+#### Genres
 
-# Install dependencies
-$ yarn
+- `manageGenres`: APIView for managing genres (GET, POST, PUT, DELETE)
 
-# Run the project
-$ yarn start
+#### Albums
 
-# The server will initialize in the <http://localhost:3000>
-```
+- `manageAlbums`: APIView for managing albums (GET, POST, PUT, DELETE)
 
-## :memo: License ##
+#### Album Ratings
 
-This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
+- `manageAlbumRatings`: APIView for managing album ratings (GET, POST)
+
+#### Carts
+
+- `manageCarts`: APIView for managing carts (GET, POST, PUT, DELETE)
+
+#### Orders
+
+- `manageOrders`: APIView for managing orders (GET, POST, PUT, DELETE)
+
+#### Order Items
+
+- `manageOrderItems`: APIView for managing order items (GET, POST, PUT, DELETE)
+
+### URLs
+
+- Authentication endpoints (`auth/` and `register/`)
+- Artist endpoints (`artists/`)
+- Genre endpoints (`genres/`)
+- Album endpoints (`albums/`)
+- Cart endpoints (`cart/`)
+- Order endpoints (`orders/`)
+- Order item endpoints (`orderitems/`)
+- Album rating endpoints (`create_album_rating/` and `get_album_ratings/<int:album_id>/`)
+
+### Usage
+
+1. Clone the repository: `git clone gh repo clone Idanbenaim/ecommerce_io-shop_django_angular`
+2. Create a virtual environment: `python -m venv venv`
+3. Activate the virtual environment:
+   - On Windows: `venv\Scripts\activate`
+   - On macOS and Linux: `source venv/bin/activate`
+4. cd Back 
+5. Install the required packages: `pip install -r requirements.txt`
+6. Run the Django development server: `python manage.py runserver`
+
+## Frontend Table of Contents - Music Store Web Application
+
+Welcome to the Music Store Web Application! This front end part of the application is built using Angular for the front end and connects to a backend API for managing albums, carts, orders, and user authentication.
+
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Folder Structure](#folder-structure)
+- [Contributing](#contributing)
+- [License](#license)
+
+### Features
+
+- Browse and search for music albums.
+- Add albums to the shopping cart.
+- View and edit the shopping cart contents.
+- Proceed to checkout and place orders.
+- User authentication and registration.
+- View order history and details.
+
+### Getting Started
+
+#### Prerequisites
+
+- Node.js (https://nodejs.org/)
+- Angular CLI (https://cli.angular.io/)
+
+#### Installation
+
+1. Open a new terminal 
+2. type command to change directory: `cd Front`
+3. type command to change directory: `cd myapp`
+4. type command to install: `nmp i`
+5. type run command: `ng serve -o`
 
 
-Made with :heart: by <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">{{YOUR_NAME}}</a>
+## License
 
-&#xa0;
+This project is licensed under the [MIT License](LICENSE).
 
-<a href="#top">Back to top</a>

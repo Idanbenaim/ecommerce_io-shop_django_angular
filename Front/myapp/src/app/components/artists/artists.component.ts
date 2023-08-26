@@ -36,7 +36,5 @@ export class ArtistsComponent implements OnInit {
     }
   }
 
-
-
 }
 

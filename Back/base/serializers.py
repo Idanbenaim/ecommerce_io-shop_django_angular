@@ -73,15 +73,3 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 
-    """
-    Update a cart object.
-
-    Args:
-        instance: The cart object to update.
-        validated_data: The validated JSON data.
-
-    Returns:
-        The updated cart object.
-    """
-
-

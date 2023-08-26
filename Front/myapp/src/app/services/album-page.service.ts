@@ -13,22 +13,12 @@ import { UserService } from './user.service';
 export class AlbumPageService {
   private MY_SERVER = `${BASE_API_URL}/albums`;
   private authToken = localStorage.getItem('token');
-  // private headers: HttpHeaders;
 
   constructor(
     private http: HttpClient,
-    // private userService: UserService,
   )
   {
 
-    // if (userId) {
-    //   // console.log('User is logged in. Loading cart from server...', userId);
-
-    //   this.authToken = localStorage.getItem('token');
-    //   this.headers = new HttpHeaders({
-    //     'Authorization': `Bearer ${this.authToken}`
-    //   });
-    // }
   }
 
   getAlbum(id: any): Observable<Album> {
