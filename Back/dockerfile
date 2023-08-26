@@ -3,7 +3,7 @@ FROM python:3.9
 
 # Set up the working directory and copy the Django project files
 WORKDIR /Back
-COPY ./epsealon /backend
+COPY ./dockerBack /Back
 
 # Install dependencies using pip
 RUN pip install -r requirements.txt

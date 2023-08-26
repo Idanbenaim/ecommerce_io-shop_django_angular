@@ -1,0 +1,19 @@
+# Base image for Angular
+FROM node:16
+
+# Set up the working directory and copy the Angular project files
+WORKDIR /myapp
+COPY ./myapp /myapp
+
+# Install dependencies using npm
+RUN npm install
+
+# Build the Angular app
+WORKDIR /myapp
+RUN npm run build --prod
+
+# Expose the necessary port
+EXPOSE 4200
+
+# Start the Angular development server
+CMD ["npm", "run", "start", "--", "--host", "0.0.0.0", "--port", "4200", "--disable-host-check"]
