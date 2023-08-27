@@ -14,11 +14,11 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Order #{{ order.id }} - {{ order.timestamp | date : "MM-dd-yyyy" }}
+          Order date - {{ order.timestamp | date : "MM-dd-yyyy" }}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="order-details">
-        <h2>Order #{{ order.id }}</h2>
+        <h2>Order detail</h2>
         <p><strong>Name:</strong> {{ order.firstName }} {{ order.lastName }}</p>
         <p><strong>Email:</strong> {{ order.email }}</p>
         <p>

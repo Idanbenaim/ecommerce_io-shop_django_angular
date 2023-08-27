@@ -1,6 +1,6 @@
 // auth.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Login } from '../models/login';
 import { Observable, of, timer, Subscription } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -16,13 +16,15 @@ import { UserService } from './user.service';
 export class AuthService {
   private MY_SERVER = BASE_API_URL;
   private inactivityTimer!: Subscription;
-
+  headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
   constructor(
     private http: HttpClient,
     private router: Router,
     private userService: UserService,
     private cartService: CartService
-  ) { }
+  ) {}
 
   login(user: Login): Observable<any> {
     const url = `${this.MY_SERVER}/auth/`;
@@ -32,14 +34,13 @@ export class AuthService {
 
         this.userService.setUserIdFromToken(res.access);
         this.userService.setCartIdFromToken(res.access);
-        this.userService.getUserId();
-        this.userService.getCartId();
-        console.log('get User id !!!!!!!!:', this.userService.getUserId());
+        // console.log('get User id !!!!!!!!:', this.userService.getUserId());
+        // console.log('get cart id !!!!!!!!:', this.userService.getCartId());
 
 
         // use type assertion to let TypeScript know decodedToken is an object
         const decodedToken = jwt_decode(res.access) as any;
-        // console.log('User ID: ', decodedToken.user_id, 'Username: ', decodedToken.username); // log the user id from the decoded token
+        console.log('User ID: ', decodedToken.user_id, 'Username: ', decodedToken.username); // log the user id from the decoded token
 
         this.startInactivityTimer();
 

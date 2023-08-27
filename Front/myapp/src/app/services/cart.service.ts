@@ -348,5 +348,4 @@ export class CartService {
     this.cartUpdated.next();
     this.updateItemCount();
   }
-
 }

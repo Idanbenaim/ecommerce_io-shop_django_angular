@@ -5,6 +5,9 @@ This is an ecommerce site for album records built on Django and Angular.
 
 Welcome to the Music Store Web Application! This application is built using Django for the back end and Angular for the front end.
 
+### test username: anna@yopmail.com
+### test password: 123
+
 ## Backend Table of Contents
 This is the backend component of the Django + Angular project. It includes Django models, serializers, views, and URLs for managing artists, genres, albums, carts, orders, and more.
 
