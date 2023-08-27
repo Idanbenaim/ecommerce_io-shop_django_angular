@@ -64,6 +64,7 @@ export class CartPanelComponent implements OnInit {
   proceedToCheckout(): void {
     if (this.authService.isLoggedIn()) {
       // If the user is logged in, navigate to the checkout page
+      this.cartService.updateServerCart();
       this.router.navigate(['/checkout']);
       this.close()
     } else {

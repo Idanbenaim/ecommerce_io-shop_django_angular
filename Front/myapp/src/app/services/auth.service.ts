@@ -32,6 +32,10 @@ export class AuthService {
 
         this.userService.setUserIdFromToken(res.access);
         this.userService.setCartIdFromToken(res.access);
+        this.userService.getUserId();
+        this.userService.getCartId();
+        console.log('get User id !!!!!!!!:', this.userService.getUserId());
+
 
         // use type assertion to let TypeScript know decodedToken is an object
         const decodedToken = jwt_decode(res.access) as any;
@@ -68,7 +72,7 @@ export class AuthService {
     }
 
     // Decode the token to get the user_id
-    const decodedToken = jwt_decode<any>(token); // Ensure you have imported `jwt_decode` at the top of the AuthService file.
+    const decodedToken = jwt_decode<any>(token);
 
     // Return the user_id as an observable
     return of(decodedToken.user_id);

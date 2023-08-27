@@ -14,7 +14,7 @@ export class UserService {
     const decodedToken = jwt_decode<any>(token);
     const userId = decodedToken.user_id;
     this.userIdSubject.next(userId);
-    // console.log('set User id !!!!!!!!:', userId);
+    console.log('set User id !!!!!!!!:', userId);
   }
 
   getUserId(): Observable<number | null> {
@@ -25,10 +25,10 @@ export class UserService {
     const decodedToken = jwt_decode<any>(token);
     const cartId = decodedToken.cart_id;
     this.cartIdSubject.next(cartId);
-    // console.log('set cart id !!!!!!!!:', cartId);
+    console.log('set cart id !!!!!!!!:', cartId);
   }
 
-  getCartId(): Observable<number | null> {
+  getCartId(): Observable<number | null > {
     return this.cartIdSubject.asObservable();
   }
 }

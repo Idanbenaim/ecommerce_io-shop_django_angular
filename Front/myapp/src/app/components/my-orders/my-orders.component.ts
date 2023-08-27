@@ -59,12 +59,23 @@ ngOnInit(): void {
 }
 
 
+  refreshPage(): void {
+    window.location.reload();
+  }
 
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
+      this.refreshPage(); 
     }
   }
+
+
+  // ngOnDestroy(): void {
+  //   if (this.subscription) {
+  //     this.subscription.unsubscribe();
+  //   }
+  // }
 
   handleVoteChanged(vote: number): void {
     // console.log('Vote changed:', vote);
