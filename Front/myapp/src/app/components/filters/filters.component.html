@@ -19,7 +19,22 @@
     </mat-select>
   </mat-form-field>
 
+    <!-- <mat-form-field>
+    <mat-label>Decades</mat-label>
+    <mat-select [formControl]="selectedDecades" multiple>
+      <mat-option *ngFor="let decade of decades" [value]="decade">
+        {{ decade }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
+  <mat-form-field>
+  <mat-label>Decades</mat-label>
+  <mat-select [formControl]="selectedDecades" multiple (selectionChange)="onDecadesSelectionChange()">
+    <mat-option *ngFor="let decade of decades" [value]="decade">
+      {{ decade }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 </div>
-
 </body>
 </html>

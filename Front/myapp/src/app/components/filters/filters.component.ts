@@ -4,6 +4,7 @@ import { AlbumsService } from 'src/app/services/albums.service';
 import { Genre } from 'src/app/models/genre';
 import { FormControl } from '@angular/forms';
 import { FiltersService } from 'src/app/services/filters.service';
+import { devOnlyGuardedExpression } from '@angular/compiler';
 
 
 @Component({
@@ -31,14 +32,40 @@ export class FiltersComponent implements OnInit {
     this.filtersService.updateSelectedGenres(this.selectedGenres.value!);
   }
 
+  // onDecadesSelectionChange() {
+  //   this.filtersService.updateSelectedDecades(this.selectedDecades.value!);
+  // }
+  // onDecadesSelectionChange() {
+  //   const formattedDecades = (this.selectedDecades.value ?? []).map((decade: string) => {
+  //     const year = Number(decade.slice(0, 2));
+  //     return `${year}0s`;
+  //   });
+  //   this.filtersService.updateSelectedDecades(formattedDecades);
+  // }
+
   onDecadesSelectionChange() {
-    const formattedDecades = this.selectedDecades.value?.map((decade: string) => {
-      return decade.slice(0, 1); // Get the first character of the selected decade ("60s" -> "6")
+    const formattedDecades = this.selectedDecades.value?.map((decades: string) => {
+      console.log(decades.slice(0, 1));
+      return decades.slice(0, 1); // Get the first character of the selected decade ("60s" -> "6")
     });
     if (formattedDecades) {
       this.filtersService.updateSelectedDecades(formattedDecades);
     }
   }
+  // onDecadesSelectionChange() {
+  //   const selectedDecades = this.selectedDecades.value || [];
 
+  //   // Filter and format the selected decades
+  //   const formattedDecades = selectedDecades.map((decade: string) => {
+  //     // Extract the first digit of the selected decade
+  //     console.log(this.decades.slice(0, 1));
+  //     const selectedDecadeDigit = decade.slice(0, 1);
+
+  //     return Number(selectedDecadeDigit); // Convert it to a number
+  //   });
+
+  //   // Update the selected decades in the FiltersService
+  //   this.filtersService.updateSelectedDecades(formattedDecades);
+  // }
 
 }

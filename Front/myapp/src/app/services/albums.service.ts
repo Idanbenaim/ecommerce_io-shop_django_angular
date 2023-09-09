@@ -31,8 +31,8 @@ export class AlbumsService {
 
         if (selectedDecades.length > 0) {
           filteredAlbums = filteredAlbums.filter(album => {
-            const decadePrefix = album.albumYear.toString().substr(0, 1); // Get the first digit of albumYear
-            return selectedDecades.includes(`${decadePrefix}0s`);
+            const albumDecadeDigit = album.albumYear.toString().charAt(2); // Get the third character from the left (representing the decade)
+            return selectedDecades.includes(albumDecadeDigit);
           });
         }
 
@@ -40,6 +40,7 @@ export class AlbumsService {
       })
     );
   }
+
 
 
 }
