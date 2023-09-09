@@ -178,7 +178,7 @@ class manageAlbums(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #################### Album Rating #############
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 class manageAlbumRatings(APIView):
     def get(self, request, album_id):
         album_ratings = AlbumRating.objects.filter(album_id=album_id)

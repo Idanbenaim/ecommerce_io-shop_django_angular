@@ -34,7 +34,7 @@ export class OrderService {
     this.userService.getUserId().subscribe(userId => {
       if (userId) {
         // console.log('User is logged in. Loading cart from server...', userId);
-        this.cartService.loadCartFromServer(userId);
+        this.cartService.loadCartFromServer();
       }
     });
 
