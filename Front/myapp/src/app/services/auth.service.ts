@@ -259,7 +259,7 @@ export class AuthService {
         // use type assertion to let TypeScript know decodedToken is an object
         const decodedToken = jwt_decode(res.access) as any;
         console.log('User ID: ', decodedToken.user_id, 'Username: ', decodedToken.username); // log the user id from the decoded token
-        this.startInactivityTimer();
+        // this.startInactivityTimer();
         // Call the loadCart method after successful login
         this.cartService.loadCart();
       }),
@@ -292,9 +292,9 @@ export class AuthService {
   }
   logout(): void {
     localStorage.removeItem('token');
-    if (this.inactivityTimer) {
-      this.inactivityTimer.unsubscribe();
-    }
+    // if (this.inactivityTimer) {
+    //   this.inactivityTimer.unsubscribe();
+    // }
     this.router.navigate(['/auth']);
   }
   isLoggedIn(): boolean {
@@ -304,19 +304,19 @@ export class AuthService {
     const url = `${this.MY_SERVER}/register/`;
     return this.http.post(url, user);
   }
-  // Start or reset inactivity timer
-  startInactivityTimer(): void {
-    // If there's a previous timer, clear it
-    if (this.inactivityTimer) {
-      this.inactivityTimer.unsubscribe();
-    }
-    // Start a new timer (30 minutes = 1800000 milliseconds)
-    this.inactivityTimer = timer(1800000).subscribe(() => this.logout());
-  }
-  // Call this method whenever user performs an action
-  userActivity(): void {
-    if (this.isLoggedIn()) {
-      this.startInactivityTimer();
-    }
-  }
+  // // Start or reset inactivity timer
+  // startInactivityTimer(): void {
+  //   // If there's a previous timer, clear it
+  //   if (this.inactivityTimer) {
+  //     this.inactivityTimer.unsubscribe();
+  //   }
+  //   // Start a new timer (30 minutes = 1800000 milliseconds)
+  //   this.inactivityTimer = timer(1800000).subscribe(() => this.logout());
+  // }
+  // // Call this method whenever user performs an action
+  // userActivity(): void {
+  //   if (this.isLoggedIn()) {
+  //     this.startInactivityTimer();
+  //   }
+  // }
 }
