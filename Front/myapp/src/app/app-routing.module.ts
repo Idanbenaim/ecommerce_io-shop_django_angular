@@ -11,7 +11,6 @@ import { MatdesComponent } from './components/matdes/matdes.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { HomeComponent } from './components/home/home.component';
-import { AlbumRatingComponent } from './components/album-rating/album-rating.component';
 
 const routes: Routes = [
   { path: "home",component:HomeComponent },
@@ -25,7 +24,7 @@ const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'orders', component: MyOrdersComponent },
   { path: 'get_album_ratings/:id', component: AlbumPageComponent },
-  
+
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // Redirect empty path to /home
   { path: '**', redirectTo: '/home' } // Redirect all other paths to /home as well
 

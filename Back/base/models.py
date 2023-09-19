@@ -27,7 +27,6 @@ class Album(models.Model):
     description = models.CharField(max_length=2500)
     price = models.DecimalField(max_digits=5, decimal_places=2)
     yt_link = models.CharField(max_length=1000, blank=True, null=True)
-    # yt_link = models.URLField(max_length=1000, blank=True, null=True)
     songs_list = models.CharField(max_length=1000, null=True)
     album_cover = models.ImageField(upload_to='static/images', blank=True, null=True)
 

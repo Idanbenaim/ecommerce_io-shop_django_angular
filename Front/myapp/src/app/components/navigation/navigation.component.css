@@ -11,6 +11,7 @@
   position: sticky;
   top: 0;
   z-index: 500;
+  /* background-color: rgb(187, 215, 239); */
 }
 
 .countBadge {
@@ -33,3 +34,8 @@
   align-items: center; /* Vertically align items */
   margin-left: auto; /* Push items to the right */
 }
+
+.active-link {
+  background-color: #541971; /* Amber for active link */
+}
+
