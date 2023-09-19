@@ -6,7 +6,7 @@ import { Album } from 'src/app/models/album';
 import { BASE_API_URL } from 'src/app/api.config';
 import { CartService } from 'src/app/services/cart.service';
 import { AlbumRatingService } from 'src/app/services/album-rating.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
 @Component({
@@ -21,14 +21,18 @@ export class AlbumPageComponent implements OnInit {
   quantity: number = 0;
   upVotes: number | undefined;
   downVotes: number | undefined;
-  safeYtLink: SafeResourceUrl = "";
+  ytLink: SafeHtml | undefined;
+
+  apiLoaded = false;
+  videoId?: string;
+
 
   constructor(
     private albumPageService: AlbumPageService,
     private route: ActivatedRoute,
     private cartService: CartService,
     private albumRatingService: AlbumRatingService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit(): void {
@@ -38,6 +42,15 @@ export class AlbumPageComponent implements OnInit {
         this.updateQuantity();
       }
     });
+
+    if (!this.apiLoaded) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+      this.apiLoaded = true;
+    }
+
+    // this.videoId = this.getYouTubeVideoId(this.album?.yt_link);
   }
 
   getAlbum(): void {
@@ -48,13 +61,16 @@ export class AlbumPageComponent implements OnInit {
       this.albumPageService.getAlbum(idNumber).subscribe(albm => {
         this.album = albm;
         this.updateQuantity();
+        // Assuming you have received the JSON response and stored it in 'album' variable
+        if (this.album?.yt_link) {
+          this.ytLink = this.sanitizer.bypassSecurityTrustHtml(this.album.yt_link);
+        }
         // Fetch album ratings here
         this.albumRatingService.getAlbumRatings(idNumber).subscribe(ratings => {
           // console.log("ratings: ", ratings)
           this.upVotes = ratings.up_votes;
           this.downVotes = ratings.down_votes;
         });
-        // this.safeYtLink; async () => await this.sanitizer.bypassSecurityTrustResourceUrl(this.album?.yt_link || "");
 
       },
         albumError => {
@@ -84,6 +100,16 @@ export class AlbumPageComponent implements OnInit {
       this.cartService.decrementQuantity(this.album);
     }
   }
+
+  // getYouTubeVideoId(url: string | undefined): string | undefined {
+  //   if (!url) return undefined;
+  //   const videoIdMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?&v=|embed\/watch\?v=|embed\/watch\?feature=player_embedded&v=|embed\/watch\?feature=player_embedded&v=))([^#\&\?]*).*/);
+  //   if (videoIdMatch && videoIdMatch[1]) {
+  //     return videoIdMatch[1];
+  //   }
+  //   return undefined;
+  // }
+
 }
 
 

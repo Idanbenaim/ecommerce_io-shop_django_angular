@@ -173,4 +173,3 @@ Welcome to the Music Store Web Application! This front end part of the applicati
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-

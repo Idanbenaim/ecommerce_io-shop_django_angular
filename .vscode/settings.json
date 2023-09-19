@@ -1,3 +1,7 @@
 {
-    "python.defaultInterpreterPath": "/Users/idanbenaim/Desktop/my-io-shop/Back/.venv/bin/python"
+    "python.defaultInterpreterPath": "/Users/idanbenaim/Desktop/my-io-shop/Back/.venv/bin/python",
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none"
 }

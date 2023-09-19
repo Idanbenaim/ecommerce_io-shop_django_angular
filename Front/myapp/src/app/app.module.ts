@@ -37,6 +37,7 @@ import { HomeComponent } from './components/home/home.component';
 import { FiltersComponent } from './components/filters/filters.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { AlbumRatingComponent } from './components/album-rating/album-rating.component';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,6 @@ import { AlbumRatingComponent } from './components/album-rating/album-rating.com
     FiltersComponent,
     MyOrdersComponent,
     AlbumRatingComponent,
-    // MatdesComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +73,8 @@ import { AlbumRatingComponent } from './components/album-rating/album-rating.com
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    YouTubePlayerModule
   ],
   providers: [OrderService],
   bootstrap: [AppComponent]
