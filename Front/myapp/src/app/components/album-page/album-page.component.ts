@@ -23,10 +23,6 @@ export class AlbumPageComponent implements OnInit {
   downVotes: number | undefined;
   ytLink: SafeHtml | undefined;
 
-  apiLoaded = false;
-  videoId?: string;
-
-
   constructor(
     private albumPageService: AlbumPageService,
     private route: ActivatedRoute,
@@ -43,14 +39,6 @@ export class AlbumPageComponent implements OnInit {
       }
     });
 
-    if (!this.apiLoaded) {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.body.appendChild(tag);
-      this.apiLoaded = true;
-    }
-
-    // this.videoId = this.getYouTubeVideoId(this.album?.yt_link);
   }
 
   getAlbum(): void {
@@ -100,15 +88,6 @@ export class AlbumPageComponent implements OnInit {
       this.cartService.decrementQuantity(this.album);
     }
   }
-
-  // getYouTubeVideoId(url: string | undefined): string | undefined {
-  //   if (!url) return undefined;
-  //   const videoIdMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?&v=|embed\/watch\?v=|embed\/watch\?feature=player_embedded&v=|embed\/watch\?feature=player_embedded&v=))([^#\&\?]*).*/);
-  //   if (videoIdMatch && videoIdMatch[1]) {
-  //     return videoIdMatch[1];
-  //   }
-  //   return undefined;
-  // }
 
 }
 
