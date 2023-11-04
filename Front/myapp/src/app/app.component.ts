@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { AlbumsService } from './services/albums.service';
+import { Component, HostListener } from '@angular/core';
+import { InactivityService } from './services/inactivity.service';
 
 
 @Component({
@@ -9,7 +9,13 @@ import { AlbumsService } from './services/albums.service';
 })
 export class AppComponent {
   title = 'myapp';
-  
-  constructor() {}
+
+  constructor(private inactivityService: InactivityService) { }
+
+  @HostListener('document:mousemove', ['$event'])
+  @HostListener('document:keydown', ['$event'])
+  onUserActivity() {
+    this.inactivityService.resetInactivityTimer();
+  }
 
 }

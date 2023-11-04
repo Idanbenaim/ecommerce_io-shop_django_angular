@@ -12,7 +12,6 @@ import { AppComponent } from './app.component';
 import { AlbumsComponent } from './components/albums/albums.component';
 import { ArtistsComponent } from './components/artists/artists.component';
 
-import { MatdesComponent } from './components/matdes/matdes.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialExampleModule } from 'src/material.module';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -25,19 +24,19 @@ import { AlbumPageComponent } from './components/album-page/album-page.component
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ArtistPageComponent } from './components/artist-page/artist-page.component';
-// import { CartComponent } from './components/cart/cart.component';
 import { CartPanelComponent } from './components/cart-panel/cart-panel.component';
 import { LoginComponent } from './components/login/login.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { PaypalComponent } from './components/paypal/paypal.component';
 import { RegisterComponent } from './components/register/register.component';
-import { OrderService } from './services/order.service';
-import { OrderItemService } from './services/order-item.service';
 import { HomeComponent } from './components/home/home.component';
 import { FiltersComponent } from './components/filters/filters.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { AlbumRatingComponent } from './components/album-rating/album-rating.component';
 import { YouTubePlayerModule } from '@angular/youtube-player';
+
+import { OrderService } from './services/order.service';
+import { InactivityService } from './services/inactivity.service';
 
 @NgModule({
   declarations: [
@@ -76,7 +75,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     ReactiveFormsModule,
     YouTubePlayerModule
   ],
-  providers: [OrderService],
+  providers: [OrderService, InactivityService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
